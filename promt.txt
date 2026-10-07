@@ -1,0 +1,31 @@
+Actúa como un Desarrollador Web Full-Stack Senior y Diseñador UX/UI.
+Necesito que me ayudes a crear el código fuente (HTML, CSS y JavaScript moderno / o dime si prefieres usar React/Tailwind) para mi página web de portafolio personal como programador.
+Objetivo de la página:
+Mostrar mi perfil profesional de forma limpia, moderna, minimalista y responsive (adaptada a móviles), destacando principalmente 2 proyectos clave.
+Estructura que debe tener la web:
+1. Cabecera / Sección Hero:
+	• Mi nombre (déjalo como [Tu Nombre y Apellido]).
+	• Un titular fuerte (ej. Desarrollador [Tu especialidad, ej: Full-Stack / Frontend]).
+	• Una breve frase de impacto (bio de 2 líneas) y un botón de llamada a la acción ("Ver proyectos" o "Contactar").
+2. Sección "Sobre mí":
+	• Breve descripción de mi pasión por el código, enfoque de resolución de problemas y experiencia.
+3. Sección de Tecnologías / Stack:
+	• Iconos o etiquetas con los lenguajes, frameworks y herramientas que domino (ej. JavaScript, React, Node.js, Python, Git).
+4. Sección de Proyectos Destacados (Los 2 proyectos más importantes):
+	• Proyecto 1: [Nombre del proyecto 1]
+		• Descripción corta (problema que resuelve y mi rol).
+		• Lista de tecnologías usadas.
+		• Enlaces a la demo en vivo y al repositorio en GitHub.
+		• Espacio para una imagen o captura de pantalla.
+	• Proyecto 2: [Nombre del proyecto 2]
+		• Descripción corta (problema que resuelve y mi rol).
+		• Lista de tecnologías usadas.
+		• Enlaces a la demo en vivo y al repositorio en GitHub.
+		• Espacio para una imagen o captura de pantalla.
+5. Sección de Contacto / Footer:
+	• Enlaces directos a mi LinkedIn, GitHub y correo electrónico de contacto.
+Requisitos técnicos:
+• Utiliza código limpio, semántico y fácil de modificar.
+• Si usas HTML/CSS/JS puro, agrúpalo de forma ordenada; si es mejor usar Tailwind CSS o un framework ligero, indícamelo.
+• Incluye estilos CSS modernos (modo oscuro elegante por defecto o paleta limpia profesional, con tipografías de Google Fonts).
+Por favor, hazme primero 3 o 4 preguntas rápidas sobre mis proyectos reales (nombre, tecnologías, qué hacen) para rellenar los datos tú mismo, o entrégame una plantilla con marcadores de posición ([RELLENAR AQUÍ]) listos para personalizar.
