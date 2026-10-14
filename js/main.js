@@ -1,39 +1,68 @@
 // =========================================================
-// PORTFOLIO · interacciones
+// PORTFOLIO · alexbadev · interacciones
 // =========================================================
 
 const $ = (sel, ctx = document) => ctx.querySelector(sel);
 const $$ = (sel, ctx = document) => [...ctx.querySelectorAll(sel)];
 
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
-/* ---------- Tema claro / oscuro ---------- */
-const root = document.documentElement;
-const themeToggle = $('#theme-toggle');
+/* ---------- Pantalla de carga ----------
+   Cuenta de 0 a 100 y se retira hacia arriba. Solo se muestra
+   una vez por sesión para no repetirla en cada recarga. */
+const loader = $('#loader');
 
-function currentTheme() {
-  if (root.dataset.theme) return root.dataset.theme;
-  return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+function hideLoader() {
+  loader.classList.add('is-leaving');
+  setTimeout(() => loader.classList.add('is-done'), 800);
 }
 
-themeToggle.addEventListener('click', () => {
-  const next = currentTheme() === 'dark' ? 'light' : 'dark';
-  root.dataset.theme = next;
-  try { localStorage.setItem('theme', next); } catch (e) {}
-});
+let seenLoader = false;
+try { seenLoader = sessionStorage.getItem('loader-seen') === '1'; } catch (e) {}
+
+if (reduceMotion || seenLoader) {
+  loader.classList.add('is-done');
+} else {
+  const countEl = $('#loader-count');
+  const barEl = $('#loader-bar');
+  let count = 0;
+
+  const timer = setInterval(() => {
+    count = Math.min(100, count + Math.ceil(Math.random() * 7));
+    countEl.textContent = String(count).padStart(3, '0');
+    barEl.style.width = `${count}%`;
+
+    if (count >= 100) {
+      clearInterval(timer);
+      try { sessionStorage.setItem('loader-seen', '1'); } catch (e) {}
+      setTimeout(hideLoader, 300);
+    }
+  }, 45);
+}
+
+/* ---------- Cursor personalizado ---------- */
+const cursor = $('#cursor');
+
+if (finePointer && !reduceMotion) {
+  const hoverTargets = 'a, button, .tech, input, textarea';
+
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = `${e.clientX}px`;
+    cursor.style.top = `${e.clientY}px`;
+    cursor.classList.add('is-visible');
+    cursor.classList.toggle('is-big', !!e.target.closest(hoverTargets));
+  });
+  document.addEventListener('mouseleave', () => cursor.classList.remove('is-visible'));
+}
 
 /* ---------- Navegación ---------- */
-const nav = $('#nav');
 const navToggle = $('#nav-toggle');
 const navMenu = $('#nav-menu');
 
-const onScroll = () => nav.classList.toggle('is-scrolled', window.scrollY > 10);
-onScroll();
-window.addEventListener('scroll', onScroll, { passive: true });
-
 function setMenu(open) {
   navToggle.setAttribute('aria-expanded', String(open));
-  navToggle.setAttribute('aria-label', open ? 'Cerrar menú' : 'Abrir menú');
+  navToggle.textContent = open ? 'Cerrar' : 'Menú';
   navMenu.classList.toggle('is-open', open);
 }
 
@@ -58,45 +87,58 @@ const sectionObserver = new IntersectionObserver(entries => {
 
 $$('main section[id]').forEach(section => sectionObserver.observe(section));
 
-/* ---------- Animación al hacer scroll ---------- */
+/* ---------- Aparición al hacer scroll (lista del stack) ---------- */
 const revealObserver = new IntersectionObserver((entries, obs) => {
   entries.forEach(entry => {
     if (!entry.isIntersecting) return;
     entry.target.classList.add('is-visible');
     obs.unobserve(entry.target);
   });
-}, { threshold: 0.12 });
+}, { threshold: 0.15 });
 
-$$('.reveal').forEach((el, i) => {
-  // Pequeño escalonado para los elementos del hero
-  if (el.closest('.hero')) el.style.transitionDelay = `${i * 90}ms`;
-  revealObserver.observe(el);
-});
+$$('.reveal').forEach(el => revealObserver.observe(el));
 
-/* ---------- Palabra rotativa del hero ---------- */
-const rotator = $('#rotator');
-const words = ['rápidas', 'accesibles', 'responsive', 'útiles'];
-let wordIndex = 0;
+/* ---------- Proyectos: lista con vista previa ---------- */
+const rows = $$('.project-row');
+const preview = {
+  img: $('#preview-img'),
+  name: $('#preview-name'),
+  desc: $('#preview-desc'),
+  stack: $('#preview-stack'),
+  repo: $('#preview-repo'),
+};
 
-if (rotator && !reduceMotion) {
-  setInterval(() => {
-    rotator.classList.add('is-out');
-    setTimeout(() => {
-      wordIndex = (wordIndex + 1) % words.length;
-      rotator.textContent = words[wordIndex];
-      rotator.classList.remove('is-out');
-    }, 350);
-  }, 2600);
+function showProject(row) {
+  if (row.classList.contains('is-active')) return;
+  rows.forEach(r => r.classList.toggle('is-active', r === row));
+
+  const { name, img, desc, stack, repo } = row.dataset;
+  preview.img.classList.add('is-swapping');
+  setTimeout(() => {
+    preview.img.src = img;
+    preview.img.alt = `Captura de ${name}`;
+    preview.img.classList.remove('is-swapping');
+  }, 150);
+  preview.name.textContent = name;
+  preview.desc.textContent = desc;
+  preview.stack.textContent = stack;
+  preview.repo.href = repo;
 }
+
+rows.forEach(row => {
+  row.addEventListener('mouseenter', () => showProject(row));
+  row.addEventListener('focus', () => showProject(row));
+  row.addEventListener('click', () => showProject(row));
+});
 
 /* ---------- Copiar email ---------- */
 const copyBtn = $('#copy-email');
 const emailLink = $('#email-link');
+const emailAddress = emailLink.getAttribute('href').replace('mailto:', '');
 
 copyBtn.addEventListener('click', async () => {
-  const email = emailLink.getAttribute('href').replace('mailto:', '');
   try {
-    await navigator.clipboard.writeText(email);
+    await navigator.clipboard.writeText(emailAddress);
     copyBtn.textContent = '¡Copiado!';
   } catch (e) {
     copyBtn.textContent = 'Error';
@@ -124,21 +166,20 @@ form.addEventListener('submit', e => {
 
   if (!valid) {
     status.textContent = 'Revisa los campos marcados.';
-    status.className = 'form__status is-error';
+    status.className = 'form__status mono is-error';
     return;
   }
 
   const [name, email, message] = fields.map(f => f.value.trim());
-  const to = emailLink.getAttribute('href').replace('mailto:', '');
   const subject = encodeURIComponent(`Contacto desde el portfolio · ${name}`);
   const body = encodeURIComponent(`${message}\n\n— ${name} (${email})`);
 
-  window.location.href = `mailto:${to}?subject=${subject}&body=${body}`;
+  window.location.href = `mailto:${emailAddress}?subject=${subject}&body=${body}`;
 
   status.textContent = 'Abriendo tu cliente de correo…';
-  status.className = 'form__status is-ok';
+  status.className = 'form__status mono is-ok';
   form.reset();
 });
 
-/* ---------- Año del footer ---------- */
-$('#year').textContent = new Date().getFullYear();
+/* ---------- Año actual ---------- */
+$$('.js-year').forEach(el => (el.textContent = new Date().getFullYear()));
