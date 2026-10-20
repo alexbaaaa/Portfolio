@@ -1,279 +1,494 @@
 <!DOCTYPE html>
-<html lang="es" class="no-js">
+<html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>alexbadev · Desarrollador web full-stack</title>
+  <title>Alex Aguilera · Desarrollador web en Granada</title>
   <meta name="description" content="Portfolio de Alejandro Aguilera López (alexbadev), Técnico Superior en Desarrollo de Aplicaciones Web en Granada.">
-  <meta name="theme-color" content="#111111">
+  <meta name="theme-color" content="#ffffff" id="meta-theme">
 
-  <script>document.documentElement.classList.remove('no-js');</script>
+  <!-- Tema e idioma antes de pintar, para evitar parpadeos -->
+  <script>
+    (function () {
+      var d = document.documentElement, t = null, l = null;
+      d.classList.add('js');
+      try { t = localStorage.getItem('theme'); l = localStorage.getItem('lang'); } catch (e) {}
+      // Un enlace puede forzar tema o idioma: ?theme=dark · ?lang=en
+      var q = new URLSearchParams(location.search);
+      if (/^(light|dark)$/.test(q.get('theme') || '')) t = q.get('theme');
+      if (/^(es|en)$/.test(q.get('lang') || '')) l = q.get('lang');
+      if (!t) t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      d.dataset.theme = t;
+      if (l === 'en') { d.dataset.lang = 'en'; setTimeout(function () { d.classList.add('i18n-ready'); }, 1500); }
+    })();
+  </script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400;62..125,600;62..125,900&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:ital,wght@0,400..900;1,400..900&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css">
+  <script src="js/i18n.js" defer></script>
   <script src="js/main.js" defer></script>
 </head>
 <body>
-  <a class="skip-link" href="#main">Saltar al contenido</a>
+  <!-- Iconos -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="i-out" viewBox="0 0 24 24"><path d="M7 17 17 7M8 7h9v9"/></symbol>
+    <symbol id="i-down" viewBox="0 0 24 24"><path d="M12 4v15M6 13l6 6 6-6"/></symbol>
+    <symbol id="i-right" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></symbol>
+    <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 1.5 14.2 9.8 22.5 12l-8.3 2.2L12 22.5l-2.2-8.3L1.5 12l8.3-2.2z" fill="currentColor" stroke="none"/></symbol>
+  </svg>
 
-  <!-- ============ PANTALLA DE CARGA ============ -->
-  <div class="loader" id="loader" aria-hidden="true">
-    <div class="loader__top">
-      <p class="mono">alexbadev ®</p>
-      <p class="mono accent">Cargando portfolio</p>
-    </div>
-    <div>
-      <p class="loader__count big" id="loader-count">000</p>
-      <div class="loader__bar"><span id="loader-bar"></span></div>
-    </div>
-  </div>
+  <a class="skip-link" href="#main" data-i18n="skip">Saltar al contenido</a>
 
-  <!-- ============ CURSOR ============ -->
-  <div class="cursor" id="cursor" aria-hidden="true"></div>
+  <!-- ============ CABECERA ============ -->
+  <header class="hdr" id="hdr" data-tone="plain">
+    <a href="#inicio" class="hdr__mark">alexbadev</a>
 
-  <!-- ============ NAVEGACIÓN ============ -->
-  <header class="nav" id="nav">
-    <a href="#inicio" class="nav__logo mono">alexbadev ®</a>
-    <button class="nav__toggle mono" id="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-menu">Menú</button>
-    <nav class="nav__menu" id="nav-menu" aria-label="Principal">
-      <a href="#aptitudes" class="nav__link mono">01 Aptitudes</a>
-      <a href="#stack" class="nav__link mono">02 Stack</a>
-      <a href="#proyectos" class="nav__link mono">03 Proyectos</a>
-      <a href="#formacion" class="nav__link mono">04 Formación</a>
-      <a href="#contacto" class="nav__link nav__link--cta mono">05 Contacto →</a>
+    <nav class="hdr__nav" id="nav-menu" aria-label="Principal" data-i18n-attr="aria-label:nav.label">
+      <a href="#sobre-mi" class="hdr__link" data-i18n="nav.about">Sobre mí</a>
+      <a href="#proyectos" class="hdr__link" data-i18n="nav.work">Proyectos</a>
+      <a href="#stack" class="hdr__link">Stack</a>
+      <a href="#contacto" class="hdr__link" data-i18n="nav.contact">Contacto</a>
     </nav>
+
+    <div class="hdr__tools">
+      <button class="tool" id="lang-toggle" type="button" aria-label="Switch to English">EN</button>
+      <button class="tool tool--icon" id="theme-toggle" type="button" aria-label="Cambiar a modo oscuro">
+        <svg class="icon icon--moon" aria-hidden="true"><use href="#i-moon"/></svg>
+        <svg class="icon icon--sun" aria-hidden="true"><use href="#i-sun"/></svg>
+      </button>
+      <button class="tool hdr__menu" id="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-menu" data-i18n="nav.menu">Menú</button>
+    </div>
   </header>
 
   <main id="main">
-    <!-- ============ HERO ============ -->
-    <section class="hero" id="inicio">
-      <div class="hero__meta">
-        <p class="mono">[ Portfolio / <span class="js-year">2026</span> ]</p>
-        <p class="mono status"><span class="status__dot" aria-hidden="true"></span>Disponible para trabajar</p>
+    <!-- ============ INICIO · minimalismo ============ -->
+    <section class="hero" id="inicio" data-tone="plain">
+      <div class="hero__top">
+        <p class="label hero__tag" data-i18n="hero.tag">[ Portfolio 2026 ]</p>
+        <p class="label hero__clock"><span data-i18n="hero.city">Granada</span> <time id="clock">--:--:--</time></p>
       </div>
-      <h1 class="hero__title big">Alex</h1>
-      <div class="hero__grid">
-        <div class="cell">
-          <p class="hero__role cond">Desarrollador web <span class="accent">full-stack</span></p>
+
+      <div class="hero__text">
+        <h1 class="hero__title lines">
+          <span class="line"><span data-line style="--i:0" data-i18n="hero.l1">Alejandro Aguilera Lopez,</span></span>
+          <span class="line"><span data-line style="--i:1" data-i18n="hero.l2">desarrollador web.</span></span>
+        </h1>
+        <p class="hero__lead" data-load style="--d:380ms" data-i18n="hero.lead">Técnico Superior en Desarrollo de Aplicaciones Web. Construyo aplicaciones completas, de la interfaz a la base de datos.</p>
+        <div class="hero__actions" data-load style="--d:460ms">
+          <a href="#proyectos" class="btn btn--solid">
+            <span data-i18n="hero.cta">Ver proyectos</span>
+            <svg class="icon" aria-hidden="true"><use href="#i-down"/></svg>
+          </a>
+          <ul class="socials" aria-label="Redes" data-i18n-attr="aria-label:hero.socials">
+            <li><a class="chip chip--lime" href="https://github.com/alexbaaaa" target="_blank" rel="noopener noreferrer">GitHub <svg class="icon" aria-hidden="true"><use href="#i-out"/></svg></a></li>
+            <li><a class="chip chip--cobalt" href="https://www.linkedin.com/in/alejandro-aguilera-lopez-35a507378/" target="_blank" rel="noopener noreferrer">LinkedIn <svg class="icon" aria-hidden="true"><use href="#i-out"/></svg></a></li>
+            <li><a class="chip chip--orange" href="mailto:aalejandrodesarrollo@gmail.com">Email <svg class="icon" aria-hidden="true"><use href="#i-out"/></svg></a></li>
+          </ul>
         </div>
-        <div class="cell hero__intro">
-          <p>Técnico Superior en Desarrollo de Aplicaciones Web. Del pixel a la base de datos, con código que se entiende.</p>
-          <div class="btn-row">
-            <a href="#proyectos" class="btn btn--accent">Ver proyectos ↓</a>
-            <a href="#contacto" class="btn">Contactar</a>
+      </div>
+
+      <!-- Diagrama: el astrolabio con sus anotaciones -->
+      <div class="diagram">
+        <!-- Las líneas y los nodos los dibuja js/main.js según dónde caen el objeto y las notas -->
+        <svg class="diagram__lines" id="diagram-lines" aria-hidden="true"></svg>
+
+        <figure class="object">
+          <div class="object__float">
+            <img class="object__img object__img--light" src="img/astrolabio-claro.jpg" width="1920" height="1920" alt="Astrolabio náutico de latón" data-i18n-attr="alt:hero.objAlt" fetchpriority="high">
+            <img class="object__img object__img--dark" src="img/astrolabio-oscuro.jpg" width="1920" height="1920" alt="" loading="lazy">
           </div>
+        </figure>
+
+        <div class="note note--a" data-from="0.765,0.37" data-side="left" data-color="lime" data-load style="--d:620ms">
+          <p class="note__title">alexbadev</p>
+          <p>Alejandro Aguilera López</p>
+          <p data-i18n="hero.noteA">Full-stack · PHP, Laravel, React</p>
         </div>
-        <div class="cell hero__info">
-          <p class="mono">Alejandro Aguilera López<br>Base: Granada, ES<br>Stack: PHP · Laravel · React<br>Infra: Docker · Nginx</p>
+        <div class="note note--b" data-from="0.85,0.575" data-side="left" data-color="cobalt" data-load style="--d:700ms">
+          <p class="note__title" data-i18n="hero.baseT">Base</p>
+          <p data-i18n="hero.base">Granada, España</p>
+          <p data-i18n="hero.coords">37,18° N · 3,60° O</p>
+        </div>
+        <div class="note note--c" data-from="0.5,0.9" data-side="right" data-color="orange" data-load style="--d:780ms">
+          <p class="note__title" data-i18n="hero.figT">Fig. 1</p>
+          <p data-i18n="hero.fig">Astrolabio náutico: medía la altura de los astros. Yo mido tiempos de exposición.</p>
+        </div>
+        <div class="note note--d" data-from="0.15,0.575" data-side="right" data-color="pink" data-load style="--d:860ms">
+          <p class="note__title"><span class="dot" aria-hidden="true"></span><span data-i18n="hero.stateT">Estado</span></p>
+          <p data-i18n="hero.state">Disponible para trabajar</p>
+          <p data-i18n="hero.stack">Infra: Docker · Nginx</p>
         </div>
       </div>
     </section>
 
-    <div class="marquee marquee--accent" aria-hidden="true">
-      <div class="marquee__track cond">
-        <span>Disponible para trabajar</span><span>✶</span><span>Full-stack</span><span>✶</span><span>Laravel + React</span><span>✶</span><span>Docker</span><span>✶</span>
-        <span>Disponible para trabajar</span><span>✶</span><span>Full-stack</span><span>✶</span><span>Laravel + React</span><span>✶</span><span>Docker</span><span>✶</span>
-      </div>
-    </div>
-
-    <!-- ============ APTITUDES ============ -->
-    <section class="section" id="aptitudes">
-      <header class="section__head">
-        <h2 class="big section__title">Aptitudes</h2>
-        <p class="section__lead">Me gusta entender el problema antes de escribir código. Diseño la interfaz, construyo la API y lo dejo listo para desplegar.</p>
-      </header>
-      <div class="skills">
-        <article class="skill">
-          <p class="mono accent">A/01</p>
-          <h3 class="cond">Full-stack</h3>
-          <p>Frontend en React, backend en Laravel y una API JSON que los une, con autenticación y roles.</p>
-        </article>
-        <article class="skill">
-          <p class="mono accent">A/02</p>
-          <h3 class="cond">Datos</h3>
-          <p>Modelado relacional con criterio en MySQL, MariaDB y PostgreSQL.</p>
-        </article>
-        <article class="skill">
-          <p class="mono accent">A/03</p>
-          <h3 class="cond">Despliegue</h3>
-          <p>Entornos reproducibles con Docker Compose y Nginx como proxy inverso.</p>
-        </article>
-        <article class="skill">
-          <p class="mono accent">A/04</p>
-          <h3 class="cond">Interfaces</h3>
-          <p>Maquetación responsive y accesible, pensada primero para el móvil.</p>
-        </article>
-        <article class="skill">
-          <p class="mono accent">A/05</p>
-          <h3 class="cond">Equipo</h3>
-          <p>Git con ramas y commits claros. Comunico lo que hago y aprendo rápido.</p>
-        </article>
-      </div>
-    </section>
-
-    <!-- ============ STACK ============ -->
-    <section class="section" id="stack">
-      <header class="section__head">
-        <h2 class="big section__title">Stack</h2>
-        <p class="mono">( Pasa el ratón · 17 herramientas )</p>
-      </header>
-      <ul class="tech-list">
-        <li class="tech reveal"><span class="mono">01</span><span class="big tech__name">HTML</span><span class="mono tech__cat">Frontend</span></li>
-        <li class="tech reveal"><span class="mono">02</span><span class="big tech__name">CSS</span><span class="mono tech__cat">Frontend</span></li>
-        <li class="tech reveal"><span class="mono">03</span><span class="big tech__name">JavaScript</span><span class="mono tech__cat">Frontend</span></li>
-        <li class="tech reveal"><span class="mono">04</span><span class="big tech__name">React</span><span class="mono tech__cat">Frontend</span></li>
-        <li class="tech reveal"><span class="mono">05</span><span class="big tech__name">PHP</span><span class="mono tech__cat">Backend</span></li>
-        <li class="tech reveal"><span class="mono">06</span><span class="big tech__name">Laravel</span><span class="mono tech__cat">Backend</span></li>
-        <li class="tech reveal"><span class="mono">07</span><span class="big tech__name">SQL</span><span class="mono tech__cat">Datos</span></li>
-        <li class="tech reveal"><span class="mono">08</span><span class="big tech__name">MySQL</span><span class="mono tech__cat">Datos</span></li>
-        <li class="tech reveal"><span class="mono">09</span><span class="big tech__name">Docker</span><span class="mono tech__cat">DevOps</span></li>
-        <li class="tech reveal"><span class="mono">10</span><span class="big tech__name">Nginx</span><span class="mono tech__cat">DevOps</span></li>
-        <li class="tech reveal"><span class="mono">11</span><span class="big tech__name">Git</span><span class="mono tech__cat">Flujo</span></li>
-      </ul>
-      <ul class="tech-more mono" aria-label="Otras herramientas">
-        <li>También:</li>
-        <li>Chart.js</li>
-        <li>WordPress</li>
-        <li>MariaDB</li>
-        <li>PostgreSQL</li>
-        <li>GitHub</li>
-        <li>REST / JSON</li>
-      </ul>
-    </section>
-
-    <!-- ============ PROYECTOS ============ -->
-    <section class="section" id="proyectos">
-      <header class="section__head">
-        <h2 class="big section__title">Proyectos</h2>
-        <p class="mono">( 02 seleccionados )</p>
-      </header>
-
-      <div class="projects">
-        <!-- Cada botón guarda los datos de su proyecto. Para cambiar la captura, edita data-img. -->
-        <div class="projects__list" role="list">
-          <button class="project-row is-active" type="button" role="listitem"
-            data-name="Swimming Up"
-            data-img="img/captura-por-defecto.svg"
-            data-desc="Gestión integral de un club de natación: nadadores, grupos, competiciones, calendario y marcas. Panel de administración con roles, API JSON y blog del club, orquestado con Docker Compose y Nginx."
-            data-stack="PHP · Laravel · React · Docker · Nginx · MariaDB · PostgreSQL · WordPress"
-            data-repo="https://github.com/alexbaaaa/Final-Project-DAW">
-            <span class="mono">01</span>
-            <span class="cond project-row__name">Swimming Up</span>
-            <span class="mono project-row__kind">Proyecto final DAW ↗</span>
-          </button>
-          <button class="project-row" type="button" role="listitem"
-            data-name="MAAT ETC"
-            data-img="img/captura-por-defecto.svg"
-            data-desc="Calculadora web de tiempos de exposición para el instrumento MAAT, desarrollada durante mis prácticas en el Instituto de Astrofísica de Andalucía. Los astrónomos introducen el objeto, la configuración y las condiciones de observación, y obtienen al momento el tiempo necesario y la relación señal/ruido esperada, con gráficas interactivas."
-            data-stack="Python · Flask · JavaScript · Chart.js · Docker"
-            data-repo="https://github.com/alexbaaaa">
-            <span class="mono">02</span>
-            <span class="cond project-row__name">MAAT ETC</span>
-            <span class="mono project-row__kind">CSIC · IAA ↗</span>
-          </button>
+    <!-- ============ SOBRE MÍ ============ -->
+    <section class="section about" id="sobre-mi" data-tone="plain">
+      <div class="wrap about__grid">
+        <div class="about__side">
+          <h2 class="about__title" data-reveal data-i18n="about.title">Sobre mí</h2>
+          <dl class="facts" data-reveal style="--i:1">
+            <div><dt data-i18n="about.f1t">Base</dt><dd data-i18n="about.f1">Granada, España</dd></div>
+            <div><dt data-i18n="about.f2t">Formación</dt><dd data-i18n="about.f2">CFGS Desarrollo de Aplicaciones Web</dd></div>
+            <div><dt data-i18n="about.f3t">Prácticas</dt><dd data-i18n="about.f3">CSIC · Instituto de Astrofísica de Andalucía</dd></div>
+            <div><dt data-i18n="about.f4t">Estado</dt><dd data-i18n="about.f4">Disponible para trabajar</dd></div>
+          </dl>
         </div>
 
-        <article class="project-preview" aria-live="polite">
-          <img class="project-preview__img" id="preview-img" src="img/captura-por-defecto.svg" alt="Captura de Swimming Up" width="1200" height="900">
-          <div class="project-preview__body">
-            <h3 class="visually-hidden" id="preview-name">Swimming Up</h3>
-            <p id="preview-desc">Gestión integral de un club de natación: nadadores, grupos, competiciones, calendario y marcas. Panel de administración con roles, API JSON y blog del club, orquestado con Docker Compose y Nginx.</p>
-            <p class="mono" id="preview-stack">PHP · Laravel · React · Docker · Nginx · MariaDB · PostgreSQL · WordPress</p>
-            <a class="btn" id="preview-repo" href="https://github.com/alexbaaaa/Final-Project-DAW" target="_blank" rel="noopener noreferrer">Ver repositorio ↗</a>
-          </div>
-        </article>
-      </div>
-    </section>
+        <p class="statement" data-reveal style="--i:1" data-i18n="about.text">Soy Alex <span class="inline-pic"><img src="img/alicatado-alhambra.jpg" width="500" height="375" alt="Alicatado de la Alhambra" loading="lazy"></span>, desarrollador web en Granada. Diseño <span class="boxed boxed--lime">la interfaz</span>, construyo <span class="boxed boxed--cobalt">la API</span> y lo dejo listo para desplegar. En el Instituto de Astrofísica <span class="inline-pic"><img src="img/osn-telescopio.jpg" width="960" height="1440" alt="Telescopio del Observatorio de Sierra Nevada" loading="lazy"></span> aprendí que el buen software es, ante todo, precisión <span class="inline-pic inline-pic--round"><img src="img/astrolabio-hispano.jpg" width="500" height="562" alt="Astrolabio hispano del siglo XIV" loading="lazy"></span>.</p>
 
-    <!-- ============ FORMACIÓN ============ -->
-    <section class="section" id="formacion">
-      <header class="section__head">
-        <h2 class="big section__title">Formación</h2>
-        <p class="mono">( Formación + experiencia )</p>
-      </header>
-      <ol class="timeline">
-        <li class="timeline__item">
-          <p class="mono accent">2025 — 2026</p>
-          <h3 class="cond">CFGS Desarrollo de Aplicaciones Web</h3>
-          <p>IES Zaidín-Vergeles, Granada. Programación, bases de datos, despliegue de aplicaciones y diseño de interfaces web.</p>
-        </li>
-        <li class="timeline__item">
-          <p class="mono accent">2026 · 3 meses</p>
-          <h3 class="cond">Prácticas · CSIC — Instituto de Astrofísica de Andalucía</h3>
-          <p>Desarrollo del ETC (calculadora de tiempos de exposición) del proyecto MAAT, un instrumento astronómico, dentro de un equipo científico real.</p>
-        </li>
-        <li class="timeline__item">
-          <p class="mono accent">2026</p>
-          <h3 class="cond">Proyecto final: Swimming Up</h3>
-          <p>Aplicación completa para un club de natación, de la base de datos al despliegue con Docker.</p>
-        </li>
-      </ol>
-    </section>
-
-    <div class="marquee marquee--light" aria-hidden="true">
-      <div class="marquee__track marquee__track--reverse big">
-        <span>¿Hablamos?</span><span class="accent">●</span><span>¿Hablamos?</span><span class="accent">●</span><span>¿Hablamos?</span><span class="accent">●</span>
-        <span>¿Hablamos?</span><span class="accent">●</span><span>¿Hablamos?</span><span class="accent">●</span><span>¿Hablamos?</span><span class="accent">●</span>
-      </div>
-    </div>
-
-    <!-- ============ CONTACTO ============ -->
-    <section class="contact" id="contacto">
-      <div class="contact__head">
-        <p class="mono accent">05 / Contacto</p>
-        <h2 class="big contact__title">Hable<span class="accent">mos</span></h2>
-      </div>
-
-      <div class="contact__grid">
-        <form class="contact__form" id="contact-form" novalidate>
-          <div class="contact__row">
-            <div class="field">
-              <label for="name" class="mono">Nombre</label>
-              <input id="name" name="name" type="text" autocomplete="name" required placeholder="Tu nombre">
-            </div>
-            <div class="field">
-              <label for="email" class="mono">Email</label>
-              <input id="email" name="email" type="email" autocomplete="email" required placeholder="tu@email.com">
-            </div>
-          </div>
-          <div class="field">
-            <label for="message" class="mono">Mensaje</label>
-            <textarea id="message" name="message" rows="4" required placeholder="Cuéntame en qué puedo ayudarte"></textarea>
-          </div>
-          <button type="submit" class="btn btn--accent btn--inverse">Enviar mensaje →</button>
-          <p class="form__status mono" id="form-status" role="status" aria-live="polite"></p>
-        </form>
-
-        <ul class="contact__links">
-          <li class="contact__link">
-            <a href="mailto:aalejandrodesarrollo@gmail.com" id="email-link">
-              <span class="mono accent">Email</span>
-              <span class="cond contact__value contact__value--email">aalejandrodesarrollo@gmail.com ↗</span>
-            </a>
-            <button class="copy-btn mono" type="button" id="copy-email">Copiar</button>
+        <ul class="plates" aria-label="Figuras" data-i18n-attr="aria-label:about.plates">
+          <li class="plate plate--lime" data-reveal style="--i:2">
+            <figure>
+              <img src="img/alicatado-alhambra.jpg" width="500" height="375" alt="Alicatado geométrico en un muro de la Alhambra" data-i18n-attr="alt:about.p1alt" loading="lazy">
+              <figcaption class="label" data-i18n="about.p1">Fig. 2 · Alhambra, Granada</figcaption>
+            </figure>
           </li>
-          <li class="contact__link">
-            <a href="https://github.com/alexbaaaa" target="_blank" rel="noopener noreferrer">
-              <span class="mono accent">GitHub</span>
-              <span class="cond contact__value">alexbaaaa ↗</span>
-            </a>
+          <li class="plate plate--orange" data-reveal style="--i:3">
+            <figure>
+              <img src="img/osn-telescopio.jpg" width="960" height="1440" alt="Telescopio de 1,5 m del Observatorio de Sierra Nevada" data-i18n-attr="alt:about.p2alt" loading="lazy">
+              <figcaption class="label" data-i18n="about.p2">Fig. 3 · Observatorio de Sierra Nevada</figcaption>
+            </figure>
           </li>
-          <li class="contact__link">
-            <a href="https://www.linkedin.com/in/alejandro-aguilera-lopez-35a507378/" target="_blank" rel="noopener noreferrer">
-              <span class="mono accent">LinkedIn</span>
-              <span class="cond contact__value">Alejandro Aguilera López ↗</span>
-            </a>
+          <li class="plate plate--pink" data-reveal style="--i:4">
+            <figure>
+              <img src="img/astrolabio-hispano.jpg" width="500" height="562" alt="Astrolabio planisférico hispano del siglo XIV" data-i18n-attr="alt:about.p3alt" loading="lazy">
+              <figcaption class="label" data-i18n="about.p3">Fig. 4 · Astrolabio hispano, s. XIV</figcaption>
+            </figure>
           </li>
         </ul>
       </div>
     </section>
+
+    <!-- ============ PROYECTOS ============ -->
+    <section class="section work" id="proyectos" data-tone="plain">
+      <div class="wrap">
+        <header class="work__head">
+          <h2 class="h2" data-reveal data-i18n="work.title">Proyectos</h2>
+          <p class="work__lead" data-reveal style="--i:1" data-i18n="work.lead">Dos aplicaciones completas, de la base de datos al despliegue.</p>
+        </header>
+
+        <!-- Swimming Up -->
+        <article class="project">
+          <div class="project__media" data-reveal>
+            <figure class="frame shutter">
+              <img src="img/piscina-calles.jpg" width="1280" height="960" alt="Calles y poyetes de salida de una piscina de competición" data-i18n-attr="alt:work.p1alt" loading="lazy">
+            </figure>
+            <div class="ui-card ui-times" data-ui data-reveal style="--i:2">
+              <div class="ui-card__bar"><span>Swimming Up</span><span data-i18n="work.p1ui">Marcas · 100 m libre</span></div>
+              <table>
+                <thead><tr><th data-i18n="work.p1c1">Nadador</th><th data-i18n="work.p1c2">Grupo</th><th data-i18n="work.p1c3">Tiempo</th></tr></thead>
+                <tbody>
+                  <tr><td>L. Martín</td><td data-i18n="work.g1">Absoluto</td><td>58,42 <span class="ui-badge" data-i18n="work.pb">Récord</span></td></tr>
+                  <tr><td>C. Ruiz</td><td>Junior</td><td>1:02,15</td></tr>
+                  <tr><td>A. Gómez</td><td data-i18n="work.g2">Infantil</td><td>1:09,80 <span class="ui-badge" data-i18n="work.pb">Récord</span></td></tr>
+                  <tr><td>M. Torres</td><td data-i18n="work.g2">Infantil</td><td>1:11,04</td></tr>
+                </tbody>
+              </table>
+              <p class="ui-card__note" data-i18n="work.sample">Datos de ejemplo</p>
+            </div>
+          </div>
+
+          <div class="project__body">
+            <h3 class="project__name" data-reveal>Swimming Up</h3>
+            <p class="project__kind" data-reveal style="--i:1"><span class="sq sq--cobalt" aria-hidden="true"></span><span data-i18n="work.p1kind">Proyecto final DAW · 2026</span></p>
+            <p class="project__desc" data-reveal style="--i:2" data-i18n="work.p1desc">Gestión integral de un club de natación: nadadores, grupos, competiciones, calendario y marcas. Panel de administración con roles, API JSON y blog del club, orquestado con Docker Compose y Nginx.</p>
+            <ul class="tags" data-reveal style="--i:3" aria-label="Tecnologías" data-i18n-attr="aria-label:work.techs">
+              <li>PHP</li><li>Laravel</li><li>React</li><li>Docker</li><li>Nginx</li><li>MariaDB</li><li>PostgreSQL</li><li>WordPress</li>
+            </ul>
+            <a class="btn btn--line" data-reveal style="--i:4" href="https://github.com/alexbaaaa/Final-Project-DAW" target="_blank" rel="noopener noreferrer">
+              <span data-i18n="work.repo">Ver repositorio</span>
+              <svg class="icon" aria-hidden="true"><use href="#i-out"/></svg>
+            </a>
+          </div>
+        </article>
+
+        <!-- MAAT ETC -->
+        <article class="project project--flip">
+          <div class="project__media" data-reveal>
+            <figure class="frame frame--tall shutter">
+              <img src="img/osn-telescopio.jpg" width="960" height="1440" alt="Telescopio de 1,5 m del Observatorio de Sierra Nevada (IAA-CSIC)" data-i18n-attr="alt:work.p2alt" loading="lazy">
+            </figure>
+
+            <!-- Lo que se puede tocar: una versión simplificada de la calculadora -->
+            <form class="ui-card etc" data-ui data-reveal style="--i:2" aria-labelledby="etc-title" onsubmit="return false">
+              <div class="ui-card__bar"><span id="etc-title">MAAT ETC · demo</span><span data-i18n="work.etcTag">Pruébalo</span></div>
+              <div class="etc__row">
+                <label for="etc-mag" data-i18n="work.etcMag">Magnitud del objeto</label>
+                <output id="etc-mag-out" for="etc-mag">18,0</output>
+              </div>
+              <input type="range" id="etc-mag" min="12" max="24" step="0.5" value="18">
+              <div class="etc__row">
+                <label for="etc-t" data-i18n="work.etcT">Tiempo de exposición</label>
+                <output id="etc-t-out" for="etc-t">300 s</output>
+              </div>
+              <input type="range" id="etc-t" min="0" max="100" step="1" value="70">
+              <div class="etc__result">
+                <span>S/N</span>
+                <strong id="etc-sn">40</strong>
+                <span class="etc__verdict" id="etc-verdict">Buena medida</span>
+              </div>
+              <div class="etc__meter" aria-hidden="true"><span id="etc-bar" style="width:40%"></span></div>
+              <p class="ui-card__note" data-i18n="work.etcNote">Versión simplificada de la ecuación CCD con valores ilustrativos, no los del instrumento.</p>
+            </form>
+          </div>
+
+          <div class="project__body">
+            <h3 class="project__name" data-reveal>MAAT ETC</h3>
+            <p class="project__kind" data-reveal style="--i:1"><span class="sq sq--orange" aria-hidden="true"></span><span data-i18n="work.p2kind">Prácticas · CSIC · IAA · 2026</span></p>
+            <p class="project__desc" data-reveal style="--i:2" data-i18n="work.p2desc">Calculadora web de tiempos de exposición para el instrumento MAAT, desarrollada durante mis prácticas en el Instituto de Astrofísica de Andalucía. Los astrónomos introducen el objeto, la configuración y las condiciones de observación, y obtienen al momento el tiempo necesario y la relación señal/ruido esperada, con gráficas interactivas.</p>
+            <ul class="tags" data-reveal style="--i:3" aria-label="Tecnologías" data-i18n-attr="aria-label:work.techs">
+              <li>Python</li><li>Flask</li><li>JavaScript</li><li>Chart.js</li><li>Docker</li>
+            </ul>
+            <a class="btn btn--line" data-reveal style="--i:4" href="https://github.com/alexbaaaa" target="_blank" rel="noopener noreferrer">
+              <span data-i18n="work.profile">Ver mi GitHub</span>
+              <svg class="icon" aria-hidden="true"><use href="#i-out"/></svg>
+            </a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ============ CÓMO TRABAJO ============ -->
+    <section class="section how" id="como-trabajo" data-tone="tint">
+      <div class="wrap how__grid">
+        <div class="how__intro">
+          <h2 class="h2" data-reveal data-i18n="how.title">Cómo trabajo</h2>
+          <p class="how__lead" data-reveal style="--i:1" data-i18n="how.lead">Sin prisas al principio y sin sorpresas al final. Así llevo un proyecto, de la primera pregunta al despliegue.</p>
+        </div>
+
+        <div class="slip" data-stamp>
+          <div class="slip__group">
+            <h3 class="slip__when" data-i18n="how.g1">Antes de programar</h3>
+            <ol>
+              <li><span data-i18n="how.s1">Entender el problema</span><i aria-hidden="true"></i><span data-i18n="how.o1">preguntas</span></li>
+              <li><span data-i18n="how.s2">Modelar los datos</span><i aria-hidden="true"></i><span data-i18n="how.o2">esquema</span></li>
+              <li><span data-i18n="how.s3">Bocetar la interfaz</span><i aria-hidden="true"></i><span data-i18n="how.o3">bocetos</span></li>
+            </ol>
+          </div>
+          <div class="slip__group">
+            <h3 class="slip__when" data-i18n="how.g2">Mientras programo</h3>
+            <ol>
+              <li><span data-i18n="how.s4">API y base de datos</span><i aria-hidden="true"></i><span>Laravel · Flask</span></li>
+              <li><span data-i18n="how.s5">Interfaz responsive</span><i aria-hidden="true"></i><span>React · CSS</span></li>
+              <li><span data-i18n="how.s6">Commits pequeños y claros</span><i aria-hidden="true"></i><span>Git</span></li>
+            </ol>
+          </div>
+          <div class="slip__group">
+            <h3 class="slip__when" data-i18n="how.g3">Al terminar</h3>
+            <ol>
+              <li><span data-i18n="how.s7">Probar en móvil y escritorio</span><i aria-hidden="true"></i><span data-i18n="how.o7">revisión</span></li>
+              <li><span data-i18n="how.s8">Desplegar en contenedores</span><i aria-hidden="true"></i><span>Docker · Nginx</span></li>
+              <li><span data-i18n="how.s9">Documentar para el siguiente</span><i aria-hidden="true"></i><span>README</span></li>
+            </ol>
+          </div>
+          <p class="slip__total"><span data-i18n="how.total">Resultado: software que se entiende</span><span data-i18n="how.total2">y se mantiene</span></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ FORMACIÓN ============ -->
+    <section class="section edu" id="formacion" data-tone="plain">
+      <div class="wrap edu__grid">
+        <figure class="edu__pic frame shutter" data-reveal>
+          <img src="img/alhambra-tejados.jpg" width="1280" height="852" alt="Torres y tejados de la Alhambra vistos desde el Generalife, Granada" data-i18n-attr="alt:edu.alt" decoding="async">
+          <figcaption data-i18n="edu.cap">Granada, mi base.</figcaption>
+        </figure>
+
+        <div class="edu__list">
+          <h2 class="h2" data-reveal data-i18n="edu.title">Formación</h2>
+          <ol class="rows">
+            <li class="row" data-reveal style="--i:1">
+              <span class="row__dot sq--lime" aria-hidden="true"></span>
+              <div class="row__main">
+                <h3 data-i18n="edu.r1">CFGS Desarrollo de Aplicaciones Web</h3>
+                <p data-i18n="edu.r1d">IES Zaidín-Vergeles, Granada. Programación, bases de datos, despliegue de aplicaciones y diseño de interfaces web.</p>
+              </div>
+              <span class="row__when">2025–2026</span>
+            </li>
+            <li class="row" data-reveal style="--i:2">
+              <span class="row__dot sq--orange" aria-hidden="true"></span>
+              <div class="row__main">
+                <h3 data-i18n="edu.r2">Prácticas en el CSIC · IAA</h3>
+                <p data-i18n="edu.r2d">Desarrollo del ETC (calculadora de tiempos de exposición) del proyecto MAAT, un instrumento astronómico, dentro de un equipo científico real.</p>
+              </div>
+              <span class="row__when" data-i18n="edu.r2w">2026 · 3 meses</span>
+            </li>
+            <li class="row" data-reveal style="--i:3">
+              <span class="row__dot sq--cobalt" aria-hidden="true"></span>
+              <div class="row__main">
+                <h3 data-i18n="edu.r3">Proyecto final: Swimming Up</h3>
+                <p data-i18n="edu.r3d">Aplicación completa para un club de natación, de la base de datos al despliegue con Docker.</p>
+              </div>
+              <span class="row__when">2026</span>
+            </li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ APTITUDES ============ -->
+    <section class="section skills" id="aptitudes" data-tone="plain">
+      <div class="wrap">
+        <h2 class="h2" data-reveal data-i18n="skills.title">Aptitudes</h2>
+        <div class="table" role="table" aria-label="Aptitudes" data-i18n-attr="aria-label:skills.title" data-stamp>
+          <div class="table__row table__row--head" role="row">
+            <span role="columnheader" data-i18n="skills.c1">Aptitud</span>
+            <span role="columnheader" data-i18n="skills.c2">Qué hago</span>
+            <span role="columnheader" data-i18n="skills.c3">Con qué</span>
+            <span role="columnheader" class="is-key" data-i18n="skills.c4">Dónde lo he hecho</span>
+          </div>
+          <div class="table__row" role="row">
+            <span role="rowheader">Full-stack</span>
+            <span role="cell" data-label="Qué hago" data-i18n-attr="data-label:skills.c2" data-i18n="skills.r1">Frontend, backend y la API JSON que los une, con autenticación y roles</span>
+            <span role="cell" data-label="Con qué" data-i18n-attr="data-label:skills.c3">React · Laravel</span>
+            <span role="cell" data-label="Dónde lo he hecho" data-i18n-attr="data-label:skills.c4" class="is-key">Swimming Up</span>
+          </div>
+          <div class="table__row" role="row">
+            <span role="rowheader" data-i18n="skills.n2">Datos</span>
+            <span role="cell" data-label="Qué hago" data-i18n-attr="data-label:skills.c2" data-i18n="skills.r2">Modelado relacional con criterio</span>
+            <span role="cell" data-label="Con qué" data-i18n-attr="data-label:skills.c3">MySQL · MariaDB · PostgreSQL</span>
+            <span role="cell" data-label="Dónde lo he hecho" data-i18n-attr="data-label:skills.c4" class="is-key">Swimming Up</span>
+          </div>
+          <div class="table__row" role="row">
+            <span role="rowheader" data-i18n="skills.n3">Despliegue</span>
+            <span role="cell" data-label="Qué hago" data-i18n-attr="data-label:skills.c2" data-i18n="skills.r3">Entornos reproducibles con proxy inverso</span>
+            <span role="cell" data-label="Con qué" data-i18n-attr="data-label:skills.c3">Docker Compose · Nginx</span>
+            <span role="cell" data-label="Dónde lo he hecho" data-i18n-attr="data-label:skills.c4" class="is-key">Swimming Up · MAAT ETC</span>
+          </div>
+          <div class="table__row" role="row">
+            <span role="rowheader" data-i18n="skills.n4">Interfaces</span>
+            <span role="cell" data-label="Qué hago" data-i18n-attr="data-label:skills.c2" data-i18n="skills.r4">Maquetación responsive y accesible, pensada primero para el móvil</span>
+            <span role="cell" data-label="Con qué" data-i18n-attr="data-label:skills.c3">HTML · CSS · JavaScript</span>
+            <span role="cell" data-label="Dónde lo he hecho" data-i18n-attr="data-label:skills.c4" class="is-key" data-i18n="skills.w4">Este portfolio</span>
+          </div>
+          <div class="table__row" role="row">
+            <span role="rowheader" data-i18n="skills.n5">Equipo</span>
+            <span role="cell" data-label="Qué hago" data-i18n-attr="data-label:skills.c2" data-i18n="skills.r5">Ramas y commits claros. Comunico lo que hago y aprendo rápido</span>
+            <span role="cell" data-label="Con qué" data-i18n-attr="data-label:skills.c3">Git · GitHub</span>
+            <span role="cell" data-label="Dónde lo he hecho" data-i18n-attr="data-label:skills.c4" class="is-key" data-i18n="skills.w5">Prácticas en el IAA</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ STACK · neo-brutalismo ============ -->
+    <section class="section stack" id="stack" data-tone="invert">
+      <div class="wrap">
+        <h2 class="stack__title" data-reveal data-i18n="stack.title">Mi stack</h2>
+
+        <div class="bento">
+          <div class="cell cell--count" data-stamp>
+            <p class="cell__big">19</p>
+            <p data-i18n="stack.count">herramientas que he usado en proyectos reales</p>
+          </div>
+
+          <div class="cell cell--lime" data-stamp>
+            <h3 class="cell__name">Frontend</h3>
+            <ul class="pills"><li>HTML</li><li>CSS</li><li>JavaScript</li><li>React</li><li>Chart.js</li></ul>
+          </div>
+
+          <div class="cell cell--orange" data-stamp>
+            <h3 class="cell__name">Backend</h3>
+            <ul class="pills"><li>PHP</li><li>Laravel</li><li>Python</li><li>Flask</li><li>REST / JSON</li></ul>
+          </div>
+
+          <div class="cell cell--pink" data-stamp>
+            <h3 class="cell__name" data-i18n="stack.data">Datos</h3>
+            <ul class="pills"><li>SQL</li><li>MySQL</li><li>MariaDB</li><li>PostgreSQL</li></ul>
+          </div>
+
+          <div class="cell cell--paper" data-stamp>
+            <h3 class="cell__name" data-i18n="stack.ops">DevOps y flujo</h3>
+            <ul class="pills"><li>Docker</li><li>Nginx</li><li>Git</li><li>GitHub</li><li>WordPress</li></ul>
+          </div>
+
+          <div class="cell cell--go" data-stamp>
+            <h3 class="cell__name" data-i18n="stack.goT">Mi combinación habitual</h3>
+            <p class="cell__combo">Laravel <span aria-hidden="true">+</span> React <span aria-hidden="true">+</span> Docker</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee__track">
+        <span data-i18n="marquee.a">Disponible para trabajar</span><svg class="icon"><use href="#i-star"/></svg>
+        <span>Full-stack</span><svg class="icon"><use href="#i-star"/></svg>
+        <span>Granada</span><svg class="icon"><use href="#i-star"/></svg>
+        <span>Laravel + React</span><svg class="icon"><use href="#i-star"/></svg>
+        <span data-i18n="marquee.a">Disponible para trabajar</span><svg class="icon"><use href="#i-star"/></svg>
+        <span>Full-stack</span><svg class="icon"><use href="#i-star"/></svg>
+        <span>Granada</span><svg class="icon"><use href="#i-star"/></svg>
+        <span>Laravel + React</span><svg class="icon"><use href="#i-star"/></svg>
+      </div>
+    </div>
+
+    <!-- ============ CONTACTO ============ -->
+    <section class="section contact" id="contacto" data-tone="lime">
+      <div class="wrap contact__grid">
+        <div class="contact__intro">
+          <h2 class="contact__title" data-reveal data-i18n="contact.title">¿Hablamos?</h2>
+          <p class="contact__lead" data-reveal style="--i:1" data-i18n="contact.lead">Si tienes una oferta, un proyecto o una pregunta, escríbeme. Respondo a todo.</p>
+
+          <ul class="links">
+            <li class="link-card" data-stamp>
+              <a href="mailto:aalejandrodesarrollo@gmail.com" id="email-link">
+                <span class="link-card__label">Email</span>
+                <span class="link-card__value">aalejandrodesarrollo@<wbr>gmail.com</span>
+              </a>
+              <button class="copy-btn" type="button" id="copy-email" data-i18n="contact.copy">Copiar</button>
+            </li>
+            <li class="link-card" data-stamp>
+              <a href="https://github.com/alexbaaaa" target="_blank" rel="noopener noreferrer">
+                <span class="link-card__label">GitHub</span>
+                <span class="link-card__value">alexbaaaa</span>
+              </a>
+              <svg class="icon" aria-hidden="true"><use href="#i-out"/></svg>
+            </li>
+            <li class="link-card" data-stamp>
+              <a href="https://www.linkedin.com/in/alejandro-aguilera-lopez-35a507378/" target="_blank" rel="noopener noreferrer">
+                <span class="link-card__label">LinkedIn</span>
+                <span class="link-card__value">Alejandro Aguilera López</span>
+              </a>
+              <svg class="icon" aria-hidden="true"><use href="#i-out"/></svg>
+            </li>
+          </ul>
+        </div>
+
+        <form class="form" id="contact-form" novalidate data-stamp>
+          <div class="field">
+            <label for="name" data-i18n="contact.name">Nombre</label>
+            <input id="name" name="name" type="text" autocomplete="name" required placeholder="Tu nombre" data-i18n-attr="placeholder:contact.namePh">
+          </div>
+          <div class="field">
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" autocomplete="email" required placeholder="tu@email.com" data-i18n-attr="placeholder:contact.emailPh">
+          </div>
+          <div class="field">
+            <label for="message" data-i18n="contact.msg">Mensaje</label>
+            <textarea id="message" name="message" rows="5" required placeholder="Cuéntame en qué puedo ayudarte" data-i18n-attr="placeholder:contact.msgPh"></textarea>
+          </div>
+          <button type="submit" class="btn btn--solid btn--block">
+            <span data-i18n="contact.send">Enviar mensaje</span>
+            <svg class="icon" aria-hidden="true"><use href="#i-right"/></svg>
+          </button>
+          <p class="form__status" id="form-status" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
   </main>
 
-  <footer class="footer">
-    <p class="mono">© <span class="js-year">2026</span> alexbadev — Alejandro Aguilera López</p>
-    <a href="#inicio" class="mono">Arriba ↑</a>
+  <footer class="footer" data-tone="ink">
+    <p class="footer__mark" aria-hidden="true">alexbadev</p>
+    <div class="wrap footer__row">
+      <p>© <span class="js-year">2026</span> Alejandro Aguilera López</p>
+      <a href="#inicio" class="footer__top"><span data-i18n="footer.top">Volver arriba</span> <svg class="icon" aria-hidden="true"><use href="#i-out"/></svg></a>
+    </div>
+    <p class="wrap credits" data-i18n="footer.credits">Imágenes: <a href="https://commons.wikimedia.org/wiki/File:Astrolabe-MnM_11_NA_120-IMG_6073-white.jpg">astrolabio náutico</a> de Rama, <a href="https://creativecommons.org/licenses/by-sa/3.0/fr/deed.en">CC BY-SA 3.0</a>; <a href="https://commons.wikimedia.org/wiki/File:Planispheric_astrolabe_with_inscriptions_in_Latin_and_Arabic_and_later_Hebrew,_Spain,_14th_century,_bronze_with_silver_inserts_added_later_-_Aga_Khan_Museum_-_Toronto,_Canada_-_DSC06585.jpg">astrolabio hispano, s. XIV</a> de Daderot, dominio público; <a href="https://commons.wikimedia.org/wiki/File:Tiles-wall-Alhambra-Granada-2011.jpg">alicatado de la Alhambra</a> de Acediscovery, <a href="https://creativecommons.org/licenses/by/4.0">CC BY 4.0</a>; <a href="https://commons.wikimedia.org/wiki/File:OSN_-_Observatorio_de_Sierra_Nevada_-_IAA_-Telescope_1.5m.jpg">telescopio del OSN</a> de Juan Fernández, <a href="https://creativecommons.org/licenses/by-sa/2.0">CC BY-SA 2.0</a>; <a href="https://commons.wikimedia.org/wiki/File:Swimming_Pool_lanes_and_starting_blocks.jpg">piscina</a> de KeepActive Australia, <a href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a>; <a href="https://commons.wikimedia.org/wiki/File:Roofs_and_towers_of_Alhambra_from_Generalife,_Granada,_Spain.jpg">Alhambra</a> de Jebulon, CC0. Vía Wikimedia Commons.</p>
   </footer>
 </body>
 </html>
