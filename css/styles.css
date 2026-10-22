@@ -1087,6 +1087,7 @@ figcaption {
 .field.has-error input,
 .field.has-error textarea { border-color: #d6261c; box-shadow: 4px 4px 0 #d6261c; }
 .form .btn--solid { background: var(--black); color: var(--white); border-color: var(--black); }
+.field--trap { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
 .form__status { min-height: 1.4em; font-weight: 600; }
 .form__status.is-error { color: #b3170e; }
 
