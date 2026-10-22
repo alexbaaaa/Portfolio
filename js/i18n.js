@@ -9,7 +9,7 @@ window.I18N = {
 
     'hero.tag': '[ Portfolio 2026 ]',
     'hero.city': 'Granada',
-    'hero.l1': 'Alejandro Aguilera Lopez,',
+    'hero.l1': 'Alejandro Aguilera,',
     'hero.l2': 'web developer.',
     'hero.lead': 'Higher Technician in Web Application Development. I build complete applications, from the interface to the database.',
     'hero.cta': 'See my work',
@@ -66,7 +66,7 @@ window.I18N = {
     'work.v3': 'Good measurement',
     'work.etcNote': 'Simplified CCD equation with illustrative values, not the instrument’s.',
     'work.p2kind': 'Internship · CSIC · IAA · 2026',
-    'work.p2desc': 'A web exposure-time calculator for the MAAT instrument, built during my internship at the Institute of Astrophysics of Andalusia. Astronomers enter the target, the setup and the observing conditions, and instantly get the time they need and the expected signal-to-noise ratio, with interactive charts.',
+    'work.p2desc': 'A web version of the exposure-time calculator for the MAAT instrument on the Gran Telescopio Canarias, built during my internship at the Institute of Astrophysics of Andalusia. I turned the science team\'s desktop Python script into a Flask app: the form sends the observing parameters, and the server computes the signal-to-noise ratio or the exposure time and returns the plot generated with matplotlib. Parameters can also be loaded from a .txt file, and the app is served with Gunicorn and Nginx.',
     'work.profile': 'See my GitHub',
 
     'how.title': 'How I work',
@@ -143,7 +143,7 @@ window.I18N = {
   // Textos que solo existen en el JavaScript
   ui: {
     es: {
-      title: 'Alejandro Aguilera Lopez · Desarrollador web en Granada',
+      title: 'alexbadev',
       description: 'Portfolio de Alejandro Aguilera López (alexbadev), Técnico Superior en Desarrollo de Aplicaciones Web en Granada.',
       langLabel: 'Switch to English',
       langText: 'EN',
@@ -165,7 +165,7 @@ window.I18N = {
       decimal: ','
     },
     en: {
-      title: 'Alejandro Aguilera · Web developer in Granada',
+      title: 'alexbadev',
       description: 'Portfolio of Alejandro Aguilera López (alexbadev), web application developer based in Granada, Spain.',
       langLabel: 'Cambiar a español',
       langText: 'ES',
