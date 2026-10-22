@@ -1,11 +1,3 @@
-// =========================================================
-// Traducciones
-// El español es el texto del propio HTML: main.js lo guarda al
-// cargar. Aquí solo hace falta el inglés y los textos que crea
-// el JavaScript (mensajes, etiquetas de botones...).
-// Para cambiar un texto en inglés, busca su clave (data-i18n).
-// =========================================================
-
 window.I18N = {
   en: {
     'skip': 'Skip to content',
@@ -22,13 +14,13 @@ window.I18N = {
     'hero.lead': 'Higher Technician in Web Application Development. I build complete applications, from the interface to the database.',
     'hero.cta': 'See my work',
     'hero.socials': 'Social links',
-    'hero.objAlt': 'Brass mariner’s astrolabe',
+    'hero.objAlt': '12-inch silicon wafer full of chips',
     'hero.noteA': 'Full-stack · PHP, Laravel, React',
     'hero.baseT': 'Base',
     'hero.base': 'Granada, Spain',
     'hero.coords': '37.18° N · 3.60° W',
     'hero.figT': 'Fig. 1',
-    'hero.fig': 'Mariner’s astrolabe: it measured the height of the stars. I measure exposure times.',
+    'hero.fig': 'Silicon wafer: every square is a chip. It’s where everything I write ends up running.',
     'hero.stateT': 'Status',
     'hero.state': 'Open to work',
     'hero.stack': 'Infra: Docker · Nginx',
@@ -145,7 +137,7 @@ window.I18N = {
     'contact.send': 'Send message',
 
     'footer.top': 'Back to top',
-    'footer.credits': 'Pictures: <a href="https://commons.wikimedia.org/wiki/File:Astrolabe-MnM_11_NA_120-IMG_6073-white.jpg">mariner’s astrolabe</a> by Rama, <a href="https://creativecommons.org/licenses/by-sa/3.0/fr/deed.en">CC BY-SA 3.0</a>; <a href="https://commons.wikimedia.org/wiki/File:Planispheric_astrolabe_with_inscriptions_in_Latin_and_Arabic_and_later_Hebrew,_Spain,_14th_century,_bronze_with_silver_inserts_added_later_-_Aga_Khan_Museum_-_Toronto,_Canada_-_DSC06585.jpg">14th-century Spanish astrolabe</a> by Daderot, public domain; <a href="https://commons.wikimedia.org/wiki/File:Tiles-wall-Alhambra-Granada-2011.jpg">Alhambra tilework</a> by Acediscovery, <a href="https://creativecommons.org/licenses/by/4.0">CC BY 4.0</a>; <a href="https://commons.wikimedia.org/wiki/File:OSN_-_Observatorio_de_Sierra_Nevada_-_IAA_-Telescope_1.5m.jpg">OSN telescope</a> by Juan Fernández, <a href="https://creativecommons.org/licenses/by-sa/2.0">CC BY-SA 2.0</a>; <a href="https://commons.wikimedia.org/wiki/File:Swimming_Pool_lanes_and_starting_blocks.jpg">swimming pool</a> by KeepActive Australia, <a href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a>; <a href="https://commons.wikimedia.org/wiki/File:Roofs_and_towers_of_Alhambra_from_Generalife,_Granada,_Spain.jpg">Alhambra</a> by Jebulon, CC0. Via Wikimedia Commons.'
+    'footer.credits': 'Pictures: <a href="https://commons.wikimedia.org/wiki/File:12-inch_silicon_wafer.jpg">silicon wafer</a> by Peellden, <a href="https://creativecommons.org/licenses/by-sa/3.0">CC BY-SA 3.0</a>; <a href="https://commons.wikimedia.org/wiki/File:Planispheric_astrolabe_with_inscriptions_in_Latin_and_Arabic_and_later_Hebrew,_Spain,_14th_century,_bronze_with_silver_inserts_added_later_-_Aga_Khan_Museum_-_Toronto,_Canada_-_DSC06585.jpg">14th-century Spanish astrolabe</a> by Daderot, public domain; <a href="https://commons.wikimedia.org/wiki/File:Tiles-wall-Alhambra-Granada-2011.jpg">Alhambra tilework</a> by Acediscovery, <a href="https://creativecommons.org/licenses/by/4.0">CC BY 4.0</a>; <a href="https://commons.wikimedia.org/wiki/File:OSN_-_Observatorio_de_Sierra_Nevada_-_IAA_-Telescope_1.5m.jpg">OSN telescope</a> by Juan Fernández, <a href="https://creativecommons.org/licenses/by-sa/2.0">CC BY-SA 2.0</a>; <a href="https://commons.wikimedia.org/wiki/File:Swimming_Pool_lanes_and_starting_blocks.jpg">swimming pool</a> by KeepActive Australia, <a href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a>; <a href="https://commons.wikimedia.org/wiki/File:Roofs_and_towers_of_Alhambra_from_Generalife,_Granada,_Spain.jpg">Alhambra</a> by Jebulon, CC0. Via Wikimedia Commons.'
   },
 
   // Textos que solo existen en el JavaScript
