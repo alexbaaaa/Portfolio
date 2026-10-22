@@ -290,12 +290,12 @@ copyBtn.addEventListener('click', async () => {
 });
 
 /* ---------- Formulario de contacto ----------
-   Sin backend: abre el programa de correo con el mensaje relleno.
-   Si más adelante usas un servicio como Formspree, cambia el envío aquí. */
+   Envía el mensaje a la función serverless /api/contact (Resend). */
 const form = $('#contact-form');
 const status = $('#form-status');
+const submitBtn = form.querySelector('button[type="submit"]');
 
-form.addEventListener('submit', e => {
+form.addEventListener('submit', async e => {
   e.preventDefault();
 
   const fields = ['name', 'email', 'message'].map(id => form.elements[id]);
@@ -316,14 +316,27 @@ form.addEventListener('submit', e => {
   }
 
   const [name, email, message] = fields.map(f => f.value.trim());
-  const subject = encodeURIComponent(`${ui().subject} · ${name}`);
-  const body = encodeURIComponent(`${message}\n\n— ${name} (${email})`);
 
-  window.location.href = `mailto:${emailAddress}?subject=${subject}&body=${body}`;
-
-  status.textContent = ui().formOk;
+  status.textContent = ui().formSending;
   status.className = 'form__status';
-  form.reset();
+  submitBtn.disabled = true;
+
+  try {
+    const res = await fetch('/api/contact', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email, message, website: form.elements.website.value })
+    });
+    if (!res.ok) throw new Error(res.status);
+
+    status.textContent = ui().formOk;
+    form.reset();
+  } catch (err) {
+    status.textContent = ui().formSendError;
+    status.className = 'form__status is-error';
+  } finally {
+    submitBtn.disabled = false;
+  }
 });
 
 /* ---------- Año actual ---------- */
