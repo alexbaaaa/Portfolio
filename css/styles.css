@@ -391,7 +391,15 @@ figcaption {
   width: clamp(300px, 30vw, 560px);
   translate: -50% -50%;
 }
-.object__float { position: relative; aspect-ratio: 1; }
+/* Imagen redonda: el recorte circular la hace válida en claro y en oscuro */
+.object__float {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  overflow: clip;
+  outline: 1px solid var(--ink);
+  background: var(--surface);
+}
 .object__img {
   position: absolute;
   inset: 0;
@@ -399,11 +407,9 @@ figcaption {
   height: 100%;
   object-fit: contain;
 }
-/* El fondo de la foto desaparece contra el de la página */
-.object__img--light { mix-blend-mode: multiply; }
-.object__img--dark { mix-blend-mode: screen; display: none; }
-[data-theme="dark"] .object__img--light { display: none; }
-[data-theme="dark"] .object__img--dark { display: block; }
+/* La oblea ocupa el 88 % de la foto: se amplía para llenar el círculo
+   también mientras gira */
+.object__img { scale: 1.16; }
 
 .note {
   position: absolute;
