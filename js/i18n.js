@@ -9,7 +9,7 @@ window.I18N = {
 
     'hero.tag': '[ Portfolio 2026 ]',
     'hero.city': 'Granada',
-    'hero.l1': 'Alejandro Aguilera Lopez,',
+    'hero.l1': 'Alejandro Aguilera,',
     'hero.l2': 'web developer.',
     'hero.lead': 'Higher Technician in Web Application Development. I build complete applications, from the interface to the database.',
     'hero.cta': 'See my work',
