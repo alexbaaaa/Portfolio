@@ -1,0 +1,38 @@
+[
+  {
+    "id": "funciona-en-mi-maquina",
+    "title": "Funciona en mi máquina",
+    "pose": "img/pixel/poses/01-funciona-en-mi-maquina.png",
+    "scene": "img/pixel/escena/01-funciona-en-mi-maquina.png"
+  },
+  {
+    "id": "abrazo-al-portatil",
+    "title": "Abrazo al portátil",
+    "pose": "img/pixel/poses/02-abrazo-al-portatil.png",
+    "scene": "img/pixel/escena/02-abrazo-al-portatil.png"
+  },
+  {
+    "id": "servidor-al-hombro",
+    "title": "Servidor al hombro",
+    "pose": "img/pixel/poses/03-servidor-al-hombro.png",
+    "scene": "img/pixel/escena/03-servidor-al-hombro.png"
+  },
+  {
+    "id": "tecleando-a-lo-loco",
+    "title": "Tecleando a lo loco",
+    "pose": "img/pixel/poses/04-tecleando-a-lo-loco.png",
+    "scene": "img/pixel/escena/04-tecleando-a-lo-loco.png"
+  },
+  {
+    "id": "el-cable-desenchufado",
+    "title": "El cable desenchufado",
+    "pose": "img/pixel/poses/05-el-cable-desenchufado.png",
+    "scene": "img/pixel/escena/05-el-cable-desenchufado.png"
+  },
+  {
+    "id": "cafe-xxl",
+    "title": "Café XXL",
+    "pose": "img/pixel/poses/06-cafe-xxl.png",
+    "scene": "img/pixel/escena/06-cafe-xxl.png"
+  }
+]
