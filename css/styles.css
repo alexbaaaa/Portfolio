@@ -391,13 +391,13 @@ figcaption {
   width: clamp(300px, 30vw, 560px);
   translate: -50% -50%;
 }
-/* Imagen redonda: el recorte circular la hace válida en claro y en oscuro */
+/* Pixel art: marco cuadrado con la sombra dura de la casa */
 .object__float {
   position: relative;
   aspect-ratio: 1;
-  border-radius: 50%;
   overflow: clip;
-  outline: 1px solid var(--ink);
+  border: 2px solid var(--ink);
+  box-shadow: 8px 8px 0 var(--lime);
   background: var(--surface);
 }
 .object__img {
@@ -405,11 +405,9 @@ figcaption {
   inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: cover;
+  image-rendering: pixelated;
 }
-/* La oblea ocupa el 88 % de la foto: se amplía para llenar el círculo
-   también mientras gira */
-.object__img { scale: 1.16; }
 
 .note {
   position: absolute;
@@ -1146,7 +1144,7 @@ figcaption {
   .js .diagram__lines { opacity: 0; animation: rise 700ms var(--ease-out) 450ms forwards; }
   .js .node { scale: 0; animation: pop 400ms var(--ease-out) forwards; animation-delay: 700ms; }
 
-  /* El astrolabio flota y gira con el scroll */
+  /* La imagen del inicio flota */
   /* Solo flota cuando no tiene líneas conectadas */
   @media (max-width: 1180px) { .object { animation: float 7s ease-in-out infinite alternate; } }
 
@@ -1181,11 +1179,6 @@ figcaption {
   .marquee:hover .marquee__track { animation-play-state: paused; }
 }
 
-@supports (animation-timeline: scroll()) {
-  @media (prefers-reduced-motion: no-preference) {
-    .object__img { animation: turn linear both; animation-timeline: scroll(root); animation-range: 0 120vh; }
-  }
-}
 
 @keyframes rise-line { to { transform: none; } }
 @keyframes rise { to { opacity: 1; transform: none; } }
