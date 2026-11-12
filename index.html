@@ -257,35 +257,156 @@
       <div class="wrap how__grid">
         <div class="how__intro">
           <h2 class="h2" data-reveal data-i18n="how.title">Cómo trabajo</h2>
-          <p class="how__lead" data-reveal style="--i:1" data-i18n="how.lead">Sin prisas al principio y sin sorpresas al final. Así llevo un proyecto, de la primera pregunta al despliegue.</p>
+          <p class="how__lead" data-reveal style="--i:1" data-i18n="how.lead">Pienso mucho antes de escribir la primera línea. Cuando por fin programo, ya sé qué voy a usar y de qué forma.</p>
+          <figure class="pixel-fig pixel-fig--route">
+            <div class="pixel-fig__frame" data-stamp>
+              <img src="img/pixel/poses/07-la-ruta-en-la-pizarra.png" width="1024" height="1024" alt="Alejandro en pixel art señalando una pizarra con una ruta dibujada de principio a fin" data-i18n-attr="alt:how.figAlt" loading="lazy">
+              <!-- Al cruzar la puerta de la ruta, la figura pasa de planear a programar (js/main.js) -->
+              <img class="pixel-fig__swap" src="img/pixel/poses/04-tecleando-a-lo-loco.png" width="1024" height="1024" alt="" aria-hidden="true" loading="lazy">
+            </div>
+            <figcaption data-i18n="how.fig">Fig. 5 · Primero la ruta, luego el código.</figcaption>
+          </figure>
         </div>
 
-        <div class="slip" data-stamp>
-          <div class="slip__group">
-            <h3 class="slip__when" data-i18n="how.g1">Antes de programar</h3>
-            <ol>
-              <li><span data-i18n="how.s1">Entender el problema</span><i aria-hidden="true"></i><span data-i18n="how.o1">preguntas</span></li>
-              <li><span data-i18n="how.s2">Modelar los datos</span><i aria-hidden="true"></i><span data-i18n="how.o2">esquema</span></li>
-              <li><span data-i18n="how.s3">Bocetar la interfaz</span><i aria-hidden="true"></i><span data-i18n="how.o3">bocetos</span></li>
+        <!-- La ruta: cinco paradas antes de programar, tres después -->
+        <ol class="route">
+          <li class="stop" data-reveal>
+            <h3 class="stop__name" data-i18n="how.s1">Planteo el problema</h3>
+            <p data-i18n="how.s1d">Antes de tocar nada lo escribo entero: qué hay que resolver, para quién y con qué límites.</p>
+          </li>
+
+          <li class="stop" data-reveal>
+            <h3 class="stop__name" data-i18n="how.s2">Investigo las tecnologías</h3>
+            <p data-i18n="how.s2d">Busco las que son compatibles con la solución y estudio las ventajas y desventajas de cada una.</p>
+            <div class="fig compare" data-stamp>
+              <div class="compare__col">
+                <p class="compare__name">Laravel</p>
+                <p class="compare__where" data-i18n="how.aw">Elegido en Swimming Up</p>
+                <ul>
+                  <li data-i18n="how.a1">Autenticación y roles de serie</li>
+                  <li data-i18n="how.a2">ORM y migraciones</li>
+                  <li class="con" data-i18n="how.a3">Pesado para algo pequeño</li>
+                </ul>
+              </div>
+              <div class="compare__col">
+                <p class="compare__name">Flask</p>
+                <p class="compare__where" data-i18n="how.bw">Elegido en MAAT ETC</p>
+                <ul>
+                  <li data-i18n="how.b1">Ligero y directo</li>
+                  <li data-i18n="how.b2">El mismo lenguaje que el script científico</li>
+                  <li class="con" data-i18n="how.b3">Casi todo se monta a mano</li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <li class="stop" data-reveal>
+            <h3 class="stop__name" data-i18n="how.s3">Trazo una ruta</h3>
+            <p data-i18n="how.s3d">Con la tecnología elegida, dibujo un camino posible hasta la solución, paso a paso.</p>
+          </li>
+
+          <li class="stop" data-reveal>
+            <h3 class="stop__name" data-i18n="how.s4">Divido el proyecto en partes</h3>
+            <p data-i18n="how.s4d">Partes bien diferenciadas, para trabajar mejor en cada una y para que un error en una no arruine el proyecto entero.</p>
+            <!-- Lo que se puede tocar: se rompe una parte y las demás siguen en pie -->
+            <div class="fig mods" data-stamp>
+              <p class="mods__hint" data-i18n="how.modsHint">Toca una parte para romperla.</p>
+              <div class="mods__grid" role="group" aria-label="Partes del proyecto" data-i18n-attr="aria-label:how.modsLabel">
+                <button class="mod" type="button" aria-pressed="false"><span class="mod__name" data-i18n="how.m1">Interfaz</span><span class="mod__state">OK</span></button>
+                <button class="mod" type="button" aria-pressed="true"><span class="mod__name">API</span><span class="mod__state">Error</span></button>
+                <button class="mod" type="button" aria-pressed="false"><span class="mod__name" data-i18n="how.m3">Base de datos</span><span class="mod__state">OK</span></button>
+                <button class="mod" type="button" aria-pressed="false"><span class="mod__name">Login</span><span class="mod__state">OK</span></button>
+              </div>
+              <p class="mods__status" id="mods-status" role="status" aria-live="polite">Error en: API. Las demás partes siguen funcionando.</p>
+            </div>
+          </li>
+
+          <li class="stop" data-reveal>
+            <h3 class="stop__name" data-i18n="how.s5">Abro el repositorio</h3>
+            <p data-i18n="how.s5d">Git y GitHub llevan el control de versiones: cada cambio queda guardado y siempre puedo volver atrás.</p>
+            <div class="fig gitfig" data-stamp>
+              <svg viewBox="0 0 320 60" role="img" aria-label="Rama principal de la que sale una rama que después vuelve a unirse" data-i18n-attr="aria-label:how.gitAlt">
+                <path d="M10 44H310"/>
+                <path class="gitfig__branch" d="M86 44 112 16H200l26 28"/>
+                <rect x="18" y="37" width="14" height="14"/>
+                <rect x="79" y="37" width="14" height="14"/>
+                <rect class="gitfig__commit" x="126" y="9" width="14" height="14"/>
+                <rect class="gitfig__commit" x="172" y="9" width="14" height="14"/>
+                <rect x="219" y="37" width="14" height="14"/>
+                <rect x="282" y="37" width="14" height="14"/>
+              </svg>
+              <ul class="gitfig__legend">
+                <li><span class="sq sq--ink" aria-hidden="true"></span>main</li>
+                <li><span class="sq sq--cobalt" aria-hidden="true"></span><span data-i18n="how.gitBranch">una rama por cada parte</span></li>
+              </ul>
+            </div>
+          </li>
+
+          <li class="gate" data-stamp>
+            <p class="gate__title" data-i18n="how.gate">Hasta aquí, ni una línea de código.</p>
+            <p class="gate__sub" data-i18n="how.gateSub">Solo empiezo a programar cuando tengo claro qué voy a utilizar y de qué forma.</p>
+          </li>
+
+          <li class="stop" data-reveal>
+            <h3 class="stop__name" data-i18n="how.s6">Programo por versiones</h3>
+            <p data-i18n="how.s6d">Ahora sí. Construyo cada parte y voy cerrando versiones pequeñas, una detrás de otra.</p>
+            <ol class="versions" aria-label="Versiones" data-i18n-attr="aria-label:how.versLabel">
+              <li><code>v0.1</code></li>
+              <li><code>v0.2</code></li>
+              <li><code>v0.3</code></li>
             </ol>
+          </li>
+
+          <li class="stop" data-reveal>
+            <h3 class="stop__name" data-i18n="how.s7">Pruebo y corrijo</h3>
+            <p data-i18n="how.s7d">Pruebo cada versión en entornos virtuales con Vagrant y Docker, corrijo los errores y repito hasta que funciona.</p>
+            <pre class="fig term" data-stamp><code><span aria-hidden="true">$ </span>vagrant up
+<span aria-hidden="true">$ </span>docker compose up --build</code></pre>
+          </li>
+
+          <li class="stop stop--end" data-reveal>
+            <h3 class="stop__name" data-i18n="how.s8">La llevo a un entorno real</h3>
+            <p data-i18n="how.s8d">Solo la versión funcional sale de la máquina virtual. Ahí es donde la pruebo de verdad.</p>
+          </li>
+        </ol>
+      </div>
+
+      <!-- Subsección: la IA -->
+      <div class="wrap ai" id="ia">
+        <div class="ai__head">
+          <div class="ai__text">
+            <h3 class="ai__title" data-reveal data-i18n="ai.title">Cómo uso la IA</h3>
+            <p class="ai__statement" data-reveal style="--i:1" data-i18n="ai.statement">A día de hoy, tal y como yo lo veo, usar IA para desarrollar software ya no es opcional si no quieres quedarte atrás.</p>
+            <p class="ai__rule" data-reveal style="--i:2" data-i18n="ai.rule">Cuánto la uso depende de cuánto domino cada tecnología.</p>
           </div>
-          <div class="slip__group">
-            <h3 class="slip__when" data-i18n="how.g2">Mientras programo</h3>
-            <ol>
-              <li><span data-i18n="how.s4">API y base de datos</span><i aria-hidden="true"></i><span>Laravel · Flask</span></li>
-              <li><span data-i18n="how.s5">Interfaz responsive</span><i aria-hidden="true"></i><span>React · CSS</span></li>
-              <li><span data-i18n="how.s6">Commits pequeños y claros</span><i aria-hidden="true"></i><span>Git</span></li>
-            </ol>
+          <figure class="pixel-fig pixel-fig--ai">
+            <div class="pixel-fig__frame" data-stamp>
+              <img src="img/pixel/poses/08-yo-marco-el-rumbo.png" width="1024" height="1024" alt="Alejandro en pixel art indicando la dirección con una flecha, junto a un pequeño robot ayudante con código en el pecho" data-i18n-attr="alt:ai.figAlt" loading="lazy">
+            </div>
+            <figcaption data-i18n="ai.fig">Fig. 6 · Yo marco el rumbo; la IA teclea.</figcaption>
+          </figure>
+        </div>
+
+        <div class="ai__steps">
+          <div class="ai-card" data-stamp>
+            <h4 class="ai-card__name" data-i18n="ai.newT">Tecnología nueva</h4>
+            <p data-i18n="ai.new">Primero la aprendo yo. Investigo por mi cuenta, leo la documentación y sigo tutoriales hasta ser capaz de manejarla sin ayuda de la IA.</p>
+            <p class="ai-switch"><span class="ai-switch__track" aria-hidden="true"><span></span></span><span data-i18n="ai.off">Sin IA, todavía</span></p>
           </div>
-          <div class="slip__group">
-            <h3 class="slip__when" data-i18n="how.g3">Al terminar</h3>
-            <ol>
-              <li><span data-i18n="how.s7">Probar en móvil y escritorio</span><i aria-hidden="true"></i><span data-i18n="how.o7">revisión</span></li>
-              <li><span data-i18n="how.s8">Desplegar en contenedores</span><i aria-hidden="true"></i><span>Docker · Nginx</span></li>
-              <li><span data-i18n="how.s9">Documentar para el siguiente</span><i aria-hidden="true"></i><span>README</span></li>
-            </ol>
+
+          <div class="ai__arrow" aria-hidden="true"><svg class="icon"><use href="#i-right"/></svg></div>
+
+          <div class="ai-card ai-card--on" data-stamp style="--i:1">
+            <h4 class="ai-card__name" data-i18n="ai.knownT">Tecnología que domino</h4>
+            <p data-i18n="ai.known">Entonces sí. Con Claude y Claude Code desarrollo más rápido y con menos errores, porque sé revisar cada cambio que proponen.</p>
+            <p class="ai-switch ai-switch--on"><span class="ai-switch__track" aria-hidden="true"><span></span></span><span data-i18n="ai.on">Con IA</span></p>
           </div>
-          <p class="slip__total"><span data-i18n="how.total">Resultado: software que se entiende</span><span data-i18n="how.total2">y se mantiene</span></p>
+        </div>
+
+        <div class="blackbox" data-stamp>
+          <h4 class="blackbox__title" data-i18n="ai.boxT">Nada de cajas negras.</h4>
+          <p data-i18n="ai.box">No quiero un proyecto que solo sepa desarrollar la IA. Entiendo qué está construyendo y por qué, para poder corregirla o decidir otro camino en cualquier momento.</p>
+          <p class="blackbox__result" data-i18n="ai.result">Así las aplicaciones que hago salen más fiables, más eficientes y más fáciles de mantener.</p>
         </div>
       </div>
     </section>

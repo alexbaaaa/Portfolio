@@ -1,5 +1,6 @@
-// Generador del pixel art del hero: 6 poses (fondo transparente) + escena
-// "escritorio con vistas a la Alhambra" + las 6 poses sobre esa escena.
+// Generador del pixel art: poses del personaje (fondo transparente) + escena
+// "escritorio con vistas a la Alhambra" + las poses del hero sobre esa escena.
+// Las poses con solo: true (Cómo trabajo, IA) no llevan escena.
 // Uso: node tools/pixelart.js   → escribe PNG en img/pixel/
 // Sin dependencias: dibuja en una rejilla y codifica el PNG a mano.
 
@@ -157,6 +158,7 @@ function face(O, expr) {
   const E = {
     normal: () => { O.rect(27, 20, 2, 2, C.EYE).rect(36, 20, 2, 2, C.EYE); },
     look: () => { O.rect(26, 20, 2, 2, C.EYE).rect(35, 20, 2, 2, C.EYE); },
+    lookR: () => { O.rect(28, 20, 2, 2, C.EYE).rect(37, 20, 2, 2, C.EYE); },
     wide: () => { O.rect(27, 19, 2, 3, C.EYE).rect(36, 19, 2, 3, C.EYE); O.px([[28, 19], [37, 19]], C.W); },
     closed: () => { O.px([[26, 21], [27, 20], [28, 20], [29, 21], [35, 21], [36, 20], [37, 20], [38, 21]], C.EYE); },
     tired: () => {
@@ -217,10 +219,14 @@ function drawArm(cv, sh, el, hand, opt = {}) {
   });
 }
 
+// personaje desplazado en horizontal: deja sitio a un objeto a su lado
+function shifted(cv, dx, build) { const ch = new Layer(S, S); build(ch); cv.draw(ch, dx, 0); }
+
 const HEART = ['.p.p.', 'ppppp', 'ppppp', '.ppp.', '..p..'];
 const QMARK = ['.ooo.', 'oo.oo', '...oo', '..oo.', '..oo.', '.....', '..oo.'];
 
-/* ---------- las 6 poses ---------- */
+/* ---------- las poses ----------
+   solo: true → solo el personaje, sin la escena del escritorio */
 const POSES = [
   {
     id: 'funciona-en-mi-maquina',
@@ -323,6 +329,63 @@ const POSES = [
       part(cv, L => L.ascii(48, 4, ['ccc', '..c', '.c.', 'ccc'], { c: C.COBALT }).ascii(53, 1, ['cc', '.c', 'cc'], { c: C.COBALT }));
     },
   },
+  {
+    id: 'la-ruta-en-la-pizarra',
+    title: 'La ruta en la pizarra',
+    solo: true,
+    build(cv) {
+      // caballete
+      part(cv, L => { L.rect(41, 32, 2, 24, C.CASE).rect(57, 32, 2, 24, C.CASE).rect(39, 56, 6, 2, C.CASE).rect(55, 56, 6, 2, C.CASE); });
+      // pizarra con la ruta: salida naranja, paradas y meta lima
+      part(cv, L => L.rect(37, 4, 25, 28, C.W), O => {
+        O.hline(37, 61, 31, C.FAINT);
+        O.hline(40, 49, 7, C.K);
+        O.hline(41, 47, 13, C.COBALT).vline(47, 13, 19, C.COBALT).hline(47, 55, 19, C.COBALT).vline(55, 19, 25, C.COBALT);
+        O.rect(40, 12, 3, 3, C.ORANGE).rect(46, 12, 3, 3, C.K).rect(46, 18, 3, 3, C.K).rect(54, 18, 3, 3, C.K);
+        O.rect(53, 23, 5, 5, C.K).rect(54, 24, 3, 3, C.LIME);
+        O.hline(53, 58, 9, C.SOFT).hline(53, 56, 11, C.SOFT);
+        O.hline(40, 45, 24, C.SOFT).hline(40, 43, 26, C.SOFT);
+      });
+      shifted(cv, -10, ch => {
+        drawLegs(ch); drawTorso(ch); drawHead(ch, { brows: 'up', eyes: 'lookR', mouth: 'smile' });
+        drawArm(ch, [25, 34], [18, 39], [23, 43]);
+        // rotulador en la mano que señala
+        part(ch, L => L.capsule(52, 27, 54, 23, 0.8, C.COBALT));
+        drawArm(ch, [39, 34], [46, 36], [51, 29], { hx: 2.4 });
+      });
+    },
+  },
+  {
+    id: 'yo-marco-el-rumbo',
+    title: 'Yo marco el rumbo',
+    solo: true,
+    build(cv) {
+      // robot ayudante: antena, piernas, cuello, brazos, cuerpo con código, cabeza
+      part(cv, L => { L.rect(52, 24, 1, 4, C.SOFT).rect(51, 22, 3, 2, C.ORANGE); });
+      part(cv, L => { L.rect(47, 53, 3, 3, C.CASE).rect(55, 53, 3, 3, C.CASE).rect(45, 56, 6, 2, C.CASE).rect(54, 56, 6, 2, C.CASE); });
+      part(cv, L => L.rect(51, 39, 3, 2, C.SOFT));
+      part(cv, L => { L.capsule(45, 44, 42, 49, 1, C.SOFT); L.capsule(60, 44, 61, 49, 1, C.SOFT); });
+      part(cv, L => L.rect(46, 41, 13, 12, C.COBALT), O => {
+        O.rect(48, 43, 9, 7, C.K);
+        O.hline(49, 52, 44, C.LIME).hline(50, 55, 46, C.W).hline(50, 53, 48, C.PINK);
+        O.hline(46, 58, 52, C.JEANS_SH);
+      });
+      part(cv, L => L.rect(44, 28, 17, 11, C.W), O => {
+        O.rect(46, 31, 13, 5, C.K);
+        O.rect(48, 32, 2, 3, C.LIME).rect(55, 32, 2, 3, C.LIME);
+        O.hline(44, 60, 38, C.FAINT);
+      });
+      // bocadillo con la dirección a seguir
+      part(cv, L => { L.rect(42, 2, 19, 12, C.W); L.poly([[43, 13], [47, 13], [39.5, 17]], C.W); }, O => {
+        O.ascii(46, 5, ['.......cc..', '........cc.', 'ccccccccccc', 'ccccccccccc', '........cc.', '.......cc..'], { c: C.COBALT });
+      });
+      shifted(cv, -10, ch => {
+        drawLegs(ch); drawTorso(ch); drawHead(ch, { brows: 'up', eyes: 'lookR', mouth: 'smile' });
+        drawArm(ch, [25, 34], [18, 39], [23, 43]);
+        drawArm(ch, [39, 34], [46, 33], [50, 25], { hx: 2.4 });
+      });
+    },
+  },
 ];
 
 function character(pose) { const cv = new Layer(S, S); pose.build(cv); return cv; }
@@ -412,21 +475,26 @@ POSES.forEach((pose, i) => {
   const n = String(i + 1).padStart(2, '0');
   const ch = character(pose);
   toPNG(ch, 16, path.join(OUT, 'poses', `${n}-${pose.id}.png`));
-  const sc = new Layer(BG, BG); sc.draw(bg); sc.draw(ch, 16, 36);
-  toPNG(sc, 10, path.join(OUT, 'escena', `${n}-${pose.id}.png`));
-  manifest.push({ id: pose.id, title: pose.title, pose: `img/pixel/poses/${n}-${pose.id}.png`, scene: `img/pixel/escena/${n}-${pose.id}.png` });
+  const entry = { id: pose.id, title: pose.title, pose: `img/pixel/poses/${n}-${pose.id}.png` };
+  if (!pose.solo) {
+    const sc = new Layer(BG, BG); sc.draw(bg); sc.draw(ch, 16, 36);
+    toPNG(sc, 10, path.join(OUT, 'escena', `${n}-${pose.id}.png`));
+    entry.scene = `img/pixel/escena/${n}-${pose.id}.png`;
+  }
+  manifest.push(entry);
 });
 fs.writeFileSync(path.join(OUT, 'poses.json'), JSON.stringify(manifest, null, 2) + '\n');
 
 // hoja de contactos para revisar (SHEET=ruta.png node tools/pixelart.js)
 if (process.env.SHEET) {
-  const sheet = new Layer(6 * (S + 2) + 2, (S + 4) + BG * 2 + 12);
+  const scenes = POSES.filter(p => !p.solo);
+  const sheet = new Layer(POSES.length * (S + 2) + 2, (S + 4) + BG * 2 + 12);
   sheet.rect(0, 0, sheet.w, sheet.h, '#bfbfbf');
   POSES.forEach((p, i) => {
     const ch = character(p); const t = new Layer(S, S); t.rect(0, 0, S, S, C.W); t.draw(ch);
     sheet.draw(t, i * (S + 2) + 2, 2);
   });
-  POSES.forEach((p, i) => {
+  scenes.forEach((p, i) => {
     const sc = new Layer(BG, BG); sc.draw(bg); sc.draw(character(p), 16, 36);
     sheet.draw(sc, (i % 3) * (BG + 2) + 2, S + 6 + Math.floor(i / 3) * (BG + 2));
   });
