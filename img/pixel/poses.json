@@ -44,5 +44,15 @@
     "id": "yo-marco-el-rumbo",
     "title": "Yo marco el rumbo",
     "pose": "img/pixel/poses/08-yo-marco-el-rumbo.png"
+  },
+  {
+    "id": "la-pieza-que-falta",
+    "title": "La pieza que falta",
+    "pose": "img/pixel/poses/09-la-pieza-que-falta.png"
+  },
+  {
+    "id": "listo-para-nadar",
+    "title": "Listo para nadar",
+    "pose": "img/pixel/poses/10-listo-para-nadar.png"
   }
 ]

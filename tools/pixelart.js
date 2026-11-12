@@ -1,6 +1,6 @@
 // Generador del pixel art: poses del personaje (fondo transparente) + escena
 // "escritorio con vistas a la Alhambra" + las poses del hero sobre esa escena.
-// Las poses con solo: true (Cómo trabajo, IA) no llevan escena.
+// Las poses con solo: true (Cómo trabajo, IA, Sobre mí) no llevan escena.
 // Uso: node tools/pixelart.js   → escribe PNG en img/pixel/
 // Sin dependencias: dibuja en una rejilla y codifica el PNG a mano.
 
@@ -212,6 +212,7 @@ function drawArm(cv, sh, el, hand, opt = {}) {
     if (opt.thumb) L.capsule(...opt.thumb[0], ...opt.thumb[1], 1, C.SKIN);
     L.ellipse(...hand, opt.hx || 2.3, opt.hy || 2.3, C.SKIN);
   }, O => { if (opt.knuckles) O.px(opt.knuckles, C.SKIN_SH); });
+  if (opt.bare) return; // sin polo: el nadador
   // manga corta del polo
   const m = [sh[0] + (el[0] - sh[0]) * 0.5, sh[1] + (el[1] - sh[1]) * 0.5];
   part(cv, L => L.capsule(...sh, ...m, 2.8, C.POLO), O => {
@@ -384,6 +385,67 @@ const POSES = [
         drawArm(ch, [25, 34], [18, 39], [23, 43]);
         drawArm(ch, [39, 34], [46, 33], [50, 25], { hx: 2.4 });
       });
+    },
+  },
+  {
+    id: 'la-pieza-que-falta',
+    title: 'La pieza que falta',
+    solo: true,
+    build(cv) {
+      // el rompecabezas a medio montar: dos piezas y el hueco de la tercera
+      part(cv, L => { L.rect(4, 5, 11, 11, C.ORANGE); L.rect(15, 9, 3, 4, C.ORANGE); });
+      part(cv, L => { L.rect(4, 17, 11, 11, C.COBALT); L.rect(8, 14, 4, 3, C.COBALT); }, O => O.hline(4, 14, 27, C.JEANS_SH));
+      // la pieza que falta, en alto
+      part(cv, L => { L.rect(46, 13, 12, 12, C.LIME); L.rect(43, 17, 3, 4, C.LIME); L.rect(50, 10, 4, 3, C.LIME); L.rect(55, 17, 3, 4, null); },
+        O => O.px([[48, 15], [49, 15], [48, 16]], C.W));
+      drawLegs(cv); drawTorso(cv); drawHead(cv, { brows: 'quirk', eyes: 'look', mouth: 'smile' });
+      drawArm(cv, [25, 34], [19, 39], [18, 31], { hx: 2.2, hy: 2.2 });
+      drawArm(cv, [39, 34], [46, 38], [50, 28], { hx: 2.6, hy: 2.4, knuckles: [[49, 27], [51, 27]] });
+      // un destello
+      part(cv, L => L.px([[60, 8], [59, 9], [60, 9], [61, 9], [60, 10]], C.LIME));
+    },
+  },
+  {
+    id: 'listo-para-nadar',
+    title: 'Listo para nadar',
+    solo: true,
+    build(cv) {
+      // chanclas, piernas y bañador de competición
+      part(cv, L => { L.rect(23, 55, 9, 3, C.SKIN).rect(33, 55, 9, 3, C.SKIN); },
+        O => { O.hline(23, 31, 57, C.COBALT).hline(33, 41, 57, C.COBALT); });
+      part(cv, L => { L.rect(26, 51, 5, 4, C.SKIN).rect(34, 51, 5, 4, C.SKIN); });
+      cv.hline(25, 30, 56, C.LIME).hline(35, 40, 56, C.LIME); // tira de la chancla
+      // torso al aire
+      part(cv, L => L.rect(30, 27, 5, 5, C.SKIN_SH));
+      part(cv, L => L.poly([[24, 30.5], [40, 30.5], [43, 34], [41, 46.5], [23, 46.5], [21, 34]], C.SKIN), O => {
+        O.hline(30, 34, 31, C.SKIN_SH);
+        O.px([[32, 43]], C.SKIN_SH);
+      });
+      part(cv, L => { L.rect(24, 45, 17, 3, C.POLO).rect(24, 45, 8, 7, C.POLO).rect(33, 45, 8, 7, C.POLO); },
+        O => { O.vline(24, 45, 51, C.COBALT).vline(40, 45, 51, C.COBALT); O.hline(25, 39, 45, C.CASE_HI); });
+      // medalla al cuello
+      part(cv, L => L.ellipse(32, 39.5, 2.6, 2.6, C.LIME), O => {
+        O.px([[28, 31], [28, 32], [29, 33], [29, 34], [30, 35], [31, 36], [36, 31], [36, 32], [35, 33], [35, 34], [34, 35], [33, 36]], C.ORANGE);
+        O.px([[31, 38], [32, 38]], C.W);
+      });
+      // cabeza con gorro y gafas subidas
+      part(cv, L => { L.ellipse(22, 21, 2, 2.5, C.SKIN); L.ellipse(42, 21, 2, 2.5, C.SKIN); },
+        O => O.px([[22, 21], [42, 21]], C.SKIN_SH));
+      part(cv, L => L.ellipse(32, 20, 9, 9.5, C.SKIN), (O, L) => {
+        for (let y = 0; y < S; y++) for (let x = 0; x < S; x++) if (L.get(x, y) && !L.get(x, y + 1)) O.set(x, y, C.SKIN_SH);
+        face(O, { brows: 'angry', mouth: 'grin' });
+      });
+      part(cv, L => L.ellipse(32, 15, 10.5, 10, C.COBALT, (x, y) => y <= 15), O => {
+        O.px([[25, 10], [25, 9], [26, 8], [27, 7], [28, 7]], C.COBALT_T);
+        O.hline(22, 42, 12, C.K);
+      });
+      part(cv, L => { L.rect(26, 11, 4, 3, C.ORANGE).rect(34, 11, 4, 3, C.ORANGE).rect(30, 12, 4, 1, C.K); },
+        O => O.px([[27, 11], [35, 11]], C.W));
+      // brazos sin manga: uno en jarra, el otro con el puño en alto
+      drawArm(cv, [25, 34], [18, 39], [21, 44], { bare: true, hx: 2, hy: 2 });
+      drawArm(cv, [39, 34], [47, 35], [48, 25], { bare: true, bicep: [44, 33], hx: 2.6, hy: 2.6, knuckles: [[47, 24], [49, 24]] });
+      // gotas de agua
+      cv.px([[13, 12], [13, 13], [53, 9], [53, 10], [56, 16], [10, 22], [10, 23]], C.COBALT);
     },
   },
 ];

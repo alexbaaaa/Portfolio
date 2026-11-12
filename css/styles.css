@@ -10,7 +10,7 @@
    3. Piezas comunes (botones, etiquetas, chips)
    4. Cabecera
    5. Inicio: diagrama del astrolabio            · nivel 0
-   6. Sobre mí: texto con imágenes en línea      · nivel 1
+   6. Sobre mí: texto con imágenes flotantes     · nivel 1
    7. Proyectos                                  · nivel 2
    8. Cómo trabajo                               · nivel 3
    9. Formación                                  · nivel 4
@@ -485,8 +485,8 @@ figcaption {
 /* ---------- 6. Sobre mí · nivel 1 ---------- */
 .about__grid {
   display: grid;
-  grid-template-columns: minmax(200px, 3fr) 9fr;
-  gap: var(--gap) clamp(32px, 5vw, 96px);
+  grid-template-columns: minmax(180px, 2.4fr) minmax(0, 5fr) minmax(0, 4.2fr);
+  gap: var(--gap) clamp(32px, 4.5vw, 80px);
   align-items: start;
 }
 .about__title {
@@ -503,81 +503,117 @@ figcaption {
   font-weight: 400;
   line-height: 1.16;
   letter-spacing: -0.025em;
-  max-width: 30em;
+  max-width: 22em;
 }
 .boxed {
   padding: 0 0.16em;
   border: 1px solid var(--ink);
   transition: background-color 220ms ease, color 220ms ease, border-color 220ms ease;
 }
-.inline-pic {
-  display: inline-block;
-  width: 1.75em;
-  height: 0.82em;
-  vertical-align: -0.06em;
-  overflow: clip;
-  border: 1px solid var(--ink);
-  transition: transform 400ms var(--ease-out), outline-color 220ms ease;
-  outline: 2px solid transparent;
-  outline-offset: 2px;
-}
-.inline-pic img { width: 100%; height: 100%; object-fit: cover; }
-.inline-pic--round { width: 0.86em; height: 0.86em; border-radius: 50%; }
 
-/* Láminas: las imágenes del texto, en grande y con su pie */
-.plates {
-  grid-column: 2;
+/* Tres ideas cortas; el cuadrito de cada una repite el color de su figura */
+.about__blocks {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: var(--gap);
-  margin-top: clamp(40px, 5vw, 72px);
-  max-width: 900px;
+  gap: clamp(24px, 2.6vw, 40px);
+  margin-top: clamp(40px, 4.5vw, 64px);
 }
-.plate figure { margin: 0; }
-.plate img {
-  width: 100%;
-  height: auto;
-  aspect-ratio: 4 / 5;
-  object-fit: cover;
-  border: 1px solid var(--ink);
-  background: var(--surface);
-  transition: transform 500ms var(--ease-out);
-}
-.plate figcaption {
+.about__block h3 {
   display: flex;
-  gap: 8px;
-  margin-top: 10px;
-  line-height: 1.4;
+  align-items: center;
+  gap: 10px;
+  font-size: var(--fs-lead);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
 }
-.plate figcaption::before {
+.about__block h3::before,
+.float figcaption::before {
   content: "";
   flex-shrink: 0;
   width: 9px;
   height: 9px;
-  margin-top: 0.3em;
   border: 1px solid var(--ink);
-  background: var(--plate-c, var(--bg));
+  background: var(--mark, var(--bg));
 }
-.plate--lime { --plate-c: var(--lime); }
-.plate--orange { --plate-c: var(--orange); }
-.plate--pink { --plate-c: var(--pink); }
-@media (hover: hover) and (pointer: fine) {
-  .plate:hover img { transform: translate(-4px, -4px); box-shadow: 4px 4px 0 var(--plate-c); }
+.about__block p { margin-top: 10px; max-width: 54ch; }
+.about__block--lime { --mark: var(--lime); }
+.about__block--pink { --mark: var(--pink); }
+.about__block--cobalt { --mark: var(--cobalt); }
+
+/* Imágenes flotantes: la foto real hace de ancla y los avatares en pixel art
+   la rodean. js/main.js escribe --p (de -1 a 1 según pasa la sección por la
+   pantalla); cada figura lo multiplica por su velocidad y su giro. */
+.about__stage {
+  position: relative;
+  margin-right: 8px;
+  padding-bottom: 62%; /* sitio para las figuras que cuelgan por debajo de la foto */
 }
+.float {
+  position: relative;
+  margin: 0;
+  translate: 0 calc(var(--p, 0) * var(--speed, 0) * var(--amp, 1) * 1px);
+  rotate: calc((var(--tilt, 0) + var(--p, 0) * var(--twist, 0)) * 1deg);
+}
+.float__frame {
+  overflow: clip;
+  border: 2px solid var(--ink);
+  background: var(--tile, var(--surface));
+  box-shadow: 6px 6px 0 var(--shade, var(--ink));
+}
+.float__frame img { width: 100%; height: auto; }
+.float--px img { image-rendering: pixelated; }
+.float figcaption { display: flex; gap: 8px; margin-top: 14px; line-height: 1.4; text-wrap: balance; }
+.float figcaption::before { margin-top: 0.3em; }
+
+.float--photo { --speed: 22; --tilt: 1.5; --twist: -1.5; --shade: var(--cobalt); --mark: var(--cobalt); width: 76%; margin-left: 24%; }
+.float--photo .float__frame { box-shadow: 8px 8px 0 var(--shade); }
+.float--photo img { aspect-ratio: 4 / 5; object-fit: cover; }
+.float--photo figcaption { padding-left: 24%; }
+
+/* Las posiciones van en % del ancho del escenario (también margin-top),
+   así el conjunto escala entero con la columna */
+.about__stage .float--px { position: absolute; top: 0; z-index: 1; }
+.float--hug { --speed: -95; --tilt: -7; --twist: 5; --tile: var(--lime); --shade: var(--pink); left: 1%; margin-top: 8%; width: 29%; }
+.float--puzzle { --speed: -55; --tilt: 4; --twist: -4; --tile: var(--pink); --shade: var(--lime); --mark: var(--pink); left: 0; margin-top: 70%; width: 40%; }
+.float--swim { --speed: 70; --tilt: -3; --twist: 4; --tile: #e8ecff; --shade: var(--cobalt); --mark: var(--cobalt); left: 52%; margin-top: 112%; width: 42%; }
+.float--server { --speed: 60; --tilt: 5; --twist: -4; --tile: var(--white); --shade: var(--orange); width: min(148px, 72%); margin-top: clamp(56px, 6vw, 96px); }
+/* Pies: el del puzle puede salirse un poco de su figura; el del nadador
+   va en una línea, alineado a su borde derecho */
+.float--puzzle figcaption { width: 125%; }
+.float--swim figcaption { position: absolute; top: 100%; right: 0; width: max-content; }
 
 @media (hover: hover) and (pointer: fine) {
   .boxed--lime:hover { background: var(--lime); color: var(--black); border-color: var(--lime); }
   .boxed--cobalt:hover { background: var(--cobalt); color: var(--white); border-color: var(--cobalt); }
-  .inline-pic:hover { transform: scale(1.5); outline-color: var(--orange); position: relative; z-index: 2; }
+  .float:hover { z-index: 3; }
+  .float:hover .float__frame {
+    transform: translate(-3px, -3px);
+    box-shadow: 10px 10px 0 var(--shade, var(--ink));
+    transition-duration: 240ms;
+    transition-delay: 0s;
+  }
 }
 
-@media (max-width: 860px) {
-  .about__grid { grid-template-columns: 1fr; }
+/* Portátil pequeño y tablet: texto y escenario a dos columnas, ficha debajo */
+@media (max-width: 1100px) {
+  .about__grid { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); }
   .about__side { display: contents; }
-  .about__title { order: 0; }
-  .statement { order: 1; }
-  .facts { order: 2; grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: 24px; }
-  .plates { order: 3; grid-column: 1; gap: 10px; margin-top: 32px; }
+  .about__title { grid-column: 1 / -1; }
+  .about__text { grid-column: 1; grid-row: 2; }
+  .about__stage { grid-column: 2; grid-row: 2; }
+  .facts { grid-column: 1; grid-row: 3; grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: 24px; }
+  .float--server { grid-column: 2; grid-row: 3; justify-self: end; width: 132px; margin: 16px 12px 0 0; }
+}
+/* Móvil: una columna. La foto y sus avatares van tras la frase grande */
+@media (max-width: 700px) {
+  .about { --amp: 0.5; }
+  .about__grid { grid-template-columns: minmax(0, 1fr) auto; }
+  .about__text { display: contents; }
+  .statement { grid-column: 1 / -1; grid-row: 2; }
+  .about__stage { grid-column: 1 / -1; grid-row: 3; margin-top: 28px; }
+  .about__blocks { grid-column: 1 / -1; grid-row: 4; margin-top: 16px; }
+  .facts { grid-row: 5; grid-template-columns: minmax(0, 1fr); }
+  .float--server { grid-row: 5; align-self: center; width: 116px; margin: 24px 10px 0 0; }
 }
 
 /* ---------- 7. Proyectos · nivel 2 ---------- */
@@ -1376,9 +1412,6 @@ figcaption {
 
 @media (max-width: 420px) {
   .link-card__value { font-size: 1rem; }
-}
-@media (max-width: 420px) {
-  .plate figcaption { flex-direction: column; gap: 6px; overflow-wrap: anywhere; }
 }
 @media (max-width: 960px) {
   .contact__intro, .form { grid-column: 1 / -1; }

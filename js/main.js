@@ -140,6 +140,31 @@ window.addEventListener('scroll', requestHeader, { passive: true });
 window.addEventListener('resize', requestHeader);
 updateHeader();
 
+/* ---------- Sobre mí: imágenes flotantes ----------
+   Solo se calcula --p: -1 cuando la sección asoma por abajo, 0 cuando está
+   centrada y 1 cuando se va por arriba. Cada figura lo multiplica en el CSS
+   por su propia velocidad y su giro. Sin movimiento, se quedan en reposo. */
+const about = $('.about');
+let floatTicking = false;
+
+function updateFloats() {
+  floatTicking = false;
+  const rect = about.getBoundingClientRect();
+  const vh = window.innerHeight;
+  if (rect.bottom < 0 || rect.top > vh) return;
+  const p = (vh / 2 - (rect.top + rect.height / 2)) / ((vh + rect.height) / 2);
+  about.style.setProperty('--p', Math.max(-1, Math.min(1, p)).toFixed(4));
+}
+
+if (!reduceMotion) {
+  const requestFloats = () => {
+    if (!floatTicking) { floatTicking = true; requestAnimationFrame(updateFloats); }
+  };
+  window.addEventListener('scroll', requestFloats, { passive: true });
+  window.addEventListener('resize', requestFloats);
+  updateFloats();
+}
+
 /* ---------- Diagrama del inicio ----------
    Une cada nota con un punto del borde del astrolabio. Se calcula
    con las posiciones reales, así encaja en cualquier pantalla.
