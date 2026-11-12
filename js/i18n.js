@@ -16,7 +16,7 @@ window.I18N = {
     'hero.socials': 'Social links',
     'hero.objAlt': 'Pixel-art Alejandro shrugging next to a laptop, at his desk overlooking the Alhambra',
     'hero.noteA': 'Full-stack · PHP, Laravel, React',
-    'hero.baseT': 'Base',
+    'hero.baseT': 'Location',
     'hero.base': 'Granada, Spain',
     'hero.coords': '37.18° N · 3.60° W',
     'hero.figT': 'Fig. 1',
@@ -26,7 +26,7 @@ window.I18N = {
     'hero.stack': 'Infra: Docker · Nginx',
 
     'about.title': 'About me',
-    'about.f1t': 'Base',
+    'about.f1t': 'Location',
     'about.f1': 'Granada, Spain',
     'about.f2t': 'Education',
     'about.f2': 'Higher Diploma in Web Application Development',
