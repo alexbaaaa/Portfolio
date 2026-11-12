@@ -133,33 +133,60 @@
           <dl class="facts" data-reveal style="--i:1">
             <div><dt data-i18n="about.f1t">Ubicación</dt><dd data-i18n="about.f1">Granada, España</dd></div>
             <div><dt data-i18n="about.f2t">Formación</dt><dd data-i18n="about.f2">CFGS Desarrollo de Aplicaciones Web</dd></div>
-            <div><dt data-i18n="about.f3t">Prácticas</dt><dd data-i18n="about.f3">CSIC · Instituto de Astrofísica de Andalucía</dd></div>
             <div><dt data-i18n="about.f4t">Estado</dt><dd data-i18n="about.f4">Disponible para trabajar</dd></div>
           </dl>
+          <figure class="float float--px float--server" aria-hidden="true">
+            <div class="float__frame" data-stamp style="--i:2">
+              <img src="img/pixel/poses/03-servidor-al-hombro.png" width="1024" height="1024" alt="" loading="lazy">
+            </div>
+          </figure>
         </div>
 
-        <p class="statement" data-reveal style="--i:1" data-i18n="about.text">Soy Alex <span class="inline-pic"><img src="img/alicatado-alhambra.jpg" width="500" height="375" alt="Alicatado de la Alhambra" loading="lazy"></span>, desarrollador web en Granada. Diseño <span class="boxed boxed--lime">la interfaz</span>, construyo <span class="boxed boxed--cobalt">la API</span> y lo dejo listo para desplegar. En el Instituto de Astrofísica <span class="inline-pic"><img src="img/osn-telescopio.jpg" width="960" height="1440" alt="Telescopio del Observatorio de Sierra Nevada" loading="lazy"></span> aprendí que el buen software es, ante todo, precisión <span class="inline-pic inline-pic--round"><img src="img/astrolabio-hispano.jpg" width="500" height="562" alt="Astrolabio hispano del siglo XIV" loading="lazy"></span>.</p>
+        <div class="about__text">
+          <p class="statement" data-reveal style="--i:1" data-i18n="about.text">Soy Alex, desarrollador web en Granada. <span class="boxed boxed--lime">Diseño soluciones</span> y las <span class="boxed boxed--cobalt">construyo</span> de principio a fin.</p>
 
-        <ul class="plates" aria-label="Figuras" data-i18n-attr="aria-label:about.plates">
-          <li class="plate plate--lime" data-reveal style="--i:2">
-            <figure>
-              <img src="img/alicatado-alhambra.jpg" width="500" height="375" alt="Alicatado geométrico en un muro de la Alhambra" data-i18n-attr="alt:about.p1alt" loading="lazy">
-              <figcaption class="label" data-i18n="about.p1">Fig. 2 · Alhambra, Granada</figcaption>
-            </figure>
-          </li>
-          <li class="plate plate--orange" data-reveal style="--i:3">
-            <figure>
-              <img src="img/osn-telescopio.jpg" width="960" height="1440" alt="Telescopio de 1,5 m del Observatorio de Sierra Nevada" data-i18n-attr="alt:about.p2alt" loading="lazy">
-              <figcaption class="label" data-i18n="about.p2">Fig. 3 · Observatorio de Sierra Nevada</figcaption>
-            </figure>
-          </li>
-          <li class="plate plate--pink" data-reveal style="--i:4">
-            <figure>
-              <img src="img/astrolabio-hispano.jpg" width="500" height="562" alt="Astrolabio planisférico hispano del siglo XIV" data-i18n-attr="alt:about.p3alt" loading="lazy">
-              <figcaption class="label" data-i18n="about.p3">Fig. 4 · Astrolabio hispano, s. XIV</figcaption>
-            </figure>
-          </li>
-        </ul>
+          <div class="about__blocks">
+            <div class="about__block about__block--lime" data-reveal style="--i:2">
+              <h3 data-i18n="about.b1t">De dónde vengo</h3>
+              <p data-i18n="about.b1">Soy Técnico Superior en Desarrollo de Aplicaciones Web. De esa formación me llevo la visión completa de una aplicación: interfaz, servidor, base de datos y despliegue.</p>
+            </div>
+            <div class="about__block about__block--pink" data-reveal style="--i:3">
+              <h3 data-i18n="about.b2t">Lo que me engancha</h3>
+              <p data-i18n="about.b2">Este mundo está lleno de rompecabezas, y eso es justo lo que me gusta de él. Cada proyecto empieza como un problema sin forma y acaba, pieza a pieza, en algo que funciona. Y lo mejor es ver que puedo construir todo lo que soy capaz de imaginar.</p>
+            </div>
+            <div class="about__block about__block--cobalt" data-reveal style="--i:4">
+              <h3 data-i18n="about.b3t">Fuera de la pantalla</h3>
+              <p data-i18n="about.b3">Soy nadador federado. Entreno seis días a la semana y compito a nivel provincial, andaluz y nacional. De la piscina me traigo la disciplina y la constancia que pongo en cada proyecto.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Imágenes flotantes: cada una se mueve y gira a su ritmo con el scroll (js/main.js) -->
+        <div class="about__stage">
+          <figure class="float float--photo">
+            <div class="float__frame" data-stamp>
+              <img src="img/alex-retrato.jpg" width="880" height="1100" alt="Retrato de Alejandro Aguilera, sonriendo, con un polo negro" data-i18n-attr="alt:about.photoAlt" loading="lazy">
+            </div>
+            <figcaption data-i18n="about.fig2">Fig. 2 · Sin píxeles.</figcaption>
+          </figure>
+          <figure class="float float--px float--hug" aria-hidden="true">
+            <div class="float__frame" data-stamp style="--i:1">
+              <img src="img/pixel/poses/02-abrazo-al-portatil.png" width="1024" height="1024" alt="" loading="lazy">
+            </div>
+          </figure>
+          <figure class="float float--px float--puzzle">
+            <div class="float__frame" data-stamp style="--i:2">
+              <img src="img/pixel/poses/09-la-pieza-que-falta.png" width="1024" height="1024" alt="Alejandro en pixel art a punto de encajar la pieza que falta en un rompecabezas" data-i18n-attr="alt:about.fig3Alt" loading="lazy">
+            </div>
+            <figcaption data-i18n="about.fig3">Fig. 3 · La pieza que falta.</figcaption>
+          </figure>
+          <figure class="float float--px float--swim">
+            <div class="float__frame" data-stamp style="--i:3">
+              <img src="img/pixel/poses/10-listo-para-nadar.png" width="1024" height="1024" alt="Alejandro en pixel art con gorro y gafas de natación, una medalla al cuello y el puño en alto" data-i18n-attr="alt:about.fig4Alt" loading="lazy">
+            </div>
+            <figcaption data-i18n="about.fig4">Fig. 4 · Seis días a la semana.</figcaption>
+          </figure>
+        </div>
       </div>
     </section>
 
