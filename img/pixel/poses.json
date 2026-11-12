@@ -34,5 +34,15 @@
     "title": "Café XXL",
     "pose": "img/pixel/poses/06-cafe-xxl.png",
     "scene": "img/pixel/escena/06-cafe-xxl.png"
+  },
+  {
+    "id": "la-ruta-en-la-pizarra",
+    "title": "La ruta en la pizarra",
+    "pose": "img/pixel/poses/07-la-ruta-en-la-pizarra.png"
+  },
+  {
+    "id": "yo-marco-el-rumbo",
+    "title": "Yo marco el rumbo",
+    "pose": "img/pixel/poses/08-yo-marco-el-rumbo.png"
   }
 ]

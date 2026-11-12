@@ -61,6 +61,7 @@ function applyLang() {
   updateThemeLabel();
   setMenu(false);
   renderEtc();
+  renderMods();
   drawDiagram();
   root.classList.add('i18n-ready');
 }
@@ -107,6 +108,8 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') setMenu(fals
 const hdr = $('#hdr');
 const toned = $$('[data-tone]').filter(el => el !== hdr);
 const navLinks = $$('.hdr__link');
+const howIntro = $('.how__intro');
+const howGate = $('.gate');
 let ticking = false;
 
 function updateHeader() {
@@ -125,6 +128,9 @@ function updateHeader() {
     if (section && section.getBoundingClientRect().top <= mid) activeId = link.getAttribute('href');
   }
   navLinks.forEach(link => link.classList.toggle('is-active', link.getAttribute('href') === activeId));
+
+  // Cómo trabajo: pasada la puerta de la ruta, la figura fija ya programa
+  howIntro.classList.toggle('is-coding', howGate.getBoundingClientRect().top < window.innerHeight * 0.55);
 }
 
 function requestHeader() {
@@ -274,6 +280,27 @@ function renderEtc() {
 
 etc.mag.addEventListener('input', renderEtc);
 etc.time.addEventListener('input', renderEtc);
+
+/* ---------- Cómo trabajo: partes independientes ----------
+   Se rompe una parte y las demás siguen en pie. Como mucho hay una
+   rota; tocar la rota la arregla. Sin JavaScript queda la API rota. */
+const mods = $$('.mod');
+const modsStatus = $('#mods-status');
+
+function renderMods() {
+  const broken = mods.find(mod => mod.getAttribute('aria-pressed') === 'true');
+  mods.forEach(mod => { $('.mod__state', mod).textContent = mod === broken ? 'Error' : 'OK'; });
+  modsStatus.textContent = broken
+    ? ui().modFail.replace('{x}', $('.mod__name', broken).textContent)
+    : ui().modOk;
+}
+
+mods.forEach(mod => mod.addEventListener('click', () => {
+  const wasBroken = mod.getAttribute('aria-pressed') === 'true';
+  mods.forEach(other => other.setAttribute('aria-pressed', 'false'));
+  if (!wasBroken) mod.setAttribute('aria-pressed', 'true');
+  renderMods();
+}));
 
 /* ---------- Copiar email ---------- */
 const copyBtn = $('#copy-email');
