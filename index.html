@@ -20,6 +20,7 @@
       if (/^(es|en)$/.test(q.get('lang') || '')) l = q.get('lang');
       if (!t) t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
       d.dataset.theme = t;
+      if (/^#proyecto\//.test(location.hash)) d.classList.add('is-case');
       if (l === 'en') { d.dataset.lang = 'en'; setTimeout(function () { d.classList.add('i18n-ready'); }, 1500); }
     })();
   </script>
@@ -37,6 +38,9 @@
     <symbol id="i-out" viewBox="0 0 24 24"><path d="M7 17 17 7M8 7h9v9"/></symbol>
     <symbol id="i-down" viewBox="0 0 24 24"><path d="M12 4v15M6 13l6 6 6-6"/></symbol>
     <symbol id="i-right" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></symbol>
+    <symbol id="i-left" viewBox="0 0 24 24"><path d="M20 12H5M11 6l-6 6 6 6"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 4v16M4 12h16"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><path d="M5 5l14 14M19 5 5 19"/></symbol>
     <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
     <symbol id="i-moon" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></symbol>
     <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 1.5 14.2 9.8 22.5 12l-8.3 2.2L12 22.5l-2.2-8.3L1.5 12l8.3-2.2z" fill="currentColor" stroke="none"/></symbol>
@@ -198,84 +202,51 @@
           <p class="work__lead" data-reveal style="--i:1" data-i18n="work.lead">Dos aplicaciones completas, de la base de datos al despliegue.</p>
         </header>
 
-        <!-- Swimming Up -->
-        <article class="project">
-          <div class="project__media" data-reveal>
-            <figure class="frame shutter">
-              <img src="img/piscina-calles.jpg" width="1280" height="960" alt="Calles y poyetes de salida de una piscina de competición" data-i18n-attr="alt:work.p1alt" loading="lazy">
-            </figure>
-            <div class="ui-card ui-times" data-ui data-reveal style="--i:2">
-              <div class="ui-card__bar"><span>Swimming Up</span><span data-i18n="work.p1ui">Marcas · 100 m libre</span></div>
-              <table>
-                <thead><tr><th data-i18n="work.p1c1">Nadador</th><th data-i18n="work.p1c2">Grupo</th><th data-i18n="work.p1c3">Tiempo</th></tr></thead>
-                <tbody>
-                  <tr><td>L. Martín</td><td data-i18n="work.g1">Absoluto</td><td>58,42 <span class="ui-badge" data-i18n="work.pb">Récord</span></td></tr>
-                  <tr><td>C. Ruiz</td><td>Junior</td><td>1:02,15</td></tr>
-                  <tr><td>A. Gómez</td><td data-i18n="work.g2">Infantil</td><td>1:09,80 <span class="ui-badge" data-i18n="work.pb">Récord</span></td></tr>
-                  <tr><td>M. Torres</td><td data-i18n="work.g2">Infantil</td><td>1:11,04</td></tr>
-                </tbody>
-              </table>
-              <p class="ui-card__note" data-i18n="work.sample">Datos de ejemplo</p>
+        <!-- Lista: una fila por proyecto. Cada fila abre su ficha ampliada (#ficha).
+             Para añadir un proyecto: una fila aquí y un <article class="case"> en la ficha. -->
+        <ol class="plist">
+          <li class="prow" data-color="cobalt" data-reveal>
+            <div class="prow__thumb" aria-hidden="true">
+              <img src="img/proyectos/swimming-up/thumb.jpg" width="560" height="350" alt="" loading="lazy">
             </div>
-          </div>
-
-          <div class="project__body">
-            <h3 class="project__name" data-reveal>Swimming Up</h3>
-            <p class="project__kind" data-reveal style="--i:1"><span class="sq sq--cobalt" aria-hidden="true"></span><span data-i18n="work.p1kind">Proyecto final DAW · 2026</span></p>
-            <p class="project__desc" data-reveal style="--i:2" data-i18n="work.p1desc">Gestión integral de un club de natación: nadadores, grupos, competiciones, calendario y marcas. Panel de administración con roles, API JSON y blog del club, orquestado con Docker Compose y Nginx.</p>
-            <ul class="tags" data-reveal style="--i:3" aria-label="Tecnologías" data-i18n-attr="aria-label:work.techs">
-              <li>PHP</li><li>Laravel</li><li>React</li><li>Docker</li><li>Nginx</li><li>MariaDB</li><li>PostgreSQL</li><li>WordPress</li>
-            </ul>
-            <a class="btn btn--line" data-reveal style="--i:4" href="https://github.com/alexbaaaa/Final-Project-DAW" target="_blank" rel="noopener noreferrer">
-              <span data-i18n="work.repo">Ver repositorio</span>
-              <svg class="icon" aria-hidden="true"><use href="#i-out"/></svg>
+            <div class="prow__title">
+              <span class="prow__num">01</span>
+              <h3 class="prow__name">Swimming Up</h3>
+            </div>
+            <div class="prow__info">
+              <p class="project__kind"><span class="sq sq--cobalt" aria-hidden="true"></span><span data-i18n="work.p1kind">Proyecto final DAW · 2026</span></p>
+              <p class="prow__desc" data-i18n="work.p1desc">Gestión integral de un club de natación: nadadores, grupos, competiciones, calendario y marcas. Panel de administración con roles, API JSON y blog del club, orquestado con Docker Compose y Nginx.</p>
+              <ul class="tags" aria-label="Tecnologías" data-i18n-attr="aria-label:work.techs">
+                <li>PHP</li><li>Laravel</li><li>React</li><li>Docker</li><li>Nginx</li><li>MariaDB</li><li>PostgreSQL</li><li>WordPress</li>
+              </ul>
+            </div>
+            <a class="btn btn--line prow__more" href="#proyecto/swimming-up" aria-label="Ver más sobre Swimming Up" data-i18n-attr="aria-label:work.p1more">
+              <span data-i18n="work.more">Ver más</span>
+              <svg class="icon" aria-hidden="true"><use href="#i-right"/></svg>
             </a>
-          </div>
-        </article>
+          </li>
 
-        <!-- MAAT ETC -->
-        <article class="project project--flip">
-          <div class="project__media" data-reveal>
-            <figure class="frame frame--tall shutter">
-              <img src="img/osn-telescopio.jpg" width="960" height="1440" alt="Telescopio de 1,5 m del Observatorio de Sierra Nevada (IAA-CSIC)" data-i18n-attr="alt:work.p2alt" loading="lazy">
-            </figure>
-
-            <!-- Lo que se puede tocar: una versión simplificada de la calculadora -->
-            <form class="ui-card etc" data-ui data-reveal style="--i:2" aria-labelledby="etc-title" onsubmit="return false">
-              <div class="ui-card__bar"><span id="etc-title">MAAT ETC · demo</span><span data-i18n="work.etcTag">Pruébalo</span></div>
-              <div class="etc__row">
-                <label for="etc-mag" data-i18n="work.etcMag">Magnitud del objeto</label>
-                <output id="etc-mag-out" for="etc-mag">18,0</output>
-              </div>
-              <input type="range" id="etc-mag" min="12" max="24" step="0.5" value="18">
-              <div class="etc__row">
-                <label for="etc-t" data-i18n="work.etcT">Tiempo de exposición</label>
-                <output id="etc-t-out" for="etc-t">300 s</output>
-              </div>
-              <input type="range" id="etc-t" min="0" max="100" step="1" value="70">
-              <div class="etc__result">
-                <span>S/N</span>
-                <strong id="etc-sn">40</strong>
-                <span class="etc__verdict" id="etc-verdict">Buena medida</span>
-              </div>
-              <div class="etc__meter" aria-hidden="true"><span id="etc-bar" style="width:40%"></span></div>
-              <p class="ui-card__note" data-i18n="work.etcNote">Versión simplificada de la ecuación CCD con valores ilustrativos, no los del instrumento.</p>
-            </form>
-          </div>
-
-          <div class="project__body">
-            <h3 class="project__name" data-reveal>MAAT ETC</h3>
-            <p class="project__kind" data-reveal style="--i:1"><span class="sq sq--orange" aria-hidden="true"></span><span data-i18n="work.p2kind">Prácticas · CSIC · IAA · 2026</span></p>
-            <p class="project__desc" data-reveal style="--i:2" data-i18n="work.p2desc">Versión web de la calculadora de tiempos de exposición del instrumento MAAT para el Gran Telescopio Canarias, hecha durante mis prácticas en el Instituto de Astrofísica de Andalucía. Llevé el script de escritorio en Python del equipo científico a una aplicación Flask: el formulario envía los parámetros de observación, el servidor calcula la relación señal/ruido o el tiempo de exposición y devuelve la gráfica generada con matplotlib. Los parámetros también se pueden cargar desde un archivo .txt, y la aplicación se sirve con Gunicorn y Nginx.</p>
-            <ul class="tags" data-reveal style="--i:3" aria-label="Tecnologías" data-i18n-attr="aria-label:work.techs">
-              <li>Python</li><li>Flask</li><li>JavaScript</li><li>Chart.js</li><li>Docker</li>
-            </ul>
-            <a class="btn btn--line" data-reveal style="--i:4" href="https://github.com/alexbaaaa/MAATETC" target="_blank" rel="noopener noreferrer">
-              <span data-i18n="work.profile">Ver mi GitHub</span>
-              <svg class="icon" aria-hidden="true"><use href="#i-out"/></svg>
+          <li class="prow" data-color="orange" data-reveal style="--i:1">
+            <div class="prow__thumb" aria-hidden="true">
+              <img src="img/proyectos/maat-etc/thumb.jpg" width="560" height="452" alt="" loading="lazy">
+            </div>
+            <div class="prow__title">
+              <span class="prow__num">02</span>
+              <h3 class="prow__name">MAAT ETC</h3>
+            </div>
+            <div class="prow__info">
+              <p class="project__kind"><span class="sq sq--orange" aria-hidden="true"></span><span data-i18n="work.p2kind">Prácticas · CSIC · IAA · 2026</span></p>
+              <p class="prow__desc" data-i18n="work.p2desc">Versión web de la calculadora de tiempos de exposición del instrumento MAAT para el Gran Telescopio Canarias, hecha durante mis prácticas en el Instituto de Astrofísica de Andalucía.</p>
+              <ul class="tags" aria-label="Tecnologías" data-i18n-attr="aria-label:work.techs">
+                <li>Python</li><li>Flask</li><li>JavaScript</li><li>Matplotlib</li><li>Gunicorn</li><li>Nginx</li>
+              </ul>
+            </div>
+            <a class="btn btn--line prow__more" href="#proyecto/maat-etc" aria-label="Ver más sobre MAAT ETC" data-i18n-attr="aria-label:work.p2more">
+              <span data-i18n="work.more">Ver más</span>
+              <svg class="icon" aria-hidden="true"><use href="#i-right"/></svg>
             </a>
-          </div>
-        </article>
+          </li>
+        </ol>
       </div>
     </section>
 
@@ -632,6 +603,358 @@
         </form>
       </div>
     </section>
+
+    <!-- ============ FICHAS DE PROYECTO ============
+         Con JavaScript solo se ve una, en lugar del resto de la página: la abre el
+         telón de color (js/main.js). Sin JavaScript quedan al final, una tras otra. -->
+    <div class="sheet" id="ficha">
+
+      <!-- Swimming Up -->
+      <article class="case" id="proyecto/swimming-up" data-case="swimming-up" data-color="cobalt" data-num="01" data-name="Swimming Up" aria-labelledby="case-su">
+        <nav class="case__bar" aria-label="Ficha de proyecto" data-i18n-attr="aria-label:case.barLabel">
+          <a class="case__back" href="#proyectos">
+            <svg class="icon" aria-hidden="true"><use href="#i-left"/></svg>
+            <span data-i18n="case.back">Proyectos</span>
+          </a>
+          <span class="label">01 / 02</span>
+        </nav>
+
+        <div class="wrap">
+          <header class="case__head">
+            <p class="project__kind case__kind"><span class="sq sq--cobalt" aria-hidden="true"></span><span data-i18n="work.p1kind">Proyecto final DAW · 2026</span></p>
+            <h2 class="case__name lines" id="case-su" tabindex="-1"><span class="line"><span data-line>Swimming Up</span></span></h2>
+            <p class="case__lead" data-i18n="c1.lead">Plataforma web para un club de natación: una app para nadadores y familias, un panel de administración con control de acceso por roles y un blog de noticias. Todo vive bajo un mismo dominio, orquestado con Docker detrás de un proxy inverso Nginx, y se desplegó en AWS con HTTPS.</p>
+            <div class="case__meta">
+              <ul class="tags" aria-label="Tecnologías" data-i18n-attr="aria-label:work.techs">
+                <li>React</li><li>Vite</li><li>Laravel</li><li>PHP</li><li>WordPress</li><li>MariaDB</li><li>PostgreSQL</li><li>Nginx</li><li>Docker</li><li>AWS</li>
+              </ul>
+              <a class="btn btn--line" href="https://github.com/alexbaaaa/Final-Project-DAW" target="_blank" rel="noopener noreferrer">
+                <span data-i18n="work.repo">Ver repositorio</span>
+                <svg class="icon" aria-hidden="true"><use href="#i-out"/></svg>
+              </a>
+            </div>
+          </header>
+
+          <div class="case__cover">
+            <figure class="shot-fig shot-fig--12">
+              <button class="shot shot--cover" type="button" data-stamp>
+                <span class="vh" data-i18n="case.zoom">Ampliar captura:</span>
+                <img src="img/proyectos/swimming-up/app-home.jpg" width="1440" height="900" alt="Portada de Swimming Up: «Welcome to Swimming Up» sobre un fondo azul con las calles de una piscina" data-i18n-attr="alt:c1.s1alt">
+                <span class="shot__plus" aria-hidden="true"><svg class="icon"><use href="#i-plus"/></svg></span>
+              </button>
+              <figcaption data-i18n="c1.s1">Portada de la app</figcaption>
+            </figure>
+          </div>
+
+          <section class="case__block" aria-labelledby="case-su-a">
+            <div class="case__block-head">
+              <h3 class="case__h" id="case-su-a" data-reveal data-i18n="case.hProblem">Problema y solución</h3>
+              <p class="case__intro" data-reveal style="--i:1" data-i18n="c1.pIntro">Lo diseñé a partir de las necesidades de un club de natación real, aunque todavía no está en uso por el club.</p>
+            </div>
+            <div class="pairs">
+              <p class="pairs__head" aria-hidden="true"><span data-i18n="c1.pColA">Necesidad del club</span><span data-i18n="c1.pColB">Solución</span></p>
+              <ol>
+                <li data-reveal>
+                  <p class="pairs__need" data-i18n="c1.n1">Nadadores y familias no saben qué días hay entreno, competición o festivo.</p>
+                  <svg class="icon pairs__arrow" aria-hidden="true"><use href="#i-right"/></svg>
+                  <p class="pairs__fix" data-i18n="c1.f1">Calendario mensual y horario semanal, filtrados por la categoría del nadador.</p>
+                </li>
+                <li data-reveal>
+                  <p class="pairs__need" data-i18n="c1.n2">Las marcas de los nadadores están dispersas.</p>
+                  <svg class="icon pairs__arrow" aria-hidden="true"><use href="#i-right"/></svg>
+                  <p class="pairs__fix" data-i18n="c1.f2">Historial de tiempos por prueba, estilo y distancia.</p>
+                </li>
+                <li data-reveal>
+                  <p class="pairs__need" data-i18n="c1.n3">Un padre o una madre puede tener varios hijos en el club.</p>
+                  <svg class="icon pairs__arrow" aria-hidden="true"><use href="#i-right"/></svg>
+                  <p class="pairs__fix" data-i18n="c1.f3">Usuario «tutor legal» con selector de perfil: elige un nadador y toda la app se recarga con sus datos.</p>
+                </li>
+                <li data-reveal>
+                  <p class="pairs__need" data-i18n="c1.n4">Varios entrenadores gestionan los datos, cada uno con distintos permisos.</p>
+                  <svg class="icon pairs__arrow" aria-hidden="true"><use href="#i-right"/></svg>
+                  <p class="pairs__fix" data-i18n="c1.f4">Panel de administración con tres roles (root, master y admin) y permisos por sección.</p>
+                </li>
+                <li data-reveal>
+                  <p class="pairs__need" data-i18n="c1.n5">El club necesita publicar noticias.</p>
+                  <svg class="icon pairs__arrow" aria-hidden="true"><use href="#i-right"/></svg>
+                  <p class="pairs__fix" data-i18n="c1.f5">Blog en WordPress con tema propio, bajo el mismo dominio.</p>
+                </li>
+              </ol>
+            </div>
+          </section>
+
+          <section class="case__block" aria-labelledby="case-su-b">
+            <div class="case__block-head">
+              <h3 class="case__h" id="case-su-b" data-reveal data-i18n="case.hArch">Arquitectura</h3>
+              <p class="case__intro" data-reveal style="--i:1" data-i18n="c1.aIntro">Siete contenedores Docker bajo un único dominio. Nginx es el único punto de entrada y reparte cada petición según el prefijo de su ruta.</p>
+            </div>
+            <ol class="arch" data-reveal>
+              <li class="arch__stage">
+                <p class="arch__label" data-i18n="c1.a1">Cliente</p>
+                <div class="arch__nodes">
+                  <div class="arch__node"><strong data-i18n="arch.browser">Navegador</strong><span>HTTPS · 443</span></div>
+                </div>
+              </li>
+              <li class="arch__stage">
+                <p class="arch__label" data-i18n="c1.a2">Entrada</p>
+                <div class="arch__nodes">
+                  <div class="arch__node arch__node--key"><strong>Nginx</strong><span data-i18n="c1.a2d">Proxy inverso y TLS</span></div>
+                </div>
+              </li>
+              <li class="arch__stage arch__stage--wide">
+                <p class="arch__label" data-i18n="c1.a3">Servicios · red interna</p>
+                <div class="arch__nodes">
+                  <div class="arch__node"><code>/</code><strong>Frontend</strong><span data-i18n="c1.a3a">React compilado, servido con Nginx</span></div>
+                  <div class="arch__node"><code>/api · /admin</code><strong>Backend</strong><span data-i18n="c1.a3b">Laravel + Apache. Usa las dos bases de datos</span></div>
+                  <div class="arch__node"><code>/blog</code><strong>WordPress</strong><span data-i18n="c1.a3c">Tema propio. Usa MariaDB</span></div>
+                </div>
+              </li>
+              <li class="arch__stage">
+                <p class="arch__label" data-i18n="c1.a4">Datos</p>
+                <div class="arch__nodes">
+                  <div class="arch__node"><strong>MariaDB</strong><span data-i18n="c1.a4a">Datos del club y WordPress</span></div>
+                  <div class="arch__node"><strong>PostgreSQL</strong><span data-i18n="c1.a4b">Usuarios y credenciales</span></div>
+                </div>
+              </li>
+            </ol>
+            <ul class="arch__notes">
+              <li data-reveal><span class="sq sq--cobalt" aria-hidden="true"></span><p data-i18n="c1.an1">Un dominio, varios servicios: Laravel y WordPress se sirven bajo un prefijo y cada uno genera bien sus URLs y limita sus cookies a su ruta.</p></li>
+              <li data-reveal style="--i:1"><span class="sq sq--cobalt" aria-hidden="true"></span><p data-i18n="c1.an2">Dos bases de datos a propósito: los datos del club van en MariaDB; las identidades y contraseñas, en PostgreSQL, aisladas del resto.</p></li>
+              <li data-reveal style="--i:2"><span class="sq sq--cobalt" aria-hidden="true"></span><p data-i18n="c1.an3">En producción la red interna no tiene salida a Internet y solo Nginx publica puertos. Se desplegó en AWS EC2 con certificado Let’s Encrypt.</p></li>
+            </ul>
+          </section>
+
+          <section class="case__block" aria-labelledby="case-su-c">
+            <div class="case__block-head">
+              <h3 class="case__h" id="case-su-c" data-reveal data-i18n="case.hShots">Capturas</h3>
+              <p class="case__intro" data-reveal style="--i:1" data-i18n="c1.sIntro">Capturas del entorno local con datos ficticios. Pulsa cualquiera para ampliarla.</p>
+            </div>
+            <div class="shots">
+              <p class="shots__group" data-i18n="c1.g1">App para nadadores y familias · React</p>
+              <figure class="shot-fig shot-fig--4" data-reveal>
+                <button class="shot" type="button">
+                  <span class="vh" data-i18n="case.zoom">Ampliar captura:</span>
+                  <img src="img/proyectos/swimming-up/app-calendar.png" width="1440" height="900" alt="Calendario mensual de noviembre con competiciones, fin de inscripción, entreno suspendido y festivo marcados por colores" data-i18n-attr="alt:c1.s2alt" loading="lazy">
+                  <span class="shot__plus" aria-hidden="true"><svg class="icon"><use href="#i-plus"/></svg></span>
+                </button>
+                <figcaption data-i18n="c1.s2">Calendario mensual</figcaption>
+              </figure>
+              <figure class="shot-fig shot-fig--4" data-reveal style="--i:1">
+                <button class="shot" type="button">
+                  <span class="vh" data-i18n="case.zoom">Ampliar captura:</span>
+                  <img src="img/proyectos/swimming-up/app-training.png" width="1440" height="900" alt="Horario de la semana actual con los bloques de entrenamiento del grupo sobre una rejilla horaria" data-i18n-attr="alt:c1.s3alt" loading="lazy">
+                  <span class="shot__plus" aria-hidden="true"><svg class="icon"><use href="#i-plus"/></svg></span>
+                </button>
+                <figcaption data-i18n="c1.s3">Horario semanal del grupo</figcaption>
+              </figure>
+              <figure class="shot-fig shot-fig--4" data-reveal style="--i:2">
+                <button class="shot" type="button">
+                  <span class="vh" data-i18n="case.zoom">Ampliar captura:</span>
+                  <img src="img/proyectos/swimming-up/app-profile.png" width="1440" height="1108" alt="Ficha de una nadadora con sus datos y la tabla de marcas, filtrable por estilo y distancia" data-i18n-attr="alt:c1.s4alt" loading="lazy">
+                  <span class="shot__plus" aria-hidden="true"><svg class="icon"><use href="#i-plus"/></svg></span>
+                </button>
+                <figcaption data-i18n="c1.s4">Perfil y marcas</figcaption>
+              </figure>
+
+              <p class="shots__group" data-i18n="c1.g2">Panel de administración · Laravel + Blade</p>
+              <figure class="shot-fig shot-fig--4" data-reveal>
+                <button class="shot" type="button">
+                  <span class="vh" data-i18n="case.zoom">Ampliar captura:</span>
+                  <img src="img/proyectos/swimming-up/admin-users.png" width="1440" height="900" alt="Tabla de usuarios de la app con alias, tipo de usuario, estado y nadadores asociados" data-i18n-attr="alt:c1.s5alt" loading="lazy">
+                  <span class="shot__plus" aria-hidden="true"><svg class="icon"><use href="#i-plus"/></svg></span>
+                </button>
+                <figcaption data-i18n="c1.s5">Usuarios de la app</figcaption>
+              </figure>
+              <figure class="shot-fig shot-fig--4" data-reveal style="--i:1">
+                <button class="shot" type="button">
+                  <span class="vh" data-i18n="case.zoom">Ampliar captura:</span>
+                  <img src="img/proyectos/swimming-up/admin-training-groups.png" width="1440" height="900" alt="Tabla de grupos de entrenamiento con las categorías de cada uno" data-i18n-attr="alt:c1.s6alt" loading="lazy">
+                  <span class="shot__plus" aria-hidden="true"><svg class="icon"><use href="#i-plus"/></svg></span>
+                </button>
+                <figcaption data-i18n="c1.s6">Grupos de entrenamiento</figcaption>
+              </figure>
+              <figure class="shot-fig shot-fig--4" data-reveal style="--i:2">
+                <button class="shot" type="button">
+                  <span class="vh" data-i18n="case.zoom">Ampliar captura:</span>
+                  <img src="img/proyectos/swimming-up/admin-calendar.png" width="1440" height="900" alt="Tabla de días especiales del calendario: festivo con entreno, entreno suspendido y fin de inscripción" data-i18n-attr="alt:c1.s7alt" loading="lazy">
+                  <span class="shot__plus" aria-hidden="true"><svg class="icon"><use href="#i-plus"/></svg></span>
+                </button>
+                <figcaption data-i18n="c1.s7">Calendario del club</figcaption>
+              </figure>
+
+              <p class="shots__group" data-i18n="c1.g3">Blog · WordPress</p>
+              <figure class="shot-fig shot-fig--8" data-reveal>
+                <button class="shot" type="button">
+                  <span class="vh" data-i18n="case.zoom">Ampliar captura:</span>
+                  <img src="img/proyectos/swimming-up/blog.jpg" width="1440" height="900" alt="Portada del blog del club con la última noticia destacada sobre la foto de una piscina" data-i18n-attr="alt:c1.s8alt" loading="lazy">
+                  <span class="shot__plus" aria-hidden="true"><svg class="icon"><use href="#i-plus"/></svg></span>
+                </button>
+                <figcaption data-i18n="c1.s8">Blog del club con tema propio</figcaption>
+              </figure>
+            </div>
+          </section>
+        </div>
+
+        <a class="case__next" href="#proyecto/maat-etc" data-color="orange">
+          <span class="label" data-i18n="case.next">Siguiente proyecto</span>
+          <span class="case__next-name">MAAT ETC <svg class="icon" aria-hidden="true"><use href="#i-right"/></svg></span>
+        </a>
+      </article>
+
+      <!-- MAAT ETC -->
+      <article class="case" id="proyecto/maat-etc" data-case="maat-etc" data-color="orange" data-num="02" data-name="MAAT ETC" aria-labelledby="case-me">
+        <nav class="case__bar" aria-label="Ficha de proyecto" data-i18n-attr="aria-label:case.barLabel">
+          <a class="case__back" href="#proyectos">
+            <svg class="icon" aria-hidden="true"><use href="#i-left"/></svg>
+            <span data-i18n="case.back">Proyectos</span>
+          </a>
+          <span class="label">02 / 02</span>
+        </nav>
+
+        <div class="wrap">
+          <header class="case__head">
+            <p class="project__kind case__kind"><span class="sq sq--orange" aria-hidden="true"></span><span data-i18n="work.p2kind">Prácticas · CSIC · IAA · 2026</span></p>
+            <h2 class="case__name lines" id="case-me" tabindex="-1"><span class="line"><span data-line>MAAT ETC</span></span></h2>
+            <p class="case__lead" data-i18n="c2.lead">Calculadora de tiempos de exposición para MAAT, la unidad de campo integral de OSIRIS+ en el Gran Telescopio Canarias. Sirve para planificar una observación: dado un objeto y unas condiciones, calcula la relación señal/ruido que se alcanza con un tiempo de exposición, o el tiempo necesario para llegar a una señal/ruido. La hice durante mis prácticas en el Instituto de Astrofísica de Andalucía (IAA-CSIC).</p>
+            <div class="case__meta">
+              <ul class="tags" aria-label="Tecnologías" data-i18n-attr="aria-label:work.techs">
+                <li>Python</li><li>Flask</li><li>NumPy</li><li>SciPy</li><li>Matplotlib</li><li>Astropy</li><li>JavaScript</li><li>Bootstrap</li><li>Gunicorn</li><li>Nginx</li><li>Vagrant</li>
+              </ul>
+              <a class="btn btn--line" href="https://github.com/alexbaaaa/MAATETC" target="_blank" rel="noopener noreferrer">
+                <span data-i18n="work.repo">Ver repositorio</span>
+                <svg class="icon" aria-hidden="true"><use href="#i-out"/></svg>
+              </a>
+            </div>
+          </header>
+
+          <div class="case__cover">
+            <figure class="shot-fig shot-fig--9">
+              <button class="shot shot--cover" type="button" data-stamp>
+                <span class="vh" data-i18n="case.zoom">Ampliar captura:</span>
+                <img src="img/proyectos/maat-etc/compute-result.jpg" width="1600" height="1293" alt="Calculadora MAAT ETC: a la izquierda el formulario de parámetros de observación; a la derecha, la gráfica de señal/ruido, el espectro simulado y el resumen del cálculo" data-i18n-attr="alt:c2.s1alt">
+                <span class="shot__plus" aria-hidden="true"><svg class="icon"><use href="#i-plus"/></svg></span>
+              </button>
+              <figcaption data-i18n="c2.s1">Calculadora con un resultado</figcaption>
+            </figure>
+            <figure class="shot-fig shot-fig--3">
+              <button class="shot shot--cover" type="button" data-stamp style="--i:2">
+                <span class="vh" data-i18n="case.zoom">Ampliar captura:</span>
+                <img src="img/proyectos/maat-etc/mobile.png" width="585" height="1266" alt="El formulario de la calculadora en un móvil, con los campos en una sola columna" data-i18n-attr="alt:c2.s2alt">
+                <span class="shot__plus" aria-hidden="true"><svg class="icon"><use href="#i-plus"/></svg></span>
+              </button>
+              <figcaption data-i18n="c2.s2">La misma calculadora en el móvil</figcaption>
+            </figure>
+          </div>
+
+          <section class="case__block" aria-labelledby="case-me-a">
+            <div class="case__block-head">
+              <h3 class="case__h" id="case-me-a" data-reveal data-i18n="case.hProblem">Problema y solución</h3>
+              <p class="case__intro" data-reveal style="--i:1" data-i18n="c2.pIntro">El cálculo ya existía: un script de escritorio en Python, con interfaz PySimpleGUI, que el equipo científico usaba internamente. Mi trabajo fue convertirlo en una aplicación web sin tocar la física.</p>
+            </div>
+            <div class="pairs">
+              <p class="pairs__head" aria-hidden="true"><span data-i18n="c2.pColA">Punto de partida</span><span data-i18n="c2.pColB">Lo que construí</span></p>
+              <ol>
+                <li data-reveal>
+                  <p class="pairs__need" data-i18n="c2.n1">Un script de escritorio atado a su propia interfaz gráfica.</p>
+                  <svg class="icon pairs__arrow" aria-hidden="true"><use href="#i-right"/></svg>
+                  <p class="pairs__fix" data-i18n="c2.f1">El motor de cálculo, convertido en un servicio sin estado: sin dependencias de interfaz local y con la física intacta.</p>
+                </li>
+                <li data-reveal>
+                  <p class="pairs__need" data-i18n="c2.n2">El resultado tiene que llegar al navegador: gráfica, resumen y datos.</p>
+                  <svg class="icon pairs__arrow" aria-hidden="true"><use href="#i-right"/></svg>
+                  <p class="pairs__fix" data-i18n="c2.f2">API REST con Flask que devuelve la gráfica en PNG, un resumen de texto y un archivo de datos descargable.</p>
+                </li>
+                <li data-reveal>
+                  <p class="pairs__need" data-i18n="c2.n3">Un formulario con muchos parámetros de observación.</p>
+                  <svg class="icon pairs__arrow" aria-hidden="true"><use href="#i-right"/></svg>
+                  <p class="pairs__fix" data-i18n="c2.f3">Validación campo a campo, valores por defecto según la red de difracción y carga de todos los parámetros arrastrando un archivo .txt.</p>
+                </li>
+                <li data-reveal>
+                  <p class="pairs__need" data-i18n="c2.n4">Tiene que funcionar como servicio en la red interna del instituto.</p>
+                  <svg class="icon pairs__arrow" aria-hidden="true"><use href="#i-right"/></svg>
+                  <p class="pairs__fix" data-i18n="c2.f4">Despliegue en Linux con Nginx, Gunicorn y systemd, más un entorno reproducible con Vagrant.</p>
+                </li>
+              </ol>
+            </div>
+          </section>
+
+          <section class="case__block" aria-labelledby="case-me-b">
+            <div class="case__block-head">
+              <h3 class="case__h" id="case-me-b" data-reveal data-i18n="case.hArch">Arquitectura</h3>
+              <p class="case__intro" data-reveal style="--i:1" data-i18n="c2.aIntro">Cada cálculo recorre cuatro capas hasta llegar a la física. La aplicación no guarda estado: no necesita base de datos ni escribe nada en disco.</p>
+            </div>
+            <ol class="arch" data-reveal>
+              <li class="arch__stage">
+                <p class="arch__label" data-i18n="c2.a1">Cliente</p>
+                <div class="arch__nodes">
+                  <div class="arch__node"><strong data-i18n="arch.browser">Navegador</strong><span data-i18n="c2.a1d">Formulario y JavaScript en módulos. Valida y envía JSON</span></div>
+                </div>
+              </li>
+              <li class="arch__stage">
+                <p class="arch__label" data-i18n="c2.a2">Entrada</p>
+                <div class="arch__nodes">
+                  <div class="arch__node"><strong>Nginx</strong><span data-i18n="c2.a2d">Sirve los estáticos y hace de proxy</span></div>
+                </div>
+              </li>
+              <li class="arch__stage">
+                <p class="arch__label" data-i18n="c2.a3">Servidor WSGI</p>
+                <div class="arch__nodes">
+                  <div class="arch__node"><strong>Gunicorn</strong><span data-i18n="c2.a3d">4 workers por socket Unix, gestionado por systemd</span></div>
+                </div>
+              </li>
+              <li class="arch__stage arch__stage--wide">
+                <p class="arch__label" data-i18n="c2.a4">Aplicación Flask</p>
+                <div class="arch__nodes">
+                  <div class="arch__node arch__node--key"><code>POST /etc</code><strong data-i18n="c2.a4a">Rutas y controladores</strong><span data-i18n="c2.a4ad">Reciben los parámetros y devuelven JSON</span></div>
+                  <div class="arch__node"><strong data-i18n="c2.a4b">Servicio HandlerETC</strong><span data-i18n="c2.a4bd">Llama al motor, codifica la gráfica y gestiona los errores</span></div>
+                </div>
+              </li>
+              <li class="arch__stage">
+                <p class="arch__label" data-i18n="c2.a5">Motor científico</p>
+                <div class="arch__nodes">
+                  <div class="arch__node"><strong>ETC.py</strong><span data-i18n="c2.a5d">Curvas de eficiencia y plantillas de espectros</span></div>
+                </div>
+              </li>
+            </ol>
+            <ul class="arch__notes">
+              <li data-reveal><span class="sq sq--orange" aria-hidden="true"></span><p data-i18n="c2.an1">Una sola respuesta JSON trae la gráfica codificada en Base64, el resumen y el archivo de resultados, que se genera en memoria.</p></li>
+              <li data-reveal style="--i:1"><span class="sq sq--orange" aria-hidden="true"></span><p data-i18n="c2.an2">Matplotlib dibuja sin pantalla y con una figura por petición, así varios workers pueden trabajar a la vez sin pisarse.</p></li>
+              <li data-reveal style="--i:2"><span class="sq sq--orange" aria-hidden="true"></span><p data-i18n="c2.an3">La lógica científica es del instituto. La aplicación web, la API, el frontend y el despliegue son trabajo mío.</p></li>
+            </ul>
+          </section>
+
+          <section class="case__block" aria-labelledby="case-me-c">
+            <div class="case__block-head">
+              <h3 class="case__h" id="case-me-c" data-reveal data-i18n="case.hShots">Capturas</h3>
+              <p class="case__intro" data-reveal style="--i:1" data-i18n="c2.sIntro">La instancia de producción funciona en la red interna del instituto; estas capturas son del entorno local. Pulsa cualquiera para ampliarla.</p>
+            </div>
+            <div class="shots">
+              <figure class="shot-fig shot-fig--6" data-reveal>
+                <button class="shot" type="button">
+                  <span class="vh" data-i18n="case.zoom">Ampliar captura:</span>
+                  <img src="img/proyectos/maat-etc/home.jpg" width="1600" height="1000" alt="Página de inicio de MAAT ETC con los modos de cálculo, los parámetros de entrada y los autores" data-i18n-attr="alt:c2.s3alt" loading="lazy">
+                  <span class="shot__plus" aria-hidden="true"><svg class="icon"><use href="#i-plus"/></svg></span>
+                </button>
+                <figcaption data-i18n="c2.s3">Página de inicio</figcaption>
+              </figure>
+              <figure class="shot-fig shot-fig--6" data-reveal style="--i:1">
+                <button class="shot" type="button">
+                  <span class="vh" data-i18n="case.zoom">Ampliar captura:</span>
+                  <img src="img/proyectos/maat-etc/guide.jpg" width="1600" height="1000" alt="Guía de uso de MAAT ETC, con los pasos numerados para hacer un cálculo" data-i18n-attr="alt:c2.s4alt" loading="lazy">
+                  <span class="shot__plus" aria-hidden="true"><svg class="icon"><use href="#i-plus"/></svg></span>
+                </button>
+                <figcaption data-i18n="c2.s4">Guía de uso integrada</figcaption>
+              </figure>
+            </div>
+          </section>
+        </div>
+
+        <a class="case__next" href="#proyecto/swimming-up" data-color="cobalt">
+          <span class="label" data-i18n="case.next">Siguiente proyecto</span>
+          <span class="case__next-name">Swimming Up <svg class="icon" aria-hidden="true"><use href="#i-right"/></svg></span>
+        </a>
+      </article>
+    </div>
   </main>
 
   <footer class="footer" data-tone="ink">
@@ -640,7 +963,33 @@
       <p>© <span class="js-year">2026</span> Alejandro Aguilera López</p>
       <a href="#inicio" class="footer__top"><span data-i18n="footer.top">Volver arriba</span> <svg class="icon" aria-hidden="true"><use href="#i-out"/></svg></a>
     </div>
-    <p class="wrap credits" data-i18n="footer.credits">Imágenes: <a href="https://commons.wikimedia.org/wiki/File:12-inch_silicon_wafer.jpg">oblea de silicio</a> de Peellden, <a href="https://creativecommons.org/licenses/by-sa/3.0">CC BY-SA 3.0</a>; <a href="https://commons.wikimedia.org/wiki/File:Planispheric_astrolabe_with_inscriptions_in_Latin_and_Arabic_and_later_Hebrew,_Spain,_14th_century,_bronze_with_silver_inserts_added_later_-_Aga_Khan_Museum_-_Toronto,_Canada_-_DSC06585.jpg">astrolabio hispano, s. XIV</a> de Daderot, dominio público; <a href="https://commons.wikimedia.org/wiki/File:Tiles-wall-Alhambra-Granada-2011.jpg">alicatado de la Alhambra</a> de Acediscovery, <a href="https://creativecommons.org/licenses/by/4.0">CC BY 4.0</a>; <a href="https://commons.wikimedia.org/wiki/File:OSN_-_Observatorio_de_Sierra_Nevada_-_IAA_-Telescope_1.5m.jpg">telescopio del OSN</a> de Juan Fernández, <a href="https://creativecommons.org/licenses/by-sa/2.0">CC BY-SA 2.0</a>; <a href="https://commons.wikimedia.org/wiki/File:Swimming_Pool_lanes_and_starting_blocks.jpg">piscina</a> de KeepActive Australia, <a href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a>; <a href="https://commons.wikimedia.org/wiki/File:Roofs_and_towers_of_Alhambra_from_Generalife,_Granada,_Spain.jpg">Alhambra</a> de Jebulon, CC0. Vía Wikimedia Commons.</p>
+    <p class="wrap credits" data-i18n="footer.credits">Imágenes: <a href="https://commons.wikimedia.org/wiki/File:12-inch_silicon_wafer.jpg">oblea de silicio</a> de Peellden, <a href="https://creativecommons.org/licenses/by-sa/3.0">CC BY-SA 3.0</a>; <a href="https://commons.wikimedia.org/wiki/File:Planispheric_astrolabe_with_inscriptions_in_Latin_and_Arabic_and_later_Hebrew,_Spain,_14th_century,_bronze_with_silver_inserts_added_later_-_Aga_Khan_Museum_-_Toronto,_Canada_-_DSC06585.jpg">astrolabio hispano, s. XIV</a> de Daderot, dominio público; <a href="https://commons.wikimedia.org/wiki/File:Tiles-wall-Alhambra-Granada-2011.jpg">alicatado de la Alhambra</a> de Acediscovery, <a href="https://creativecommons.org/licenses/by/4.0">CC BY 4.0</a>; <a href="https://commons.wikimedia.org/wiki/File:Roofs_and_towers_of_Alhambra_from_Generalife,_Granada,_Spain.jpg">Alhambra</a> de Jebulon, CC0. Vía Wikimedia Commons.</p>
   </footer>
+
+  <!-- Telón: tapa la página mientras se cambia entre la lista y una ficha (js/main.js) -->
+  <div class="curtain" id="curtain" aria-hidden="true">
+    <p class="curtain__num" id="curtain-num"></p>
+    <p class="curtain__name" id="curtain-name"></p>
+  </div>
+
+  <!-- Visor de capturas a pantalla completa -->
+  <dialog class="viewer" id="viewer" aria-label="Visor de capturas" data-i18n-attr="aria-label:viewer.label">
+    <div class="viewer__inner">
+      <div class="viewer__top">
+        <p class="label" id="viewer-count" aria-live="polite"></p>
+        <button class="tool tool--icon" id="viewer-close" type="button" aria-label="Cerrar" data-i18n-attr="aria-label:viewer.close"><svg class="icon" aria-hidden="true"><use href="#i-x"/></svg></button>
+      </div>
+      <div class="viewer__stage" id="viewer-stage">
+        <img id="viewer-img" alt="">
+      </div>
+      <div class="viewer__bottom">
+        <p class="viewer__cap" id="viewer-cap"></p>
+        <div class="viewer__nav">
+          <button class="tool tool--icon" id="viewer-prev" type="button" aria-label="Captura anterior" data-i18n-attr="aria-label:viewer.prev"><svg class="icon" aria-hidden="true"><use href="#i-left"/></svg></button>
+          <button class="tool tool--icon" id="viewer-next" type="button" aria-label="Captura siguiente" data-i18n-attr="aria-label:viewer.next"><svg class="icon" aria-hidden="true"><use href="#i-right"/></svg></button>
+        </div>
+      </div>
+    </div>
+  </dialog>
 </body>
 </html>
