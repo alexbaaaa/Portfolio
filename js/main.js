@@ -50,7 +50,7 @@ function applyLang() {
 
   root.lang = lang;
   root.dataset.lang = lang;
-  document.title = ui().title;
+  syncTitle();
   $('meta[name="description"]').setAttribute('content', ui().description);
 
   const langBtn = $('#lang-toggle');
@@ -60,7 +60,6 @@ function applyLang() {
 
   updateThemeLabel();
   setMenu(false);
-  renderEtc();
   renderMods();
   drawDiagram();
   root.classList.add('i18n-ready');
@@ -114,6 +113,15 @@ let ticking = false;
 
 function updateHeader() {
   ticking = false;
+
+  // Con una ficha de proyecto abierta el resto de la página no está: manda Proyectos
+  if (root.classList.contains('is-case')) {
+    const footer = toned[toned.length - 1];
+    hdr.dataset.tone = footer.getBoundingClientRect().top <= hdr.offsetHeight ? footer.dataset.tone : 'plain';
+    navLinks.forEach(link => link.classList.toggle('is-active', link.getAttribute('href') === '#proyectos'));
+    return;
+  }
+
   const probe = hdr.offsetHeight;
   let current = toned[0];
   for (const el of toned) {
@@ -246,10 +254,15 @@ $$('.bento, .links').forEach(group => {
 
 // Una foto cerrada con clip-path no cuenta como visible para el
 // observador, así que se observa su contenedor.
-const revealTargets = $$('[data-reveal], [data-stamp], .shutter');
-if ('IntersectionObserver' in window && !reduceMotion) {
+const REVEAL = '[data-reveal], [data-stamp], .shutter';
+
+function watchReveals(targets) {
+  if (!('IntersectionObserver' in window) || reduceMotion) {
+    targets.forEach(el => el.classList.add('is-in'));
+    return null;
+  }
   const watched = new Map();
-  revealTargets.forEach(el => {
+  targets.forEach(el => {
     const probe = el.classList.contains('shutter') ? el.parentElement : el;
     if (!watched.has(probe)) watched.set(probe, []);
     watched.get(probe).push(el);
@@ -262,49 +275,218 @@ if ('IntersectionObserver' in window && !reduceMotion) {
     });
   }, { rootMargin: '0px', threshold: 0 });
   watched.forEach((_, probe) => io.observe(probe));
-} else {
-  revealTargets.forEach(el => el.classList.add('is-in'));
+  return io;
 }
 
-/* ---------- MAAT ETC: demo de la calculadora ----------
-   Ecuación CCD simplificada: S/N = S·t / √(S·t + B·t + R²).
-   Valores ilustrativos, no los del instrumento real. */
-const etc = {
-  mag: $('#etc-mag'),
-  time: $('#etc-t'),
-  magOut: $('#etc-mag-out'),
-  timeOut: $('#etc-t-out'),
-  sn: $('#etc-sn'),
-  verdict: $('#etc-verdict'),
-  bar: $('#etc-bar'),
+// Las fichas de proyecto se observan cada vez que se abren (más abajo)
+watchReveals($$(REVEAL).filter(el => !el.closest('.sheet')));
+
+/* ---------- Proyectos: ficha ampliada ----------
+   Cada fila de la lista enlaza a #proyecto/<id>. Esa dirección abre la
+   ficha en lugar del resto de la página, así que se puede compartir y el
+   botón Atrás del navegador la cierra. El cambio lo tapa un telón del
+   color del proyecto: sube desde abajo, se hace el cambio detrás y se va
+   por arriba. Al cerrar hace el camino inverso. */
+const sheet = $('#ficha');
+const cases = $$('.case', sheet);
+const curtain = $('#curtain');
+const curtainNum = $('#curtain-num');
+const curtainName = $('#curtain-name');
+const viewer = $('#viewer');
+const CASE_HASH = /^#proyecto\/([\w-]+)$/;
+const CURTAIN_EASE = 'cubic-bezier(0.76, 0, 0.24, 1)';
+
+let openCase = null;      // ficha abierta
+let listScroll = null;    // por dónde iba la página al abrirla
+let caseObserver = null;
+let revealTimer;
+let routing = false;
+let routeAgain = false;
+
+const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
+const caseFromHash = () => {
+  const match = CASE_HASH.exec(location.hash);
+  return (match && cases.find(item => item.dataset.case === match[1])) || null;
 };
-const ZERO_POINT = 20.3;   // magnitud que da 1 e⁻/s
-const SKY = 4;             // fondo de cielo, e⁻/s
-const READ_NOISE2 = 250;   // ruido de lectura² × píxeles
+const caseLink = item => $(`.prow__more[href="#proyecto/${item.dataset.case}"]`);
 
-function exposureSeconds(slider) {
-  const raw = Math.pow(10, (slider / 100) * Math.log10(3600));
-  if (raw < 60) return Math.max(1, Math.round(raw));
-  if (raw < 600) return Math.round(raw / 10) * 10;
-  return Math.round(raw / 60) * 60;
+function syncTitle() {
+  document.title = openCase ? `${openCase.dataset.name} · ${ui().title}` : ui().title;
 }
 
-function renderEtc() {
-  const m = parseFloat(etc.mag.value);
-  const t = exposureSeconds(parseFloat(etc.time.value));
-  const signal = Math.pow(10, -0.4 * (m - ZERO_POINT)) * t;
-  const sn = signal / Math.sqrt(signal + SKY * t + READ_NOISE2);
-  const locale = lang === 'es' ? 'es-ES' : 'en-GB';
-
-  etc.magOut.textContent = m.toLocaleString(locale, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
-  etc.timeOut.textContent = `${t.toLocaleString(locale)} s`;
-  etc.sn.textContent = sn.toLocaleString(locale, { maximumFractionDigits: sn < 10 ? 1 : 0 });
-  etc.verdict.textContent = sn < 3 ? ui().v1 : sn < 10 ? ui().v2 : ui().v3;
-  etc.bar.style.width = `${Math.min(100, (Math.log10(sn + 1) / 3) * 100).toFixed(1)}%`;
+// Si la página no está pintando (ventana tapada, pestaña en segundo plano) la
+// animación no avanza: el temporizador evita que el cambio se quede a medias.
+function slideCurtain(from, to, duration) {
+  const animation = curtain.animate(
+    [{ transform: `translateY(${from}%)` }, { transform: `translateY(${to}%)` }],
+    { duration, easing: CURTAIN_EASE, fill: 'forwards' }
+  );
+  return Promise.race([animation.finished.catch(() => {}), wait(duration + 300)]);
 }
 
-etc.mag.addEventListener('input', renderEtc);
-etc.time.addEventListener('input', renderEtc);
+function revealCase(item) {
+  caseObserver = watchReveals($$(REVEAL, item));
+}
+
+// El cambio en sí: ocurre con el telón echado, o directamente si no hay movimiento
+function swapView(target, delay) {
+  const leaving = openCase;
+  if (viewer.open) viewer.close();
+  clearTimeout(revealTimer);
+  if (caseObserver) caseObserver.disconnect();
+  caseObserver = null;
+  cases.forEach(item => {
+    item.classList.remove('is-enter');
+    item.classList.toggle('is-current', item === target);
+    $$(REVEAL, item).forEach(el => el.classList.remove('is-in'));
+  });
+  root.classList.toggle('is-case', Boolean(target));
+  openCase = target;
+
+  if (target) {
+    history.scrollRestoration = 'manual';
+    target.style.setProperty('--wait', `${delay}ms`);
+    void target.offsetWidth;
+    target.classList.add('is-enter');
+    window.scrollTo({ top: 0, behavior: 'instant' });
+    $('.case__name', target).focus({ preventScroll: true });
+  } else {
+    history.scrollRestoration = 'auto';
+    const id = decodeURIComponent(location.hash.slice(1));
+    const section = id && id !== 'proyectos' ? document.getElementById(id) : null;
+    const work = $('#proyectos');
+    const top = work.getBoundingClientRect().top + window.scrollY;
+    // Se vuelve al punto exacto de la lista solo si la ficha se abrió desde ella
+    const fromList = listScroll !== null && listScroll > top - window.innerHeight && listScroll < top + work.offsetHeight;
+    if (section) {
+      section.scrollIntoView({ behavior: 'instant', block: 'start' });
+    } else if (fromList) {
+      window.scrollTo({ top: listScroll, behavior: 'instant' });
+    } else {
+      work.scrollIntoView({ behavior: 'instant', block: 'start' });
+    }
+    const link = !section && leaving && caseLink(leaving);
+    if (link) link.focus({ preventScroll: true });
+    drawDiagram();
+    if (!reduceMotion) updateFloats();
+  }
+
+  syncTitle();
+  setMenu(false);
+  updateHeader();
+}
+
+async function route() {
+  if (routing) { routeAgain = true; return; }
+  routing = true;
+  do {
+    routeAgain = false;
+    const target = caseFromHash();
+    if (target === openCase) continue;
+    if (target && !openCase) listScroll = window.scrollY;
+
+    if (reduceMotion || document.hidden) {
+      swapView(target, 0);
+      if (target) revealCase(target);
+      continue;
+    }
+
+    const closing = !target;
+    const shown = target || openCase;
+    curtain.dataset.color = shown.dataset.color;
+    curtainNum.textContent = closing ? '' : `${shown.dataset.num} / ${String(cases.length).padStart(2, '0')}`;
+    curtainName.textContent = closing ? $('.work .h2').textContent : shown.dataset.name;
+    curtain.classList.add('is-on');
+
+    await slideCurtain(closing ? -100 : 100, 0, 520);
+    swapView(target, 360);
+    await wait(140);
+    if (target) revealTimer = setTimeout(() => revealCase(target), 340);
+    await slideCurtain(0, closing ? 100 : -100, 640);
+    curtain.classList.remove('is-on');
+    curtain.getAnimations().forEach(animation => animation.cancel());
+  } while (routeAgain);
+  routing = false;
+}
+
+window.addEventListener('hashchange', route);
+
+// Al ir a una ficha, el navegador no debe recolocar el scroll por su cuenta
+document.addEventListener('click', e => {
+  if (e.target.closest('a[href^="#proyecto/"]')) history.scrollRestoration = 'manual';
+});
+
+// Dentro de una ficha, "Volver arriba" sube al principio de la ficha
+$('.footer__top').addEventListener('click', e => {
+  if (!openCase) return;
+  e.preventDefault();
+  window.scrollTo({ top: 0 });
+});
+
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Escape' || !openCase || viewer.open || routing) return;
+  if (navToggle.getAttribute('aria-expanded') === 'true') return;
+  location.hash = '#proyectos';
+});
+
+// Una ficha enlazada directamente se abre sin telón
+if (caseFromHash()) {
+  swapView(caseFromHash(), 0);
+  revealCase(openCase);
+} else {
+  root.classList.remove('is-case');
+}
+
+/* ---------- Visor de capturas ----------
+   Cada captura de una ficha es un botón. El visor recorre las de esa
+   ficha con los botones o con las flechas del teclado. */
+const viewerImg = $('#viewer-img');
+const viewerCap = $('#viewer-cap');
+const viewerCount = $('#viewer-count');
+let shots = [];
+let shotIndex = 0;
+let shotOpener = null;
+
+function showShot(index) {
+  shotIndex = (index + shots.length) % shots.length;
+  const img = $('img', shots[shotIndex]);
+  viewerImg.src = img.currentSrc || img.src;
+  viewerImg.width = img.getAttribute('width');
+  viewerImg.height = img.getAttribute('height');
+  viewerImg.alt = img.alt;
+  viewerCap.textContent = $('figcaption', shots[shotIndex].closest('figure')).textContent;
+  viewerCount.textContent = `${String(shotIndex + 1).padStart(2, '0')} / ${String(shots.length).padStart(2, '0')}`;
+  // Reinicia la animación de entrada de la imagen
+  viewerImg.style.animation = 'none';
+  void viewerImg.offsetWidth;
+  viewerImg.style.animation = '';
+}
+
+sheet.addEventListener('click', e => {
+  const shot = e.target.closest('.shot');
+  if (!shot) return;
+  shots = $$('.shot', shot.closest('.case'));
+  shotOpener = shot;
+  showShot(shots.indexOf(shot));
+  viewer.showModal();
+});
+// Al cerrar, el foco vuelve a la captura desde la que se abrió
+viewer.addEventListener('close', () => {
+  if (shotOpener && shotOpener.isConnected && openCase) shotOpener.focus({ preventScroll: true });
+  shotOpener = null;
+});
+
+$('#viewer-prev').addEventListener('click', () => showShot(shotIndex - 1));
+$('#viewer-next').addEventListener('click', () => showShot(shotIndex + 1));
+$('#viewer-close').addEventListener('click', () => viewer.close());
+// Pulsar fuera de la imagen cierra el visor
+viewer.addEventListener('click', e => {
+  if (e.target === viewer || e.target.id === 'viewer-stage' || e.target.classList.contains('viewer__inner')) viewer.close();
+});
+viewer.addEventListener('keydown', e => {
+  if (e.key === 'ArrowLeft') showShot(shotIndex - 1);
+  if (e.key === 'ArrowRight') showShot(shotIndex + 1);
+});
 
 /* ---------- Cómo trabajo: partes independientes ----------
    Se rompe una parte y las demás siguen en pie. Como mucho hay una
