@@ -54,5 +54,10 @@
     "id": "listo-para-nadar",
     "title": "Listo para nadar",
     "pose": "img/pixel/poses/10-listo-para-nadar.png"
+  },
+  {
+    "id": "nota-a-nota",
+    "title": "Nota a nota",
+    "pose": "img/pixel/poses/11-nota-a-nota.png"
   }
 ]

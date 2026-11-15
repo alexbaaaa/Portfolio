@@ -51,6 +51,19 @@ class Layer {
       }
     return this;
   }
+  // línea de 1 px (Bresenham)
+  line(x1, y1, x2, y2, c) {
+    const dx = Math.abs(x2 - x1), dy = -Math.abs(y2 - y1), sx = x1 < x2 ? 1 : -1, sy = y1 < y2 ? 1 : -1;
+    let err = dx + dy;
+    for (;;) {
+      this.set(x1, y1, c);
+      if (x1 === x2 && y1 === y2) break;
+      const e2 = 2 * err;
+      if (e2 >= dy) { err += dy; x1 += sx; }
+      if (e2 <= dx) { err += dx; y1 += sy; }
+    }
+    return this;
+  }
   path(pts, r, c) { for (let i = 0; i < pts.length - 1; i++) this.capsule(...pts[i], ...pts[i + 1], r, c); return this; }
   poly(pts, c) {
     const ys = pts.map(p => p[1]), xs = pts.map(p => p[0]);
@@ -446,6 +459,39 @@ const POSES = [
       drawArm(cv, [39, 34], [47, 35], [48, 25], { bare: true, bicep: [44, 33], hx: 2.6, hy: 2.6, knuckles: [[47, 24], [49, 24]] });
       // gotas de agua
       cv.px([[13, 12], [13, 13], [53, 9], [53, 10], [56, 16], [10, 22], [10, 23]], C.COBALT);
+    },
+  },
+  {
+    id: 'nota-a-nota',
+    title: 'Nota a nota',
+    solo: true,
+    build(cv) {
+      // el grafo de la bóveda: notas sueltas unidas por enlaces
+      const notes = [[4, 24, C.LIME], [10, 9, C.COBALT], [29, 1, C.ORANGE], [50, 7, C.PINK], [56, 23, C.LIME], [2, 40, C.W], [58, 39, C.COBALT]];
+      const links = [[0, 1], [1, 2], [2, 3], [3, 4], [0, 5], [4, 6]];
+      for (const [a, b] of links) cv.line(notes[a][0] + 2, notes[a][1] + 2, notes[b][0] + 2, notes[b][1] + 2, C.K);
+      for (const [x, y, c] of notes) part(cv, L => L.rect(x, y, 4, 4, c));
+      // sentado en el suelo, con el cuaderno abierto sobre las piernas
+      const ch = new Layer(S, S);
+      part(ch, L => {
+        L.rect(25, 46, 15, 4, C.JEANS);
+        L.capsule(25, 49, 41, 53, 3, C.JEANS).capsule(39, 49, 23, 53, 3, C.JEANS);
+      }, O => { O.px([[29, 51], [30, 52], [31, 52], [35, 51], [34, 52], [33, 52]], C.JEANS_SH); });
+      part(ch, L => { L.rect(16, 51, 7, 4, C.W).rect(41, 51, 7, 4, C.W); },
+        O => { O.hline(16, 22, 54, C.FAINT).hline(41, 47, 54, C.FAINT); O.px([[19, 52], [20, 52], [43, 52], [44, 52]], C.COBALT); });
+      drawTorso(ch);
+      part(ch, L => L.rect(23, 40, 19, 8, C.W), O => {
+        O.vline(32, 40, 47, C.FAINT);
+        O.hline(25, 30, 42, C.SOFT).hline(25, 29, 44, C.SOFT).hline(34, 39, 42, C.COBALT).hline(34, 37, 44, C.SOFT);
+        O.hline(23, 41, 47, C.LIME);
+      });
+      drawHead(ch, { brows: 'soft', eyes: 'normal', mouth: 'tongue' });
+      drawArm(ch, [25, 34], [20, 41], [24, 45], { hx: 2.2, hy: 2.2 });
+      part(ch, L => L.capsule(40, 39, 37, 45, 0.8, C.ORANGE), O => O.set(37, 45, C.K)); // el boli
+      drawArm(ch, [39, 34], [45, 40], [41, 42], { hx: 2.2, hy: 2.2 });
+      cv.draw(ch, 0, 4);
+      // una idea recién apuntada
+      part(cv, L => L.px([[46, 30], [45, 31], [46, 31], [47, 31], [46, 32]], C.LIME));
     },
   },
 ];

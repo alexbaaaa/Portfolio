@@ -61,6 +61,7 @@ function applyLang() {
   updateThemeLabel();
   setMenu(false);
   renderMods();
+  renderGraphs();
   drawDiagram();
   root.classList.add('i18n-ready');
 }
@@ -118,7 +119,9 @@ function updateHeader() {
   if (root.classList.contains('is-case')) {
     const footer = toned[toned.length - 1];
     hdr.dataset.tone = footer.getBoundingClientRect().top <= hdr.offsetHeight ? footer.dataset.tone : 'plain';
-    navLinks.forEach(link => link.classList.toggle('is-active', link.getAttribute('href') === '#proyectos'));
+    const current = $('.case.is-current');
+    const home = `#${(current && current.dataset.home) || 'proyectos'}`;
+    navLinks.forEach(link => link.classList.toggle('is-active', link.getAttribute('href') === home));
     return;
   }
 
@@ -281,8 +284,9 @@ function watchReveals(targets) {
 // Las fichas de proyecto se observan cada vez que se abren (más abajo)
 watchReveals($$(REVEAL).filter(el => !el.closest('.sheet')));
 
-/* ---------- Proyectos: ficha ampliada ----------
-   Cada fila de la lista enlaza a #proyecto/<id>. Esa dirección abre la
+/* ---------- Proyectos y «En qué estoy trabajando»: ficha ampliada ----------
+   Cada fila de la lista enlaza a #proyecto/<id> y la nota en curso a
+   #en-curso/<id>: es el id de su <article class="case">. Esa dirección abre la
    ficha en lugar del resto de la página, así que se puede compartir y el
    botón Atrás del navegador la cierra. El cambio lo tapa un telón del
    color del proyecto: sube desde abajo, se hace el cambio detrás y se va
@@ -293,7 +297,6 @@ const curtain = $('#curtain');
 const curtainNum = $('#curtain-num');
 const curtainName = $('#curtain-name');
 const viewer = $('#viewer');
-const CASE_HASH = /^#proyecto\/([\w-]+)$/;
 const CURTAIN_EASE = 'cubic-bezier(0.76, 0, 0.24, 1)';
 
 let openCase = null;      // ficha abierta
@@ -305,10 +308,12 @@ let routeAgain = false;
 
 const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
 const caseFromHash = () => {
-  const match = CASE_HASH.exec(location.hash);
-  return (match && cases.find(item => item.dataset.case === match[1])) || null;
+  const id = decodeURIComponent(location.hash.slice(1));
+  return cases.find(item => item.id === id) || null;
 };
-const caseLink = item => $(`.prow__more[href="#proyecto/${item.dataset.case}"]`);
+// La sección de la portada a la que pertenece una ficha, y el enlace que la abre
+const caseHome = item => (item && item.dataset.home) || 'proyectos';
+const caseLink = item => $(`.section a[href="#${item.id}"]`);
 
 function syncTitle() {
   document.title = openCase ? `${openCase.dataset.name} · ${ui().title}` : ui().title;
@@ -353,8 +358,9 @@ function swapView(target, delay) {
   } else {
     history.scrollRestoration = 'auto';
     const id = decodeURIComponent(location.hash.slice(1));
-    const section = id && id !== 'proyectos' ? document.getElementById(id) : null;
-    const work = $('#proyectos');
+    const home = caseHome(leaving);
+    const section = id && id !== home ? document.getElementById(id) : null;
+    const work = document.getElementById(home);
     const top = work.getBoundingClientRect().top + window.scrollY;
     // Se vuelve al punto exacto de la lista solo si la ficha se abrió desde ella
     const fromList = listScroll !== null && listScroll > top - window.innerHeight && listScroll < top + work.offsetHeight;
@@ -394,8 +400,9 @@ async function route() {
     const closing = !target;
     const shown = target || openCase;
     curtain.dataset.color = shown.dataset.color;
-    curtainNum.textContent = closing ? '' : `${shown.dataset.num} / ${String(cases.length).padStart(2, '0')}`;
-    curtainName.textContent = closing ? $('.work .h2').textContent : shown.dataset.name;
+    // Al abrir: lo que dice la barra de la ficha y su nombre. Al cerrar: adónde se vuelve
+    curtainNum.textContent = closing ? '' : $('.case__bar .label', shown).textContent;
+    curtainName.textContent = closing ? $('.case__back span', shown).textContent : shown.dataset.name;
     curtain.classList.add('is-on');
 
     await slideCurtain(closing ? -100 : 100, 0, 520);
@@ -413,7 +420,7 @@ window.addEventListener('hashchange', route);
 
 // Al ir a una ficha, el navegador no debe recolocar el scroll por su cuenta
 document.addEventListener('click', e => {
-  if (e.target.closest('a[href^="#proyecto/"]')) history.scrollRestoration = 'manual';
+  if (e.target.closest('a[href^="#proyecto/"], a[href^="#en-curso/"]')) history.scrollRestoration = 'manual';
 });
 
 // Dentro de una ficha, "Volver arriba" sube al principio de la ficha
@@ -426,7 +433,7 @@ $('.footer__top').addEventListener('click', e => {
 document.addEventListener('keydown', e => {
   if (e.key !== 'Escape' || !openCase || viewer.open || routing) return;
   if (navToggle.getAttribute('aria-expanded') === 'true') return;
-  location.hash = '#proyectos';
+  location.hash = `#${caseHome(openCase)}`;
 });
 
 // Una ficha enlazada directamente se abre sin telón
@@ -507,6 +514,189 @@ mods.forEach(mod => mod.addEventListener('click', () => {
   mods.forEach(other => other.setAttribute('aria-pressed', 'false'));
   if (!wasBroken) mod.setAttribute('aria-pressed', 'true');
   renderMods();
+}));
+
+/* ---------- En qué estoy trabajando: el grafo de la bóveda ----------
+   Una representación del grafo de Obsidian, no la bóveda real. Cada nota
+   tiene un grupo (su color), una posición en % y las notas con las que
+   enlaza (to). Las VAULT_START primeras se ven al cargar; el botón
+   «Añadir una nota» va sacando el resto, una a una. Para cambiar el
+   grafo basta con tocar esta lista. */
+const VAULT = [
+  { id: 'sb', es: 'Second Brain', group: 'root', x: 50, y: 50 },
+  { id: 'tec', es: 'Tecnologías', en: 'Technologies', group: 'tec', hub: true, x: 24, y: 34, to: ['sb'] },
+  { id: 'pro', es: 'Mis proyectos', en: 'My projects', group: 'pro', hub: true, x: 76, y: 34, to: ['sb'] },
+  { id: 'con', es: 'Conceptos', en: 'Concepts', group: 'con', hub: true, x: 50, y: 79, to: ['sb'] },
+  { id: 'php', es: 'PHP', group: 'tec', x: 5, y: 22, to: ['tec'] },
+  { id: 'laravel', es: 'Laravel', group: 'tec', x: 20, y: 9, at: 't', to: ['tec', 'php'] },
+  { id: 'react', es: 'React', group: 'tec', x: 41, y: 19, to: ['tec'] },
+  { id: 'docker', es: 'Docker', group: 'tec', x: 5, y: 49, to: ['tec'] },
+  { id: 'swimming', es: 'Swimming Up', group: 'pro', x: 57, y: 9, at: 't', to: ['pro', 'laravel', 'react'] },
+  { id: 'maat', es: 'MAAT ETC', group: 'pro', x: 88, y: 9, at: 't', to: ['pro'] },
+  { id: 'portfolio', es: 'Portfolio', group: 'pro', x: 95, y: 46, to: ['pro'] },
+  { id: 'bd', es: 'Bases de datos', en: 'Databases', group: 'con', x: 77, y: 90, to: ['con'] },
+  { id: 'deploy', es: 'Despliegue', en: 'Deployment', group: 'con', x: 26, y: 88, to: ['con', 'docker'] },
+  { id: 'git', es: 'Git', group: 'con', x: 50, y: 98, to: ['con'] },
+  // Estas llegan con el botón
+  { id: 'nginx', es: 'Nginx', group: 'tec', x: 6, y: 72, to: ['tec', 'deploy'] },
+  { id: 'python', es: 'Python', group: 'tec', x: 97, y: 24, to: ['maat'] },
+  { id: 'postgres', es: 'PostgreSQL', group: 'tec', x: 95, y: 70, to: ['bd'] },
+  { id: 'js', es: 'JavaScript', group: 'tec', x: 38, y: 31, at: 'r', to: ['tec', 'react'] },
+  { id: 'api', es: 'API REST', en: 'REST API', group: 'con', x: 67, y: 64, to: ['con', 'swimming'] },
+  { id: 'proxy', es: 'Proxy inverso', en: 'Reverse proxy', group: 'con', x: 6, y: 98, to: ['nginx', 'deploy'] },
+  { id: 'roles', es: 'Permisos', en: 'Permissions', group: 'con', x: 32, y: 63, to: ['con', 'swimming'] },
+];
+const VAULT_START = 14;
+const VAULT_COLOR = { root: 'var(--lime)', tec: 'var(--cobalt)', pro: 'var(--orange)', con: 'var(--pink)' };
+
+const graphs = $$('[data-graph]');
+const graphMsgs = $$('[data-graph-msg]');
+let vaultShown = VAULT_START;
+let vaultNew = null;      // la última nota añadida (para animarla)
+let vaultPinned = null;   // la nota que se ha tocado
+let vaultCursor = 'sb';   // la nota que recibe el foco del teclado
+
+const noteName = note => (lang === 'en' && note.en) || note.es;
+const shownNotes = () => VAULT.slice(0, vaultShown);
+function shownLinks() {
+  const ids = new Set(shownNotes().map(note => note.id));
+  return shownNotes().flatMap(note => (note.to || []).filter(id => ids.has(id)).map(id => [note.id, id]));
+}
+// Las notas con las que enlaza una, en cualquier sentido
+function linkedTo(id) {
+  return shownLinks().filter(link => link.includes(id)).map(([a, b]) => (a === id ? b : a));
+}
+function namesOf(ids) {
+  const names = ids.map(id => noteName(VAULT.find(note => note.id === id)));
+  return new Intl.ListFormat(lang, { style: 'long', type: 'conjunction' }).format(names);
+}
+function setGraphMsg(text) {
+  graphMsgs.forEach(el => { el.textContent = text || translate('now.hint', original.text['now.hint']); });
+}
+
+function renderGraphs() {
+  const notes = shownNotes();
+  const links = shownLinks();
+
+  graphs.forEach(graph => {
+    const svg = document.createElementNS(SVG_NS, 'svg');
+    svg.setAttribute('class', 'graph__lines');
+    svg.setAttribute('viewBox', '0 0 100 100');
+    svg.setAttribute('preserveAspectRatio', 'none');
+    svg.setAttribute('aria-hidden', 'true');
+    links.forEach(([a, b]) => {
+      const from = VAULT.find(note => note.id === a);
+      const to = VAULT.find(note => note.id === b);
+      const line = document.createElementNS(SVG_NS, 'line');
+      line.setAttribute('x1', from.x); line.setAttribute('y1', from.y);
+      line.setAttribute('x2', to.x); line.setAttribute('y2', to.y);
+      line.dataset.a = a; line.dataset.b = b;
+      if (a === vaultNew) line.setAttribute('class', 'is-new');
+      svg.append(line);
+    });
+
+    const nodes = notes.map(note => {
+      const node = document.createElement('span');
+      node.className = `gnode${note.hub ? ' gnode--hub' : ''}${note.group === 'root' ? ' gnode--root' : ''}${note.id === vaultNew ? ' is-new' : ''}`;
+      node.dataset.id = note.id;
+      if (note.at) node.dataset.at = note.at;
+      node.style.setProperty('--x', note.x);
+      node.style.setProperty('--y', note.y);
+      node.style.setProperty('--g', VAULT_COLOR[note.group]);
+      // El cuadrado es un botón: con teclado solo uno recibe el foco y las flechas pasan al resto
+      const square = document.createElement('button');
+      square.type = 'button';
+      square.className = 'gnode__sq';
+      square.tabIndex = note.id === vaultCursor ? 0 : -1;
+      square.setAttribute('aria-label', noteName(note));
+      square.setAttribute('aria-pressed', String(note.id === vaultPinned));
+      const label = document.createElement('span');
+      label.className = 'gnode__label';
+      label.textContent = noteName(note);
+      node.append(square, label);
+      return node;
+    });
+    graph.replaceChildren(svg, ...nodes);
+  });
+
+  const left = VAULT.length - vaultShown;
+  $$('[data-graph-count]').forEach(el => {
+    el.textContent = ui().graphCount.replace('{n}', notes.length).replace('{l}', links.length);
+  });
+  $$('[data-graph-add]').forEach(btn => { btn.disabled = left === 0; });
+  $$('[data-graph-add-label]').forEach(el => { el.textContent = left ? ui().graphAdd : ui().graphDone; });
+  focusNote(vaultPinned, true);
+}
+
+// Enciende una nota y sus enlaces en todos los grafos; sin id, los deja como estaban
+function focusNote(id, quiet) {
+  const near = id ? new Set(linkedTo(id)) : null;
+  graphs.forEach(graph => {
+    graph.classList.toggle('is-focus', Boolean(id));
+    $$('.gnode', graph).forEach(node => node.classList.toggle('is-on', Boolean(id) && (node.dataset.id === id || near.has(node.dataset.id))));
+    $$('line', graph).forEach(line => line.classList.toggle('is-on', Boolean(id) && (line.dataset.a === id || line.dataset.b === id)));
+    $$('.gnode__sq', graph).forEach(square => square.setAttribute('aria-pressed', String(square.parentElement.dataset.id === vaultPinned)));
+  });
+  if (quiet) return;
+  const note = id && VAULT.find(item => item.id === id);
+  setGraphMsg(note && near.size ? ui().graphLinks.replace('{x}', noteName(note)).replace('{y}', namesOf([...near])) : '');
+}
+
+graphs.forEach(graph => {
+  graph.addEventListener('pointerover', e => {
+    const square = e.target.closest('.gnode__sq');
+    if (square && e.pointerType === 'mouse') focusNote(square.parentElement.dataset.id);
+  });
+  graph.addEventListener('pointerout', e => {
+    if (e.target.closest('.gnode__sq') && e.pointerType === 'mouse') focusNote(vaultPinned);
+  });
+  // Tocar una nota la deja señalada; tocarla otra vez, o tocar fuera, la suelta
+  graph.addEventListener('click', e => {
+    const square = e.target.closest('.gnode__sq');
+    const id = square ? square.parentElement.dataset.id : null;
+    vaultPinned = id && id !== vaultPinned ? id : null;
+    focusNote(vaultPinned);
+  });
+
+  // Teclado: el foco entra en una nota y las flechas recorren las demás
+  graph.addEventListener('focusin', e => {
+    const square = e.target.closest('.gnode__sq');
+    if (!square) return;
+    vaultCursor = square.parentElement.dataset.id;
+    graphs.forEach(other => $$('.gnode__sq', other).forEach(item => { item.tabIndex = item.parentElement.dataset.id === vaultCursor ? 0 : -1; }));
+    if (square.matches(':focus-visible')) focusNote(vaultCursor);
+  });
+  graph.addEventListener('focusout', e => {
+    if (e.target.closest('.gnode__sq') && !graph.contains(e.relatedTarget)) focusNote(vaultPinned);
+  });
+  graph.addEventListener('keydown', e => {
+    const square = e.target.closest('.gnode__sq');
+    if (!square) return;
+    const ids = shownNotes().map(note => note.id);
+    const at = ids.indexOf(square.parentElement.dataset.id);
+    const next = {
+      ArrowRight: at + 1, ArrowDown: at + 1, ArrowLeft: at - 1, ArrowUp: at - 1, Home: 0, End: ids.length - 1,
+    }[e.key];
+    if (next === undefined) return;
+    e.preventDefault();
+    $(`.gnode[data-id="${ids[(next + ids.length) % ids.length]}"] .gnode__sq`, graph).focus();
+  });
+});
+
+// Los [[enlaces]] del texto de la nota señalan su grupo en el grafo
+$$('.wl[data-note]').forEach(link => {
+  link.addEventListener('pointerenter', () => focusNote(link.dataset.note));
+  link.addEventListener('pointerleave', () => focusNote(vaultPinned));
+});
+
+$$('[data-graph-add]').forEach(btn => btn.addEventListener('click', () => {
+  if (vaultShown >= VAULT.length) return;
+  const note = VAULT[vaultShown];
+  vaultShown += 1;
+  vaultNew = note.id;
+  vaultPinned = null;
+  renderGraphs();
+  setGraphMsg(ui().graphNew.replace('{x}', noteName(note)).replace('{y}', namesOf(linkedTo(note.id))));
 }));
 
 /* ---------- Copiar email ---------- */

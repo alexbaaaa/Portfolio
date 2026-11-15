@@ -20,7 +20,7 @@
       if (/^(es|en)$/.test(q.get('lang') || '')) l = q.get('lang');
       if (!t) t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
       d.dataset.theme = t;
-      if (/^#proyecto\//.test(location.hash)) d.classList.add('is-case');
+      if (/^#(?:proyecto|en-curso)\//.test(location.hash)) d.classList.add('is-case');
       if (l === 'en') { d.dataset.lang = 'en'; setTimeout(function () { d.classList.add('i18n-ready'); }, 1500); }
     })();
   </script>
@@ -247,6 +247,54 @@
             </a>
           </li>
         </ol>
+      </div>
+    </section>
+
+    <!-- ============ EN QUÉ ESTOY TRABAJANDO ============
+         Un solo proyecto, presentado como una nota de la bóveda de Obsidian
+         junto a su grafo. «Ver más» abre su ficha igual que los proyectos. -->
+    <section class="section now" id="en-curso" data-tone="plain">
+      <div class="wrap">
+        <header class="work__head">
+          <h2 class="h2" data-reveal data-i18n="now.title">En qué estoy trabajando</h2>
+          <p class="work__lead" data-reveal style="--i:1" data-i18n="now.lead">Un proyecto cada vez. Ahora mismo, este.</p>
+        </header>
+
+        <div class="vault" data-color="lime" data-stamp>
+          <article class="vnote" aria-labelledby="vnote-name">
+            <p class="vnote__file"><span class="sq sq--lime" aria-hidden="true"></span>second-brain.md</p>
+            <h3 class="vnote__name" id="vnote-name">Second Brain</h3>
+            <dl class="vnote__props">
+              <div><dt data-i18n="now.k1">Estado</dt><dd><span class="dot" aria-hidden="true"></span><span data-i18n="now.v1">En curso</span></dd></div>
+              <div><dt data-i18n="now.k2">Fase</dt><dd data-i18n="now.v2">Aprendizaje · 1 de 3</dd></div>
+              <div><dt data-i18n="now.k3">Herramienta</dt><dd>Obsidian</dd></div>
+              <div><dt data-i18n="now.k4">Entrada</dt><dd data-i18n="now.v4">A mano, nota a nota</dd></div>
+            </dl>
+            <p class="vnote__body" data-i18n="now.body">Mi base de conocimiento personal. Estoy aprendiendo <span class="wl">Obsidian</span> y llenando la bóveda con lo que sé de <span class="wl" data-note="tec">tecnologías</span>, de <span class="wl" data-note="pro">mis proyectos</span> y con <span class="wl" data-note="con">apuntes y conceptos</span>.</p>
+            <a class="btn btn--line vnote__more" href="#en-curso/second-brain" aria-label="Ver más sobre Second Brain" data-i18n-attr="aria-label:now.more">
+              <span data-i18n="work.more">Ver más</span>
+              <svg class="icon" aria-hidden="true"><use href="#i-right"/></svg>
+            </a>
+          </article>
+
+          <!-- El grafo lo dibuja js/main.js; sin JavaScript queda la lista de notas -->
+          <div class="vgraph">
+            <div class="graph" data-graph role="group" aria-label="Grafo de notas enlazadas alrededor de Second Brain" data-i18n-attr="aria-label:now.graphAlt">
+              <ul class="graph__fallback">
+                <li><span class="wl">Tecnologías</span></li><li><span class="wl">Laravel</span></li><li><span class="wl">React</span></li><li><span class="wl">Docker</span></li><li><span class="wl">PHP</span></li>
+                <li><span class="wl">Mis proyectos</span></li><li><span class="wl">Swimming Up</span></li><li><span class="wl">MAAT ETC</span></li><li><span class="wl">Portfolio</span></li>
+                <li><span class="wl">Conceptos</span></li><li><span class="wl">Bases de datos</span></li><li><span class="wl">Despliegue</span></li><li><span class="wl">Git</span></li>
+              </ul>
+            </div>
+            <div class="vgraph__bar">
+              <p class="vgraph__status" aria-live="polite"><strong data-graph-count></strong><span data-graph-msg data-i18n="now.hint">Señala una nota para ver con qué enlaza.</span></p>
+              <button class="btn btn--solid" type="button" data-graph-add>
+                <svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg>
+                <span data-graph-add-label>Añadir una nota</span>
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -952,6 +1000,108 @@
         <a class="case__next" href="#proyecto/swimming-up" data-color="cobalt">
           <span class="label" data-i18n="case.next">Siguiente proyecto</span>
           <span class="case__next-name">Swimming Up <svg class="icon" aria-hidden="true"><use href="#i-right"/></svg></span>
+        </a>
+      </article>
+
+      <!-- Second Brain (en curso): misma ficha que un proyecto, con el grafo en lugar de capturas -->
+      <article class="case case--now" id="en-curso/second-brain" data-case="second-brain" data-home="en-curso" data-color="lime" data-name="Second Brain" aria-labelledby="case-sb">
+        <nav class="case__bar" aria-label="Ficha de proyecto" data-i18n-attr="aria-label:case.barLabel">
+          <a class="case__back" href="#en-curso">
+            <svg class="icon" aria-hidden="true"><use href="#i-left"/></svg>
+            <span data-i18n="now.back">En curso</span>
+          </a>
+          <span class="label" data-i18n="now.phase">Fase 1 de 3</span>
+        </nav>
+
+        <div class="wrap">
+          <header class="case__head">
+            <p class="project__kind case__kind"><span class="sq sq--lime" aria-hidden="true"></span><span data-i18n="c3.kind">En curso · Fase de aprendizaje</span></p>
+            <h2 class="case__name lines" id="case-sb" tabindex="-1"><span class="line"><span data-line>Second Brain</span></span></h2>
+            <p class="case__lead" data-i18n="c3.lead">Un second brain es una base de conocimiento personal: un sitio fuera de la cabeza donde guardar lo que aprendo, con las notas enlazadas entre sí. El mío lo estoy montando en Obsidian. Ahora mismo estoy aprendiendo la herramienta y llenando la bóveda a mano, nota a nota.</p>
+            <div class="case__meta">
+              <ul class="tags" aria-label="Tecnologías" data-i18n-attr="aria-label:work.techs">
+                <li>Obsidian</li><li>Markdown</li>
+              </ul>
+            </div>
+            <figure class="pixel-fig case__fig">
+              <div class="pixel-fig__frame" data-stamp>
+                <img src="img/pixel/poses/11-nota-a-nota.png" width="1024" height="1024" alt="Alejandro en pixel art sentado en el suelo, apuntando en un cuaderno abierto, rodeado de notas de colores unidas por líneas" data-i18n-attr="alt:c3.figAlt" loading="lazy">
+              </div>
+              <figcaption data-i18n="c3.fig">Fig. 7 · Nota a nota.</figcaption>
+            </figure>
+          </header>
+
+          <div class="case__cover">
+            <div class="vgraph vgraph--cover" data-stamp>
+              <div class="graph" data-graph role="group" aria-label="Grafo de notas enlazadas alrededor de Second Brain" data-i18n-attr="aria-label:now.graphAlt"></div>
+              <div class="vgraph__bar">
+                <p class="vgraph__status" aria-live="polite"><strong data-graph-count></strong><span data-graph-msg data-i18n="now.hint">Señala una nota para ver con qué enlaza.</span></p>
+                <button class="btn btn--solid" type="button" data-graph-add>
+                  <svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg>
+                  <span data-graph-add-label>Añadir una nota</span>
+                </button>
+              </div>
+            </div>
+            <p class="case__caption" data-i18n="c3.graphCap">Así se conectan las notas. Es una representación con nombres de ejemplo: la bóveda real es privada.</p>
+            <ul class="arch__notes">
+              <li data-reveal><span class="sq sq--cobalt" aria-hidden="true"></span><p data-i18n="c3.g1"><strong>Tecnologías.</strong> Lenguajes, frameworks y herramientas, explicados con mis palabras.</p></li>
+              <li data-reveal style="--i:1"><span class="sq sq--orange" aria-hidden="true"></span><p data-i18n="c3.g2"><strong>Mis proyectos.</strong> Swimming Up, MAAT ETC y este portfolio, cada uno enlazado con lo que usa.</p></li>
+              <li data-reveal style="--i:2"><span class="sq sq--pink" aria-hidden="true"></span><p data-i18n="c3.g3"><strong>Apuntes y conceptos.</strong> Bases de datos, redes, despliegue y lo que me llevo del ciclo.</p></li>
+            </ul>
+          </div>
+
+          <section class="case__block" aria-labelledby="case-sb-a">
+            <div class="case__block-head">
+              <h3 class="case__h" id="case-sb-a" data-reveal data-i18n="c3.hWhy">Para qué lo quiero</h3>
+              <p class="case__intro" data-reveal style="--i:1" data-i18n="c3.whyIntro">Tres motivos, del más inmediato al más lejano.</p>
+            </div>
+            <ol class="aims">
+              <li data-reveal>
+                <h4 data-i18n="c3.w1">Guardar lo que aprendo</h4>
+                <p data-i18n="c3.w1d">Tener en un solo sitio, y con mis palabras, lo que voy aprendiendo de programación y de cada tecnología, para no perderlo.</p>
+              </li>
+              <li data-reveal style="--i:1">
+                <h4 data-i18n="c3.w2">Documentar mis proyectos</h4>
+                <p data-i18n="c3.w2d">Las decisiones, los problemas y las soluciones de cada proyecto, para poder consultarlos después.</p>
+              </li>
+              <li data-reveal style="--i:2">
+                <h4 data-i18n="c3.w3">Darle contexto a la IA</h4>
+                <p data-i18n="c3.w3d">Que más adelante una IA pueda leer la bóveda y trabajar con mi propio conocimiento.</p>
+              </li>
+            </ol>
+          </section>
+
+          <section class="case__block" aria-labelledby="case-sb-b">
+            <div class="case__block-head">
+              <h3 class="case__h" id="case-sb-b" data-reveal data-i18n="c3.hPhase">En qué fase estoy</h3>
+              <p class="case__intro" data-reveal style="--i:1" data-i18n="c3.phaseIntro">En la primera de tres. Obsidian es nuevo para mí, así que de momento todo entra a mano.</p>
+            </div>
+            <ol class="arch" data-reveal>
+              <li class="arch__stage">
+                <p class="arch__label" data-i18n="c3.p1">Ahora</p>
+                <div class="arch__nodes">
+                  <div class="arch__node arch__node--key"><strong data-i18n="c3.p1t">Aprender Obsidian</strong><span data-i18n="c3.p1d">Y llenar la bóveda a mano, nota a nota</span></div>
+                </div>
+              </li>
+              <li class="arch__stage">
+                <p class="arch__label" data-i18n="c3.p2">Después</p>
+                <div class="arch__nodes">
+                  <div class="arch__node"><strong data-i18n="c3.p2t">Automatizar la entrada</strong><span data-i18n="c3.p2d">Plantillas, plugins o scripts que capturen la información por mí</span></div>
+                </div>
+              </li>
+              <li class="arch__stage">
+                <p class="arch__label" data-i18n="c3.p3">Más adelante</p>
+                <div class="arch__nodes">
+                  <div class="arch__node"><strong data-i18n="c3.p3t">Conectarla con IA</strong><span data-i18n="c3.p3d">Que una IA pueda consultar la bóveda y responder con lo que yo sé</span></div>
+                </div>
+              </li>
+            </ol>
+          </section>
+        </div>
+
+        <a class="case__next" href="#proyectos">
+          <span class="label" data-i18n="c3.next">Lo que ya está terminado</span>
+          <span class="case__next-name"><span data-i18n="work.title">Proyectos</span> <svg class="icon" aria-hidden="true"><use href="#i-right"/></svg></span>
         </a>
       </article>
     </div>
