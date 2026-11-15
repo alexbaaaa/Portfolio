@@ -11,7 +11,8 @@
    4. Cabecera
    5. Inicio: diagrama del astrolabio            · nivel 0
    6. Sobre mí: texto con imágenes flotantes     · nivel 1
-   7. Proyectos: lista, ficha, telón y visor     · nivel 2
+   7. Proyectos: lista, ficha, telón y visor;
+      en qué estoy trabajando (nota y grafo)     · nivel 2
    8. Cómo trabajo                               · nivel 3
    9. Formación                                  · nivel 4
    10. Aptitudes                                 · nivel 5
@@ -1043,6 +1044,195 @@ figcaption {
   line-height: 0.9;
 }
 
+/* 7e. En qué estoy trabajando: una nota de la bóveda y su grafo */
+.vault {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  margin: clamp(40px, 5vw, 72px) 10px 0 0;
+  background: var(--bg);
+  border: 2px solid var(--edge);
+  box-shadow: 10px 10px 0 var(--c);
+}
+.vnote {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: clamp(20px, 2.6vw, 40px);
+  border-right: 2px solid var(--edge);
+}
+.vnote__file {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--soft);
+  font-family: var(--mono);
+  font-size: var(--fs-small);
+  letter-spacing: 0.02em;
+}
+.vnote__name {
+  margin-top: clamp(20px, 3vw, 44px);
+  font-size: clamp(2.5rem, 1.4rem + 3.6vw, 5rem);
+  font-weight: 800;
+  letter-spacing: -0.045em;
+  line-height: 0.92;
+}
+.vnote__props { width: 100%; margin-top: clamp(20px, 2.4vw, 32px); border-top: 1px solid var(--edge); }
+.vnote__props div {
+  display: grid;
+  grid-template-columns: 12ch minmax(0, 1fr);
+  gap: 16px;
+  align-items: baseline;
+  padding-block: 9px;
+  border-bottom: 1px solid var(--edge);
+}
+.vnote__props dt {
+  color: var(--soft);
+  font-family: var(--mono);
+  font-size: var(--fs-small);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+.vnote__props dd { display: flex; align-items: center; gap: 10px; font-weight: 600; }
+.vnote__body { max-width: 46ch; margin-block: 24px 28px; font-size: var(--fs-lead); line-height: 1.45; }
+.vnote__more { margin-top: auto; }
+/* Un enlace entre notas, como se escribe en Obsidian: [[así]] */
+.wl {
+  white-space: nowrap;
+  text-decoration: underline;
+  text-decoration-color: var(--c, var(--lime));
+  text-decoration-thickness: 0.16em;
+  text-underline-offset: 0.18em;
+}
+/* Los corchetes son adorno: la segunda línea los calla para los lectores de pantalla */
+.wl::before { content: "[["; content: "[[" / ""; color: var(--soft); }
+.wl::after { content: "]]"; content: "]]" / ""; color: var(--soft); }
+.wl[data-note] { cursor: default; }
+
+.vgraph { display: flex; flex-direction: column; min-width: 0; background: var(--surface); }
+.graph {
+  position: relative;
+  flex: 1;
+  aspect-ratio: 5 / 4;
+  margin: clamp(30px, 3.4vw, 48px) clamp(44px, 6vw, 84px);
+}
+.graph__lines { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.graph__lines line {
+  stroke: var(--edge);
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+  transition: opacity 200ms ease, stroke-width 200ms ease;
+}
+/* Cada nota es un punto de tamaño cero: el cuadrado y el nombre cuelgan de él */
+.gnode { position: absolute; left: calc(var(--x) * 1%); top: calc(var(--y) * 1%); transition: opacity 200ms ease; }
+.gnode__sq {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: var(--s, 12px);
+  height: var(--s, 12px);
+  translate: -50% -50%;
+  padding: 0;
+  appearance: none;
+  background: var(--g);
+  border: 2px solid var(--edge);
+  cursor: pointer;
+}
+.gnode__sq::after { content: ""; position: absolute; inset: -12px; }
+.gnode--hub { --s: 18px; }
+.gnode--root { --s: 30px; }
+.gnode--root .gnode__sq { box-shadow: 4px 4px 0 var(--edge); }
+.gnode__label {
+  position: absolute;
+  left: 0;
+  top: calc(var(--s, 12px) / 2 + 3px);
+  translate: -50% 0;
+  padding: 2px 4px;
+  background: var(--surface);
+  font-family: var(--mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.01em;
+  line-height: 1;
+  white-space: nowrap;
+  pointer-events: none;
+}
+.gnode--hub .gnode__label,
+.gnode--root .gnode__label { font-weight: 500; text-transform: uppercase; }
+.gnode--root .gnode__label { top: calc(var(--s) / 2 + 8px); }
+.gnode[data-at="t"] .gnode__label { top: auto; bottom: calc(var(--s, 12px) / 2 + 3px); }
+.gnode[data-at="r"] .gnode__label { left: calc(var(--s, 12px) / 2 + 4px); top: 0; translate: 0 -50%; }
+.gnode[data-at="l"] .gnode__label { left: auto; right: calc(var(--s, 12px) / 2 + 4px); top: 0; translate: 0 -50%; }
+/* Al señalar una nota, el resto se apaga */
+.graph.is-focus .gnode:not(.is-on) { opacity: 0.22; }
+.graph.is-focus line:not(.is-on) { opacity: 0.12; }
+.graph.is-focus line.is-on { stroke-width: 3; }
+.graph__fallback { display: flex; flex-wrap: wrap; gap: 6px 14px; font-family: var(--mono); font-size: var(--fs-small); }
+html:not(.js) [data-graph-add] { display: none; }
+html:not(.js) .graph { aspect-ratio: auto; }
+
+.vgraph__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 20px;
+  padding: 14px clamp(16px, 2vw, 24px);
+  background: var(--bg);
+  border-top: 2px solid var(--edge);
+}
+/* Alto fijo para tres líneas: el aviso cambia de largo y la barra no debe saltar */
+.vgraph__status { flex: 1; min-width: 0; display: grid; gap: 2px; min-height: 4.3em; align-content: center; font-family: var(--mono); font-size: var(--fs-small); letter-spacing: 0.02em; line-height: 1.4; }
+.vgraph__status strong { font-weight: 500; text-transform: uppercase; }
+.vgraph__status span { color: var(--soft); }
+.vgraph__bar .btn { flex-shrink: 0; }
+.vgraph__bar .btn:disabled .icon { display: none; }
+.vgraph__bar .btn:disabled { opacity: 1; background: transparent; color: var(--soft); border-color: var(--faint); cursor: default; }
+
+/* Dentro de la ficha: el grafo hace de portada y la figura acompaña al texto */
+.vgraph--cover { grid-column: 1 / -1; border: 2px solid var(--edge); box-shadow: 10px 10px 0 var(--c); }
+.vgraph--cover .graph { aspect-ratio: 2 / 1; }
+.case__caption { grid-column: 1 / -1; font-family: var(--mono); font-size: var(--fs-small); letter-spacing: 0.02em; line-height: 1.4; }
+.case__cover .arch__notes { grid-column: 1 / -1; margin-top: 8px; }
+.case__fig { grid-column: 9 / span 4; grid-row: 3 / span 2; align-self: end; margin-right: 8px; }
+.case__fig .pixel-fig__frame { box-shadow: 8px 8px 0 var(--c); }
+.case__fig figcaption { margin-top: 16px; line-height: 1.4; }
+/* La figura ocupa dos filas: la sobrante va a la última, para que las etiquetas sigan al texto */
+.case--now .case__head { grid-template-rows: auto auto auto 1fr; }
+.case--now .case__meta { grid-column: 1 / span 7; grid-row: 4; align-self: start; margin-top: 28px; }
+
+.aims {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--gap);
+  margin-top: clamp(32px, 4vw, 56px);
+}
+.aims li { padding-top: 18px; border-top: 2px solid var(--edge); }
+.aims h4 { font-size: var(--fs-statement); font-weight: 700; letter-spacing: -0.03em; line-height: 1.05; }
+.aims p { max-width: 38ch; margin-top: 14px; }
+
+@media (hover: hover) and (pointer: fine) {
+  .wl[data-note]:hover { background: var(--c, var(--lime)); color: var(--black); text-decoration-color: transparent; }
+  .wl[data-note]:hover::before, .wl[data-note]:hover::after { color: var(--black); }
+  .vgraph__bar .btn--solid:not(:disabled):hover { background: var(--c); border-color: var(--edge); color: var(--c-ink); box-shadow: 5px 5px 0 var(--edge); }
+}
+
+@media (max-width: 960px) {
+  .vault { grid-template-columns: minmax(0, 1fr); }
+  .vnote { border-right: 0; border-bottom: 2px solid var(--edge); }
+  .vgraph--cover .graph { aspect-ratio: 4 / 3; }
+  .case__fig { grid-column: 1 / span 7; grid-row: auto; width: min(100%, 300px); margin-top: 32px; }
+  .case--now .case__head { grid-template-rows: none; }
+  .case--now .case__meta { grid-column: 1 / -1; grid-row: auto; }
+  .aims { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 600px) {
+  .vault { margin-right: 6px; box-shadow: 6px 6px 0 var(--c); }
+  .graph, .vgraph--cover .graph { aspect-ratio: 4 / 5; margin: 30px 40px 34px; }
+  .gnode__label { font-size: 0.625rem; padding: 1px 2px; }
+  .gnode--root { --s: 24px; }
+  .vgraph--cover { box-shadow: 6px 6px 0 var(--c); }
+  .vgraph__bar { flex-direction: column; align-items: stretch; }
+  .vgraph__bar .btn { justify-content: center; }
+}
+
 /* 7d. Visor de capturas */
 .viewer {
   width: 100vw;
@@ -1821,6 +2011,10 @@ figcaption {
   .js .case.is-enter .case__lead { animation-delay: calc(var(--wait, 0ms) + 180ms); }
   .js .case.is-enter .case__meta { animation-delay: calc(var(--wait, 0ms) + 260ms); }
   .viewer[open] .viewer__stage img { animation: viewer-in 260ms var(--ease-out); }
+  /* Una nota nueva en el grafo: aparece el cuadrado y después su nombre y sus enlaces */
+  .gnode.is-new .gnode__sq { animation: gnode-in 420ms var(--ease-out); }
+  .gnode.is-new .gnode__label,
+  .graph__lines line.is-new { animation: fade-in 500ms ease 160ms backwards; }
 
   .marquee__track { animation: marquee 32s linear infinite; }
   .marquee:hover .marquee__track { animation-play-state: paused; }
@@ -1836,6 +2030,8 @@ figcaption {
 @keyframes turn { to { rotate: 32deg; } }
 @keyframes marquee { to { transform: translateX(-50%); } }
 @keyframes viewer-in { from { opacity: 0; transform: scale(0.97); } }
+@keyframes gnode-in { from { scale: 0; } }
+@keyframes fade-in { from { opacity: 0; } }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
