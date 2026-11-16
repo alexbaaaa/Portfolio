@@ -151,7 +151,6 @@ input, textarea { caret-color: var(--orange); }
 .facts dt,
 .row__when,
 .link-card__label,
-.credits,
 figcaption {
   font-family: var(--mono);
   font-size: var(--fs-small);
@@ -1956,11 +1955,9 @@ html:not(.js) .graph { aspect-ratio: auto; }
 }
 .footer__top { display: inline-flex; align-items: center; gap: 6px; }
 .footer__top .icon { rotate: -45deg; }
-.credits { margin-top: 20px; line-height: 1.6; }
-.credits a { text-decoration: underline; text-underline-offset: 0.2em; }
 @media (hover: hover) and (pointer: fine) {
-  .footer__top:hover, .credits a:hover { color: var(--lime); }
-  [data-theme="dark"] .footer__top:hover, [data-theme="dark"] .credits a:hover { color: var(--cobalt); }
+  .footer__top:hover { color: var(--lime); }
+  [data-theme="dark"] .footer__top:hover { color: var(--cobalt); }
 }
 
 /* ---------- 13. Movimiento ---------- */
