@@ -1687,41 +1687,275 @@ html:not(.js) .graph { aspect-ratio: auto; }
   .row__when { grid-column: 2; justify-self: start; }
 }
 
-/* ---------- 10. Aptitudes · nivel 5 ---------- */
+/* ---------- 10. Aptitudes · nivel 5 ----------
+   Una escalera: el tamaño de cada bloque dice cuánto pesa.
+   Full-stack a todo el ancho, backend más ancho que frontend,
+   las dos formas de programar en dos mitades y un cierre.
+   Aquí aparecen los primeros campos de color; debajo, el stack. */
 .skills .h2 { font-weight: 900; text-transform: uppercase; letter-spacing: -0.05em; }
-.table {
-  margin-top: 48px;
-  background: var(--bg);
-  border: 3px solid var(--edge);
-  box-shadow: 10px 10px 0 var(--edge);
-}
-.table__row {
+.skills__head {
   display: grid;
-  grid-template-columns: 1.1fr 2.3fr 1.5fr 1.3fr;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 16px var(--gap);
+  align-items: end;
 }
-.table__row:nth-child(odd):not(.table__row--head) { background: var(--surface); }
-.table__row > span { padding: 18px 20px; }
-.table__row--head { background: var(--ink); color: var(--bg); font-weight: 700; }
-.table__row--head > span { padding-block: 12px; }
-.table [role="rowheader"] { font-size: 1.2rem; font-weight: 800; letter-spacing: -0.02em; }
-.table .is-key { background: var(--lime); color: var(--black); font-weight: 700; }
-.table__row + .table__row { border-top: 3px solid var(--edge); }
+.skills__head .h2 { grid-column: 1 / span 6; }
+.skills__lead {
+  grid-column: 8 / -1;
+  max-width: 34ch;
+  font-size: var(--fs-lead);
+  font-weight: 600;
+  line-height: 1.35;
+}
 
+.apt {
+  --pad: clamp(20px, 2.6vw, 40px);
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: clamp(26px, 2.6vw, 36px);
+  margin-top: 48px;
+  margin-right: 10px;
+}
+.apt-card,
+.apt-pair,
+.apt-any {
+  border: 3px solid var(--edge);
+  box-shadow: 10px 10px 0 var(--shade, var(--edge));
+}
+.apt-card__name,
+.apt-half__name,
+.apt-any__name {
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.05em;
+  line-height: 0.9;
+}
+.apt-card__text,
+.apt-half__text { max-width: 40ch; font-size: var(--fs-lead); line-height: 1.35; }
+
+/* Dónde está demostrado cada punto */
+.apt-where {
+  padding: 3px 9px;
+  background: var(--ink);
+  color: var(--bg);
+  font-size: 0.875rem;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.apt-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 18px;
+  padding: var(--pad);
+  background: var(--bg);
+  transition: transform 240ms var(--ease-out), box-shadow 240ms var(--ease-out);
+}
+.apt-card .apt-where { margin-top: auto; }
+
+/* 1 · Full-stack: el bloque que manda */
+.apt-card--full {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: clamp(20px, 2.4vw, 32px) var(--gap);
+  align-items: end;
+  background: var(--lime);
+  color: var(--black);
+}
+.apt-card--full .apt-card__name {
+  grid-column: 1 / span 8;
+  font-size: clamp(2rem, 0.8rem + 6.6vw, 7.5rem);
+  line-height: 0.82;
+  white-space: nowrap;
+}
+.apt-card--full .apt-card__text { grid-column: 9 / -1; font-weight: 600; }
+.apt-card--full .apt-where {
+  grid-column: 1 / -1;
+  justify-self: start;
+  background: var(--black);
+  color: var(--white);
+}
+
+/* Las piezas de la aplicación, unidas una a una */
+.chain {
+  --link: clamp(14px, 2.4vw, 36px);
+  grid-column: 1 / -1;
+  display: flex;
+  gap: var(--link);
+}
+.chain li {
+  position: relative;
+  flex: 1 1 0;
+  display: flex;
+  align-items: center;
+  min-height: 56px;
+  padding: 10px 14px;
+  background: var(--white);
+  color: var(--black);
+  border: 3px solid var(--black);
+  box-shadow: 4px 4px 0 var(--black);
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+}
+.chain li + li::before {
+  content: "";
+  position: absolute;
+  right: 100%;
+  top: 50%;
+  width: var(--link);
+  height: 4px;
+  margin: -2px 3px 0 0;
+  background: var(--black);
+}
+/* El despliegue no es una pieza más: es adonde llega todo.
+   Se separa, va en negativo y se entra en él con una flecha. */
+.chain .chain__end {
+  margin-left: var(--link);
+  background: var(--black);
+  color: var(--white);
+  box-shadow: 4px 4px 0 var(--white);
+}
+.chain .chain__end::before {
+  width: calc(var(--link) * 2 - 12px);
+  margin-right: 15px;
+}
+.chain .chain__end::after {
+  content: "";
+  position: absolute;
+  right: 100%;
+  top: 50%;
+  width: 16px;
+  height: 22px;
+  margin: -11px 3px 0 0;
+  background: var(--black);
+  clip-path: polygon(0 0, 100% 50%, 0 100%);
+}
+
+/* 2 y 3 · Backend y frontend */
+.apt-card--back { grid-column: span 7; --shade: var(--orange); }
+.apt-card--front { grid-column: span 5; --shade: var(--pink); }
+.apt-card--back .apt-card__name { font-size: clamp(2rem, 1rem + 3.6vw, 4.75rem); }
+.apt-card--front .apt-card__name { font-size: clamp(1.75rem, 1rem + 2.4vw, 3.5rem); }
+
+/* 4 · A mano / con IA: dos mitades, una en negativo */
+.apt-pair {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  background: var(--bg);
+}
+.apt-half {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 18px;
+  padding: var(--pad);
+}
+.apt-half + .apt-half { border-left: 3px solid var(--edge); }
+.apt-half--ai {
+  --soft: color-mix(in srgb, var(--bg) 72%, var(--ink));
+  background: var(--ink);
+  color: var(--bg);
+}
+.apt-half__name { font-size: clamp(1.75rem, 1rem + 2.4vw, 3.5rem); word-spacing: 0.14em; } /* "A MANO" no debe leerse "AMANO" */
+.apt-half .apt-where { margin-top: auto; }
+
+.apt-list { align-self: stretch; }
+.apt-list li {
+  display: grid;
+  grid-template-columns: minmax(0, 12.5em) minmax(0, 1fr);
+  gap: 2px 16px;
+  padding: 10px 0;
+  border-top: 2px solid currentColor;
+  line-height: 1.3;
+}
+.apt-list li:last-child { border-bottom: 2px solid currentColor; }
+.apt-list strong { font-weight: 800; letter-spacing: -0.01em; }
+.apt-list span { color: var(--soft); }
+
+.apt-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 44px;
+  margin-top: auto;
+  padding: 0.55rem 0.9rem;
+  background: var(--lime);
+  color: var(--black);
+  border: 2px solid var(--black);
+  font-weight: 700;
+  transition: transform 140ms var(--ease-out), box-shadow 200ms var(--ease-out);
+}
+.apt-link:active { transform: translate(2px, 2px); }
+
+/* 5 · Cierre */
+.apt-any {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 20px var(--gap);
+  align-items: end;
+  padding: var(--pad);
+  background: var(--cobalt);
+  color: var(--white);
+}
+.apt-any__name {
+  grid-column: 1 / span 7;
+  font-size: clamp(2rem, 1rem + 3.6vw, 4.75rem);
+  line-height: 1; /* la tilde de TECNOLOGÍA necesita aire */
+}
+.apt-any__body { grid-column: 8 / -1; display: grid; gap: 16px; justify-items: start; }
+.apt-any__body > p:first-child { max-width: 36ch; font-size: var(--fs-lead); font-weight: 600; line-height: 1.35; }
+.apt-any .apt-where { background: var(--white); color: var(--black); }
+
+@media (hover: hover) and (pointer: fine) {
+  .apt-card:hover { transform: translate(-3px, -3px); box-shadow: 13px 13px 0 var(--shade, var(--edge)); }
+  .js .apt-card.is-in:hover { transition-duration: 240ms; transition-delay: 0s; }
+  .apt-link:hover { transform: translate(-2px, -2px); box-shadow: 4px 4px 0 var(--bg); }
+}
+
+@media (max-width: 1100px) {
+  .apt-list li { grid-template-columns: minmax(0, 1fr); }
+}
 @media (max-width: 860px) {
-  .table__row--head { display: none; }
-  .table__row { grid-template-columns: 1fr; }
-  .table__row > span { padding: 4px 18px; }
-  .table [role="rowheader"] { padding-top: 18px; }
-  .table [role="cell"]::before {
-    content: attr(data-label);
-    display: block;
-    font-family: var(--mono);
-    font-size: var(--fs-small);
-    text-transform: uppercase;
-    color: var(--soft);
+  .skills__head .h2,
+  .skills__lead,
+  .apt-card--full .apt-card__name,
+  .apt-card--full .apt-card__text,
+  .apt-card--back,
+  .apt-card--front,
+  .apt-any__name,
+  .apt-any__body { grid-column: 1 / -1; }
+  .apt-pair { grid-template-columns: minmax(0, 1fr); }
+  .apt-half + .apt-half { border-left: 0; border-top: 3px solid var(--edge); }
+}
+@media (max-width: 700px) {
+  .chain { --link: 16px; flex-direction: column; }
+  .chain li { min-height: 48px; }
+  .chain li + li::before {
+    right: auto;
+    left: 20px;
+    top: auto;
+    bottom: 100%;
+    width: 4px;
+    height: var(--link);
+    margin: 0 0 3px;
   }
-  .table .is-key { margin-top: 10px; padding-block: 10px 12px; }
-  .table .is-key::before { color: var(--black); }
+  .chain .chain__end { margin: var(--link) 0 0; }
+  .chain .chain__end::before { width: 4px; height: calc(var(--link) * 2 - 12px); margin: 0 0 15px; }
+  .chain .chain__end::after {
+    right: auto;
+    left: 11px;
+    top: auto;
+    bottom: 100%;
+    width: 22px;
+    height: 16px;
+    margin: 0 0 3px;
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+  }
 }
 
 /* ---------- 11. Stack · nivel 6 (invertido) ---------- */

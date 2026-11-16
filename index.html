@@ -500,44 +500,73 @@
     <!-- ============ APTITUDES ============ -->
     <section class="section skills" id="aptitudes" data-tone="plain">
       <div class="wrap">
-        <h2 class="h2" data-reveal data-i18n="skills.title">Aptitudes</h2>
-        <div class="table" role="table" aria-label="Aptitudes" data-i18n-attr="aria-label:skills.title" data-stamp>
-          <div class="table__row table__row--head" role="row">
-            <span role="columnheader" data-i18n="skills.c1">Aptitud</span>
-            <span role="columnheader" data-i18n="skills.c2">Qué hago</span>
-            <span role="columnheader" data-i18n="skills.c3">Con qué</span>
-            <span role="columnheader" class="is-key" data-i18n="skills.c4">Dónde lo he hecho</span>
+        <div class="skills__head">
+          <h2 class="h2" data-reveal data-i18n="skills.title">Aptitudes</h2>
+          <p class="skills__lead" data-reveal style="--i:1" data-i18n="skills.lead">Más que escribir código: llevo una aplicación entera de la idea al despliegue.</p>
+        </div>
+
+        <div class="apt">
+          <!-- 1 · Lo principal: la aplicación completa, con sus piezas conectadas -->
+          <article class="apt-card apt-card--full" data-stamp>
+            <h3 class="apt-card__name">Full-stack</h3>
+            <p class="apt-card__text" data-i18n="skills.full">Monto una aplicación completa desde el entorno de desarrollo, conecto todas sus piezas y la despliego por mi cuenta.</p>
+            <ol class="chain" aria-label="Piezas que conecto y, al final, despliego" data-i18n-attr="aria-label:skills.chain">
+              <li>Frontend</li>
+              <li>API</li>
+              <li>Backend</li>
+              <li data-i18n="skills.db">Base de datos</li>
+              <li class="chain__end" data-i18n="skills.deploy">Despliegue</li>
+            </ol>
+            <p class="apt-where"><span data-i18n="skills.madeIn">Hecho en</span> Swimming Up · MAAT ETC</p>
+          </article>
+
+          <!-- 2 y 3 · Backend pesa más que frontend: se ve en el ancho -->
+          <article class="apt-card apt-card--back" data-stamp style="--i:1">
+            <h3 class="apt-card__name">Backend</h3>
+            <p class="apt-card__text" data-i18n="skills.back">La lógica del servidor: API JSON, autenticación con roles y un modelo de datos bien pensado.</p>
+            <p class="apt-where"><span data-i18n="skills.madeIn">Hecho en</span> Swimming Up · MAAT ETC</p>
+          </article>
+
+          <article class="apt-card apt-card--front" data-stamp style="--i:2">
+            <h3 class="apt-card__name">Frontend</h3>
+            <p class="apt-card__text" data-i18n="skills.front">Diseño y maqueto interfaces responsive y accesibles, pensadas primero para el móvil.</p>
+            <p class="apt-where"><span data-i18n="skills.madeIn">Hecho en</span> Swimming Up · <span data-i18n="skills.w4">Este portfolio</span></p>
+          </article>
+
+          <!-- 4 · Las dos formas de programar, en dos mitades -->
+          <div class="apt-pair" data-stamp>
+            <article class="apt-half">
+              <h3 class="apt-half__name" data-i18n="skills.handT">A mano</h3>
+              <p class="apt-half__text" data-i18n="skills.hand">Conozco los patrones de diseño y las técnicas que exprimen JavaScript y Java al máximo.</p>
+              <ul class="apt-list">
+                <li><strong data-i18n="skills.h1">JavaScript funcional</strong><span data-i18n="skills.h1d">closures, funciones de orden superior, inmutabilidad</span></li>
+                <li><strong data-i18n="skills.h2">JavaScript asíncrono</strong><span data-i18n="skills.h2d">promesas, async/await, event loop</span></li>
+                <li><strong data-i18n="skills.h3">Java orientado a objetos</strong><span data-i18n="skills.h3d">interfaces, genéricos, colecciones, streams</span></li>
+                <li><strong data-i18n="skills.h4">Patrones de diseño</strong><span>MVC, Singleton, Observer, Factory</span></li>
+              </ul>
+              <p class="apt-where"><span data-i18n="skills.learnedIn">Aprendido en</span> <span data-i18n="skills.daw">el CFGS DAW</span></p>
+            </article>
+
+            <article class="apt-half apt-half--ai">
+              <h3 class="apt-half__name" data-i18n="skills.aiT">Con IA</h3>
+              <p class="apt-half__text" data-i18n="skills.ai">Dirijo a la IA para desarrollar más rápido, sin perder el control del código.</p>
+              <ul class="apt-list">
+                <li><strong data-i18n="skills.a1">Yo marco el rumbo</strong><span data-i18n="skills.a1d">la arquitectura la decido yo</span></li>
+                <li><strong data-i18n="skills.a2">Reviso cada cambio</strong><span data-i18n="skills.a2d">nada entra sin entenderlo</span></li>
+                <li><strong data-i18n="skills.a3">Sin cajas negras</strong><span data-i18n="skills.a3d">puedo seguir sin ella</span></li>
+              </ul>
+              <a class="apt-link" href="#ia"><span data-i18n="ai.title">Cómo uso la IA</span><svg class="icon" aria-hidden="true"><use href="#i-right"/></svg></a>
+            </article>
           </div>
-          <div class="table__row" role="row">
-            <span role="rowheader">Full-stack</span>
-            <span role="cell" data-label="Qué hago" data-i18n-attr="data-label:skills.c2" data-i18n="skills.r1">Frontend, backend y la API JSON que los une, con autenticación y roles</span>
-            <span role="cell" data-label="Con qué" data-i18n-attr="data-label:skills.c3">React · Laravel</span>
-            <span role="cell" data-label="Dónde lo he hecho" data-i18n-attr="data-label:skills.c4" class="is-key">Swimming Up</span>
-          </div>
-          <div class="table__row" role="row">
-            <span role="rowheader" data-i18n="skills.n2">Datos</span>
-            <span role="cell" data-label="Qué hago" data-i18n-attr="data-label:skills.c2" data-i18n="skills.r2">Modelado relacional con criterio</span>
-            <span role="cell" data-label="Con qué" data-i18n-attr="data-label:skills.c3">MySQL · MariaDB · PostgreSQL</span>
-            <span role="cell" data-label="Dónde lo he hecho" data-i18n-attr="data-label:skills.c4" class="is-key">Swimming Up</span>
-          </div>
-          <div class="table__row" role="row">
-            <span role="rowheader" data-i18n="skills.n3">Despliegue</span>
-            <span role="cell" data-label="Qué hago" data-i18n-attr="data-label:skills.c2" data-i18n="skills.r3">Entornos reproducibles con proxy inverso</span>
-            <span role="cell" data-label="Con qué" data-i18n-attr="data-label:skills.c3">Docker Compose · Nginx</span>
-            <span role="cell" data-label="Dónde lo he hecho" data-i18n-attr="data-label:skills.c4" class="is-key">Swimming Up · MAAT ETC</span>
-          </div>
-          <div class="table__row" role="row">
-            <span role="rowheader" data-i18n="skills.n4">Interfaces</span>
-            <span role="cell" data-label="Qué hago" data-i18n-attr="data-label:skills.c2" data-i18n="skills.r4">Maquetación responsive y accesible, pensada primero para el móvil</span>
-            <span role="cell" data-label="Con qué" data-i18n-attr="data-label:skills.c3">HTML · CSS · JavaScript</span>
-            <span role="cell" data-label="Dónde lo he hecho" data-i18n-attr="data-label:skills.c4" class="is-key" data-i18n="skills.w4">Este portfolio</span>
-          </div>
-          <div class="table__row" role="row">
-            <span role="rowheader" data-i18n="skills.n5">Equipo</span>
-            <span role="cell" data-label="Qué hago" data-i18n-attr="data-label:skills.c2" data-i18n="skills.r5">Ramas y commits claros. Comunico lo que hago y aprendo rápido</span>
-            <span role="cell" data-label="Con qué" data-i18n-attr="data-label:skills.c3">Git · GitHub</span>
-            <span role="cell" data-label="Dónde lo he hecho" data-i18n-attr="data-label:skills.c4" class="is-key" data-i18n="skills.w5">Prácticas en el IAA</span>
-          </div>
+
+          <!-- 5 · Cierre: la capacidad no depende de la herramienta -->
+          <article class="apt-any" data-stamp>
+            <h3 class="apt-any__name" data-i18n="skills.anyT">Cualquier tecnología</h3>
+            <div class="apt-any__body">
+              <p data-i18n="skills.any">Cambia la herramienta, no el método: la estudio, la pruebo y la pongo a trabajar.</p>
+              <p class="apt-where"><span data-i18n="skills.anyW">Laravel en Swimming Up · Flask en MAAT ETC</span></p>
+            </div>
+          </article>
         </div>
       </div>
     </section>
