@@ -308,8 +308,7 @@ window.I18N = {
     'contact.msgPh': 'Tell me how I can help',
     'contact.send': 'Send message',
 
-    'footer.top': 'Back to top',
-    'footer.credits': 'Pictures: <a href="https://commons.wikimedia.org/wiki/File:12-inch_silicon_wafer.jpg">silicon wafer</a> by Peellden, <a href="https://creativecommons.org/licenses/by-sa/3.0">CC BY-SA 3.0</a>; <a href="https://commons.wikimedia.org/wiki/File:Planispheric_astrolabe_with_inscriptions_in_Latin_and_Arabic_and_later_Hebrew,_Spain,_14th_century,_bronze_with_silver_inserts_added_later_-_Aga_Khan_Museum_-_Toronto,_Canada_-_DSC06585.jpg">14th-century Spanish astrolabe</a> by Daderot, public domain; <a href="https://commons.wikimedia.org/wiki/File:Tiles-wall-Alhambra-Granada-2011.jpg">Alhambra tilework</a> by Acediscovery, <a href="https://creativecommons.org/licenses/by/4.0">CC BY 4.0</a>; <a href="https://commons.wikimedia.org/wiki/File:Roofs_and_towers_of_Alhambra_from_Generalife,_Granada,_Spain.jpg">Alhambra</a> by Jebulon, CC0. Via Wikimedia Commons.'
+    'footer.top': 'Back to top'
   },
 
   // Textos que solo existen en el JavaScript
